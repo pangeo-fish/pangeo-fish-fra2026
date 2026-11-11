@@ -13,7 +13,7 @@
 ORCID でサインインするのが簡単です（ORCID がなければ先に作ります）。
 :::
 
-:::{grid-item-card} 2. vo.pangeo.eu への参加申請
+:::{grid-item-card} 2. `vo.pangeo.eu` への参加申請
 :link: step2-vo
 :link-type: ref
 
