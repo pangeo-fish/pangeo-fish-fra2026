@@ -8,7 +8,7 @@ This hands-on workshop is given at the [European Tracking Network (ETN) Symposiu
 
 The notebooks run on [Pangeo@EOSC](https://pangeo-data.github.io/pangeo-eosc/) with the Docker image [`ghcr.io/tinaok/pangeo-fish-notebook:2026.06.04-10751a5`](https://github.com/tinaok/pangeo-fish-docker).
 
-See [Registration to Pangeo@EOSC](https://pangeo-fish.github.io/pangeo-fish-fra2026/users-getting-started.html) for the registration steps (to be done **before** the workshop).
+See [事前登録 (pre-registration)](https://pangeo-fish.github.io/pangeo-fish-fra2026/users-getting-started.html) for the registration steps (to be done **before** the workshop).
 
 Once your registration has been approved, first [log in to Pangeo@EOSC](https://pangeo-eosc.vm.fedcloud.eu/hub/login). After logging in, return to this page and use the launch link below. The launch link may not work correctly if you are not already logged in.
 

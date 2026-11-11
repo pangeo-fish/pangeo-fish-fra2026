@@ -1,36 +1,89 @@
 
-# Pangeo@EOSC への登録
+# 事前登録（できれば 11 月 22 日まで）
 
-前のセクションで説明したように、Pangeo@EOSC は、ヨーロッパの研究者とその共同研究者に開かれた、Pangeo エコシステムの主要な公開環境です。
-この環境はヨーロッパのインフラ上で運用されており、すべてのヨーロッパの研究者が無料で使える公開の環境として維持されることを目指しています。Pangeo@Europe は、研究者向けのトレーニングに主に Pangeo@EOSC を使っています。
+ワークショップでは、クラウド上の [Pangeo@EOSC](https://pangeo-data.github.io/pangeo-eosc/) でノートブックを動かします。当日すぐに始められるよう、**次の 3 つのステップを、できれば 11 月 22 日までに**済ませてください。どれも無料です。
 
-このセクションでは、Pangeo@EOSC のサービスに登録してアクセスする方法と、ワンクリックでワークショップの環境を起動する方法を説明します。
+::::{grid} 1 1 3 3
+:gutter: 3
 
-[EGI Check-in アカウント](https://www.egi.eu/service/check-in/)を作成し、仮想組織（Virtual Organisation、VO）`vo.pangeo.eu` に参加登録する必要があります。手順は次のとおりです。
+:::{grid-item-card} 1. EGI Check-in のアカウント
+:link: step1-egi
+:link-type: ref
 
-1. [こちらの手順](https://docs.egi.eu/users/aai/check-in/signup/)に従って EGI Check-in アカウントに**サインアップ**します。**認証には [ORCID iD](https://orcid.org/) を使うことをおすすめします。**
-2. 前の手順で作成した EGI Check-in アカウントで[参加登録用の URL](https://aai.egi.eu/auth/realms/id/account/#/enroll?groupPath=/vo.pangeo.eu) をクリックし、仮想組織（VO）`vo.pangeo.eu` に**参加登録**します。**"reason to join"**（参加理由）の欄には、次の文をそのまま入力してください。
+ORCID でサインインするのが簡単です（ORCID がなければ先に作ります）。
+:::
+
+:::{grid-item-card} 2. vo.pangeo.eu への参加申請
+:link: step2-vo
+:link-type: ref
+
+理由欄に指定の一文を貼るだけ。承認は手作業なので早めに。
+:::
+
+:::{grid-item-card} 3. Copernicus Marine の無料アカウント
+:link: step3-cmems
+:link-type: ref
+
+GLORYS を読むために必要です。登録後、一度ログインできることを確認します。
+:::
+::::
+
+(step1-egi)=
+## ステップ 1：EGI Check-in のアカウントを作る
+
+Pangeo@EOSC へのログインには [EGI Check-in](https://www.egi.eu/service/check-in/) のアカウントを使います。
+
+1. [ORCID iD](https://orcid.org/) を持っていない場合は、先に [ORCID に登録](https://orcid.org/register)します（数分で終わります）。
+2. [EGI Check-in のサインアップ手順](https://docs.egi.eu/users/aai/check-in/signup/)に従ってアカウントを作ります。ログイン方法の選択では **ORCID** を選ぶのがおすすめです。
+
+(step2-vo)=
+## ステップ 2：`vo.pangeo.eu` に参加申請する
+
+Pangeo@EOSC を使うには、仮想組織（Virtual Organisation、VO）`vo.pangeo.eu` のメンバーになる必要があります。
+
+1. ステップ 1 のアカウント（ORCID）でログインした状態で、[参加申請用の URL](https://aai.egi.eu/auth/realms/id/account/#/enroll?groupPath=/vo.pangeo.eu) を開きます。
+2. **"reason to join"**（参加理由）の欄に、次の一文を**そのまま**貼り付けます。
 
    ```text
    Attend the pangeo-fish workshop at FRA in Yokohama, November 2026
    ```
 
-   この文をそのまま使っていただくと、ワークショップの参加者であることが分かり、できるだけ早く承認できます。内容を確認して `Submit` をクリックします。
+   この文でワークショップの参加者だと分かり、すぐに承認できます。
+3. 内容を確認して `Submit` をクリックします。
 
 :::{warning}
-VO への参加登録の承認は**手作業**で行います。**ワークショップより十分前に**（できれば数日前までに）登録してください。間に合わないと、当日ログインできないことがあります。
+参加申請の承認は、ワークショップの講師が**手作業**で行います。承認されるまで Pangeo@EOSC にはログインできないので、**早めに**申請してください。承認されると EGI からメールが届きます。
 :::
 
+(step3-cmems)=
+## ステップ 3：Copernicus Marine の無料アカウントを作る
+
+どちらのノートブックも、[Copernicus Marine Service](https://data.marine.copernicus.eu/) から海洋モデルのデータ（GLORYS、全球海洋物理再解析）をダウンロードします。そのため、Copernicus Marine の（無料の）アカウントが必要です。
+
+1. [https://data.marine.copernicus.eu/register](https://data.marine.copernicus.eu/register) でアカウントを作成します（メールアドレスがあれば作れます。届いたメールのリンクをクリックして確認してください）。
+2. **ユーザー名**（多くの場合メールアドレス）と**パスワード**を控えておきます。
+3. [https://data.marine.copernicus.eu/](https://data.marine.copernicus.eu/) で一度ログインし、そのユーザー名とパスワードでログインできることを確認します。
+
+当日は、最初のノートブックで一度だけユーザー名とパスワードの入力を求められます（`copernicusmarine.login()`）。入力した情報は Pangeo@EOSC のホームディレクトリの `~/.copernicusmarine/.copernicusmarine-credentials` に保存されます。ホームディレクトリは永続的なので、再び入力を求められることはありません。
+
+## 事前登録はこれで完了です
+
+承認のメールが届いたら、時間があれば下の「ワークショップの環境を起動する」の手順で一度ログインし、環境を起動してみてください。当日の待ち時間を減らせます。うまくいかない場合は、[issue](https://github.com/pangeo-fish/pangeo-fish-fra2026/issues) でお知らせください。
+
 :::{note}
-**FRA 横浜ワークショップ**の終了後も、引き続きこの環境を使うことができます。
+**FRA 横浜ワークショップ**の終了後も、同じアカウントで引き続きこの環境を使うことができます。
 ぜひご感想をお寄せください。プラットフォームの今後の情報もお知らせします。連絡には [GitHub Discussions](https://github.com/pangeo-data/pangeo-eosc/discussions) をお使いください。
 
 オンラインのミートアップ「Pangeo show and tell」で発表していただくこともできます。
 :::
 
+# 当日：Pangeo@EOSC の使い方
+
+Pangeo@EOSC は、ヨーロッパの研究者とその共同研究者に開かれた、Pangeo エコシステムの主要な公開環境です。ヨーロッパのインフラ上で運用されており、Pangeo@Europe は研究者向けのトレーニングに主に Pangeo@EOSC を使っています。
+
 ## ワークショップの環境を起動する（ワンクリック）
 
-参加登録が承認されたら、まず [Pangeo@EOSC にログイン](https://pangeo-eosc.vm.fedcloud.eu/hub/login)します。**Sign in with EGI Check-in** をクリックし、登録に使ったのと同じ ORCID iD / EGI アカウントでログインしてください。ログインしたらこのページに戻り、下の起動リンクを使います。ログインしていない状態では、起動リンクが正しく動かないことがあります。
+参加申請が承認されたら、まず [Pangeo@EOSC にログイン](https://pangeo-eosc.vm.fedcloud.eu/hub/login)します。**Sign in with EGI Check-in** をクリックし、登録に使ったのと同じ ORCID iD / EGI アカウントでログインしてください。ログインしたらこのページに戻り、下の起動リンクを使います。ログインしていない状態では、起動リンクが正しく動かないことがあります。
 
 起動リンクは次のことを行います。
 
@@ -78,16 +131,6 @@ Docker イメージには 2 つの Python カーネルがあります。**この
 ターミナルでは、`conda activate pangeo-fish` で pangeo-fish の環境を有効にできます。
 
 JupyterLab の実用的なヒント（すべてのセルの実行、カーネルの終了、サーバーの停止、フォルダの削除など）は {doc}`jupyterlab-basics` にまとめています。
-
-## Copernicus Marine の認証情報
-
-どちらのノートブックも、[Copernicus Marine Service](https://data.marine.copernicus.eu/) から海洋モデルのデータ（GLORYS、全球海洋物理再解析）をダウンロードします。そのため、Copernicus Marine の（無料の）アカウントが必要です。
-
-1. [https://data.marine.copernicus.eu/register](https://data.marine.copernicus.eu/register) でアカウントを作成します（メールアドレスがあれば作れます。届いたメールのリンクをクリックして確認してください）。
-2. **ユーザー名**（多くの場合メールアドレス）と**パスワード**を控えておきます。
-3. 最初のノートブックで一度だけ入力を求められます（`copernicusmarine.login()`）。入力した情報は Pangeo@EOSC のホームディレクトリの `~/.copernicusmarine/.copernicusmarine-credentials` に保存されます。ホームディレクトリは永続的なので、再び入力を求められることはありません。
-
-確認メールが届くまで数分かかることがあるので、アカウントは**ワークショップの前に**作成しておいてください。
 
 ## 計算資源
 

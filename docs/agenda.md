@@ -14,7 +14,7 @@
 | 11:40 | その先へ：自分のタグで試すときの入力形式、FRA-ROMS、GFTS。質疑と[アンケート](feedback) |
 | 12:00 | 終了 |
 
-ワークショップの前に済ませておくこと（詳しくは [Pangeo@EOSC への登録](users-getting-started)）：
+ワークショップの前に済ませておくこと（詳しくは [事前登録](users-getting-started)、できれば 11 月 22 日まで）：
 
 - EGI Check-in に登録し、`vo.pangeo.eu` Virtual Organisation への参加を申請する（承認は手作業なので、早めに）。
 - [Copernicus Marine](https://data.marine.copernicus.eu/register) の無料アカウントを作る。

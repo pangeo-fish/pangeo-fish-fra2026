@@ -41,7 +41,7 @@ thumbnail: images/pangeo-fish-logo.png
 
 ワークショップは **2026年11月25日（水）10:00〜12:00** に、水産研究・教育機構（FRA）**横浜庁舎**で対面開催します。
 
-Pangeo@EOSC の[事前登録](users-getting-started)の手順を、**ワークショップの前に**済ませてください。参加申請の承認は手作業で行われるため、時間がかかることがあります。
+Pangeo@EOSC の[事前登録](users-getting-started)（3 ステップ）を、**できれば 11 月 22 日までに**済ませてください。参加申請の承認は手作業で行われるため、時間がかかることがあります。
 
 # 概要
 
@@ -67,4 +67,4 @@ Pangeo@EOSC の[事前登録](users-getting-started)の手順を、**ワーク�
 
 ## 環境の準備
 
-FRA 横浜ワークショップに参加する方は、[Pangeo@EOSC](https://pangeo-data.github.io/pangeo-eosc/) 上でノートブックを実行します。**ワークショップの前に**、[Pangeo@EOSC への登録](users-getting-started)の手順に従って登録してください。ワークショップ後も Pangeo@EOSC を使い続けたい場合は、同じアカウントをそのまま使えます。
+FRA 横浜ワークショップに参加する方は、[Pangeo@EOSC](https://pangeo-data.github.io/pangeo-eosc/) 上でノートブックを実行します。**ワークショップの前に**、[事前登録](users-getting-started)の 3 つのステップを済ませてください（できれば 11 月 22 日まで）。ワークショップ後も Pangeo@EOSC を使い続けたい場合は、同じアカウントをそのまま使えます。
