@@ -68,7 +68,7 @@ Pangeo@EOSC を使うには、仮想組織（Virtual Organisation、VO）`vo.pan
 
 ## 事前登録はこれで完了です
 
-承認のメールが届いたら、時間があれば下の「ワークショップの環境を起動する」の手順で一度ログインし、環境を起動してみてください。当日の待ち時間を減らせます。うまくいかない場合は、[issue](https://github.com/pangeo-fish/pangeo-fish-fra2026/issues) でお知らせください。
+承認のメールが届いたら、時間があれば {doc}`pangeo-eosc` の「ワークショップの環境を起動する」の手順で一度ログインし、環境を起動してみてください。当日の待ち時間を減らせます。うまくいかない場合は、[issue](https://github.com/pangeo-fish/pangeo-fish-fra2026/issues) でお知らせください。
 
 :::{note}
 **FRA 横浜ワークショップ**の終了後も、同じアカウントで引き続きこの環境を使うことができます。
