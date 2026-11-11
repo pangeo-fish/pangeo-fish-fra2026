@@ -19,6 +19,7 @@ parts:
       - file: gfts
       # 次の行は fra-roms.md を作成したら有効にする（手順7）。ファイルがないとビルドが失敗する。
       # - file: fra-roms
+      - file: cite
       - file: feedback
   - caption: チュートリアルの先へ
     chapters:

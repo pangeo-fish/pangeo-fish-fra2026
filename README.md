@@ -31,6 +31,14 @@ jupyter-book build docs
 
 The HTML is generated in `docs/_build/html`. The book is deployed automatically to GitHub Pages by [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) on every push to `main` touching `docs/`.
 
+## Citing pangeo-fish
+
+If you use pangeo-fish in your research, please cite:
+
+Magin, J., Mazouni, Q., Cap, E., Gonse, M., Woillez, M., Fouilloux, A., Delouis, J.-M., and Odaka, T.: pangeo-fish: A Python package for studying fish movement using biologging and earth science data, *Journal of Open Source Software*, 11(122), 8332, https://doi.org/10.21105/joss.08332, 2026.
+
+See [研究で pangeo-fish を使ったら：引用のしかた](https://pangeo-fish.github.io/pangeo-fish-fra2026/cite.html) for the data and tools to cite as well, and a list of studies that used pangeo-fish.
+
 ## Acknowledgements
 
 This repository is derived from [pangeo-data/pangeo-bids25](https://github.com/pangeo-data/pangeo-bids25) (Pangeo tutorial at BiDS 2025). The GLORYS notebook (Xarray, Dask, Zarr, HEALPix) is adapted from its *Introduction to HEALPix and Dask* notebook. The pangeo-fish notebook comes from [pangeo-fish/pangeo-fish](https://github.com/pangeo-fish/pangeo-fish/blob/main/notebooks/pangeo-fish.ipynb).
