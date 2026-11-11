@@ -1,116 +1,116 @@
 
-# Registration to Pangeo@EOSC
+# Pangeo@EOSC への登録
 
-As explained in the previous section, Pangeo@EOSC is the main public deployment of the Pangeo ecosystem open to European researchers and their collaborators.
-The deployment is hosted on European infrastructure and is meant to remain public and freely accessible to all European researchers. Pangeo@Europe mostly uses Pangeo@EOSC for training researchers.
+前のセクションで説明したように、Pangeo@EOSC は、ヨーロッパの研究者とその共同研究者に開かれた、Pangeo エコシステムの主要な公開環境です。
+この環境はヨーロッパのインフラ上で運用されており、すべてのヨーロッパの研究者が無料で使える公開の環境として維持されることを目指しています。Pangeo@Europe は、研究者向けのトレーニングに主に Pangeo@EOSC を使っています。
 
-In this section you will learn how to register and access pangeo@eosc services, and how to start the workshop environment with a single click.
+このセクションでは、Pangeo@EOSC のサービスに登録してアクセスする方法と、ワンクリックでワークショップの環境を起動する方法を説明します。
 
-You need to create an [EGI Check-in account](https://www.egi.eu/service/check-in/) and enroll to the `vo.pangeo.eu` Virtual Organisation. There are several steps to follow:
+[EGI Check-in アカウント](https://www.egi.eu/service/check-in/)を作成し、仮想組織（Virtual Organisation、VO）`vo.pangeo.eu` に参加登録する必要があります。手順は次のとおりです。
 
-1. **Sign up** for an EGI Check-in account following [these steps](https://docs.egi.eu/users/aai/check-in/signup/). **Using [ORCID iD](https://orcid.org/) to authenticate is recommended.**
-2. **Enroll** in the `vo.pangeo.eu` Virtual Organisation (VO) by clicking on [the enrollment URL](https://aai.egi.eu/auth/realms/id/account/#/enroll?groupPath=/vo.pangeo.eu) using the EGI Check-in account created in the previous step. In the **"reason to join"** field, please write exactly:
+1. [こちらの手順](https://docs.egi.eu/users/aai/check-in/signup/)に従って EGI Check-in アカウントに**サインアップ**します。**認証には [ORCID iD](https://orcid.org/) を使うことをおすすめします。**
+2. 前の手順で作成した EGI Check-in アカウントで[参加登録用の URL](https://aai.egi.eu/auth/realms/id/account/#/enroll?groupPath=/vo.pangeo.eu) をクリックし、仮想組織（VO）`vo.pangeo.eu` に**参加登録**します。**"reason to join"**（参加理由）の欄には、次の文をそのまま入力してください。
 
    ```text
-   Attend the pangeo-fish workshop at the ETN Symposium 2026 in Copenhagen
+   Attend the pangeo-fish workshop at FRA in Yokohama, November 2026
    ```
 
-   Using this exact text lets us identify workshop participants and approve the requests as soon as possible. Review and click on `Submit`.
+   この文をそのまま使っていただくと、ワークショップの参加者であることが分かり、できるだけ早く承認できます。内容を確認して `Submit` をクリックします。
 
 :::{warning}
-The approval of your enrollment to the VO is done **manually**. Please register **as early as possible before the workshop** (ideally a few days before), otherwise you may not be able to log in during the session.
+VO への参加登録の承認は**手作業**で行います。**ワークショップより十分前に**（できれば数日前までに）登録してください。間に合わないと、当日ログインできないことがあります。
 :::
 
 :::{note}
-After the **ETN Symposium 2026 pangeo-fish workshop**, you can continue to use the resources.
-We would appreciate you get in touch with us to give us some feedback and be informed of the platform evolution. You can do this through [Github Discussions](https://github.com/pangeo-data/pangeo-eosc/discussions).
+**FRA 横浜ワークショップ**の終了後も、引き続きこの環境を使うことができます。
+ぜひご感想をお寄せください。プラットフォームの今後の情報もお知らせします。連絡には [GitHub Discussions](https://github.com/pangeo-data/pangeo-eosc/discussions) をお使いください。
 
-You can also contribute to "the Pangeo show and tell" online meetups.
+オンラインのミートアップ「Pangeo show and tell」で発表していただくこともできます。
 :::
 
-## Start the workshop environment (one click)
+## ワークショップの環境を起動する（ワンクリック）
 
-Once your enrollment has been approved, first [log in to Pangeo@EOSC](https://pangeo-eosc.vm.fedcloud.eu/hub/login). Click **Sign in with EGI Check-in** and use the same ORCID iD / EGI account you used to register. After logging in, return to this page and use the launch link below. The launch link may not work correctly if you are not already logged in.
+参加登録が承認されたら、まず [Pangeo@EOSC にログイン](https://pangeo-eosc.vm.fedcloud.eu/hub/login)します。**Sign in with EGI Check-in** をクリックし、登録に使ったのと同じ ORCID iD / EGI アカウントでログインしてください。ログインしたらこのページに戻り、下の起動リンクを使います。ログインしていない状態では、起動リンクが正しく動かないことがあります。
 
-The launch link will:
+起動リンクは次のことを行います。
 
-1. start a JupyterLab server with the **pangeo-fish Docker image** (`ghcr.io/tinaok/pangeo-fish-notebook:2026.06.04-10751a5`),
-2. **clone this repository** (`pangeo-fish-fra2026`) into your home directory (or update it if it is already there) and open the pangeo-fish notebook.
+1. **pangeo-fish の Docker イメージ**（`ghcr.io/tinaok/pangeo-fish-notebook:2026.06.04-10751a5`）で JupyterLab サーバーを起動します。
+2. **このリポジトリ**（`pangeo-fish-fra2026`）をホームディレクトリに**クローン**し（すでにある場合は更新し）、pangeo-fish のノートブックを開きます。
 
-👉 **<a href="https://pangeo-eosc.vm.fedcloud.eu/hub/spawn?profile=only-choice&amp;profile-option-only-choice--image--unlisted-choice=ghcr.io%2Ftinaok%2Fpangeo-fish-notebook%3A2026.06.04-10751a5&amp;next=%2Fhub%2Fuser-redirect%2Fgit-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252Fpangeo-fish%252Fpangeo-fish-fra2026%26urlpath%3Dlab%252Ftree%252Fpangeo-fish-fra2026%252Fdocs%252Fpangeo-fish.ipynb%26branch%3Dmain">Start the ETN 2026 pangeo-fish workshop environment</a>** 👈
+👉 **<a href="https://pangeo-eosc.vm.fedcloud.eu/hub/spawn?profile=only-choice&amp;profile-option-only-choice--image--unlisted-choice=ghcr.io%2Ftinaok%2Fpangeo-fish-notebook%3A2026.06.04-10751a5&amp;next=%2Fhub%2Fuser-redirect%2Fgit-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252Fpangeo-fish%252Fpangeo-fish-fra2026%26urlpath%3Dlab%252Ftree%252Fpangeo-fish-fra2026%252Fdocs%252Fpangeo-fish.ipynb%26branch%3Dmain">FRA 2026 pangeo-fish ワークショップの環境を起動する</a>** 👈
 
-Alternatively, after logging in, copy and paste this URL into your browser's address bar:
+または、ログインしたあとで、次の URL をブラウザのアドレスバーにコピー＆ペーストしてください。
 
 ```
 https://pangeo-eosc.vm.fedcloud.eu/hub/spawn?profile=only-choice&profile-option-only-choice--image--unlisted-choice=ghcr.io%2Ftinaok%2Fpangeo-fish-notebook%3A2026.06.04-10751a5&next=%2Fhub%2Fuser-redirect%2Fgit-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252Fpangeo-fish%252Fpangeo-fish-fra2026%26urlpath%3Dlab%252Ftree%252Fpangeo-fish-fra2026%252Fdocs%252Fpangeo-fish.ipynb%26branch%3Dmain
 ```
 
 :::{note}
-If a JupyterLab server is **already running** for you (for example with another image), the link above opens that server instead of starting a new one with the pangeo-fish image. In that case, stop it first: in JupyterLab, go to `File > Hub Control Panel`, click `Stop My Server`, then click the link again.
+JupyterLab サーバーが**すでに動いている**場合（たとえば別のイメージで起動している場合）、上のリンクは pangeo-fish のイメージで新しいサーバーを起動せず、動いているサーバーを開きます。その場合は、先にサーバーを停止してください。JupyterLab で `File > Hub Control Panel` を開き、`Stop My Server` をクリックしてから、もう一度リンクをクリックします。
 :::
 
-The 🚀 (rocket) button at the top of every notebook page of this book does the same thing (clone/update the repository and open that notebook) with the `JupyterHub` entry, but it does **not** select the Docker image for you.
+このブックの各ノートブックのページ上部にある 🚀（ロケット）ボタンの `JupyterHub` からも同じこと（リポジトリのクローン・更新と、そのノートブックを開くこと）ができます。ただし、Docker イメージは自動では選ばれ**ません**。
 
-## Access to Pangeo@EOSC manually
+## Pangeo@EOSC に手動でアクセスする
 
-You can also access Pangeo@EOSC via [https://pangeo-eosc.vm.fedcloud.eu/](https://pangeo-eosc.vm.fedcloud.eu/). Click on `Sign in with EGI Check-in` and then use your ORCID iD credentials.
+[https://pangeo-eosc.vm.fedcloud.eu/](https://pangeo-eosc.vm.fedcloud.eu/) から Pangeo@EOSC にアクセスすることもできます。`Sign in with EGI Check-in` をクリックし、ORCID iD でログインしてください。
 
-In the server options, under **Image**, choose **"Specify an existing docker image"** (custom image) and enter:
+サーバーのオプションの **Image** で **"Specify an existing docker image"**（カスタムイメージ）を選び、次を入力します。
 
 ```
 ghcr.io/tinaok/pangeo-fish-notebook:2026.06.04-10751a5
 ```
 
-The fixed tag `2026.06.04-10751a5` contains the Pangeo-Fish version prepared for this workshop. Use this fixed tag so that everybody runs the same environment. The image is built and tested by [tinaok/pangeo-fish-docker](https://github.com/tinaok/pangeo-fish-docker).
+固定タグ `2026.06.04-10751a5` には、このワークショップ用に準備した Pangeo-Fish のバージョンが入っています。全員が同じ環境で作業できるよう、この固定タグを使ってください。イメージは [tinaok/pangeo-fish-docker](https://github.com/tinaok/pangeo-fish-docker) でビルド・テストされています。
 
-Once JupyterLab is started, open a terminal and clone this repository:
+JupyterLab が起動したら、ターミナルを開いてこのリポジトリをクローンします。
 
 ```
 git clone https://github.com/pangeo-fish/pangeo-fish-fra2026.git
 ```
 
-or use the one-click link of the previous section.
+または、前のセクションのワンクリック起動リンクを使ってください。
 
-## Which kernel to use
+## どのカーネルを使うか
 
-The Docker image provides two Python kernels. **Use "Python (pangeo-fish)" for all the notebooks of this workshop** (it is selected automatically when you open them from this repository). The other kernel, "Python 3 (ipykernel)", is the standard Pangeo notebook environment without pangeo-fish.
+Docker イメージには 2 つの Python カーネルがあります。**このワークショップのノートブックでは、すべて「Python (pangeo-fish)」を使ってください**（このリポジトリからノートブックを開くと自動で選ばれます）。もう一方の「Python 3 (ipykernel)」は、pangeo-fish を含まない標準の Pangeo ノートブック環境です。
 
-In a terminal, the pangeo-fish environment is activated with `conda activate pangeo-fish`.
+ターミナルでは、`conda activate pangeo-fish` で pangeo-fish の環境を有効にできます。
 
-A few practical JupyterLab tips (running all cells, shutting down kernels, stopping your server, deleting folders) are gathered in {doc}`jupyterlab-basics`.
+JupyterLab の実用的なヒント（すべてのセルの実行、カーネルの終了、サーバーの停止、フォルダの削除など）は {doc}`jupyterlab-basics` にまとめています。
 
-## Copernicus Marine credentials
+## Copernicus Marine の認証情報
 
-Both notebooks download ocean model data (GLORYS, Global Ocean Physics Reanalysis) from the [Copernicus Marine Service](https://data.marine.copernicus.eu/). You need a (free) Copernicus Marine account:
+どちらのノートブックも、[Copernicus Marine Service](https://data.marine.copernicus.eu/) から海洋モデルのデータ（GLORYS、全球海洋物理再解析）をダウンロードします。そのため、Copernicus Marine の（無料の）アカウントが必要です。
 
-1. Go to [https://data.marine.copernicus.eu/register](https://data.marine.copernicus.eu/register) and create an account (an email address is enough; confirm it by clicking on the link you receive).
-2. Remember your **username** (often your email address) and **password**.
-3. The first notebook asks for them once (`copernicusmarine.login()`) and stores them in `~/.copernicusmarine/.copernicusmarine-credentials` in your home directory on Pangeo@EOSC, which is persistent. You will not be asked again.
+1. [https://data.marine.copernicus.eu/register](https://data.marine.copernicus.eu/register) でアカウントを作成します（メールアドレスがあれば作れます。届いたメールのリンクをクリックして確認してください）。
+2. **ユーザー名**（多くの場合メールアドレス）と**パスワード**を控えておきます。
+3. 最初のノートブックで一度だけ入力を求められます（`copernicusmarine.login()`）。入力した情報は Pangeo@EOSC のホームディレクトリの `~/.copernicusmarine/.copernicusmarine-credentials` に保存されます。ホームディレクトリは永続的なので、再び入力を求められることはありません。
 
-Please create the account **before the workshop**: the confirmation email can take a few minutes to arrive.
+確認メールが届くまで数分かかることがあるので、アカウントは**ワークショップの前に**作成しておいてください。
 
-## Resources
+## 計算資源
 
-Currently (September 2023) Pangeo@EOSC is configured to host 20 simultaneous users with Jupyter (8 CPUs, 32GB RAM) and a Dask cluster (max: 4 workers, each worker with 8 CPUs and 32 GB RAM). This is subject to change depending on usage and resource availability at CESNET.
+現在（2023 年 9 月時点）、Pangeo@EOSC は、Jupyter（8 CPU、32 GB RAM）と Dask クラスター（最大 4 ワーカー、各ワーカー 8 CPU・32 GB RAM）を 20 人が同時に使える構成になっています。この構成は、利用状況や CESNET の資源の空き状況によって変わることがあります。
 
-A [Dask Gateway](https://gateway.dask.org/) is available for scaling your computation. For more details on this deployment, you may want to take a look at [Daskhub helm chart](https://github.com/dask/helm-chart/tree/main/daskhub).
+計算をスケールさせるために [Dask Gateway](https://gateway.dask.org/) が使えます。この環境の詳細は [Daskhub の Helm チャート](https://github.com/dask/helm-chart/tree/main/daskhub)を参照してください。
 
-## Access MinIO
+## MinIO へのアクセス
 
-Each user has a very small amount of local storage when using the DaskHub as it is not meant to be used for storing large data.  Instead a dedicated [MinIO Object storage](https://min.io) has been setup.
+DaskHub は大きなデータを保存するためのものではないので、各ユーザーのローカルストレージはごくわずかです。その代わりに、専用の [MinIO オブジェクトストレージ](https://min.io)が用意されています。
 
-The MinIO console endpoint is: [https://pangeo-eosc-minio.vm.fedcloud.eu/](https://pangeo-eosc-minio.vm.fedcloud.eu/). You can authenticate to the MinIO Object Storage in the same way you login to DaskHub. As shown on the Figure below, make sure you "Select Other Authentication Method" and "Login with SSO (checkin)" to access the MinIO console. Then use your ORCID iD to login.
+MinIO コンソールのエンドポイントは [https://pangeo-eosc-minio.vm.fedcloud.eu/](https://pangeo-eosc-minio.vm.fedcloud.eu/) です。MinIO オブジェクトストレージには、DaskHub と同じ方法でログインできます。下の図のように、"Select Other Authentication Method" を選び、"Login with SSO (checkin)" から MinIO コンソールに入ってください。そのあと ORCID iD でログインします。
 
-![minIO Login](images/minIO_login.png)
+![MinIO のログイン画面](images/minIO_login.png)
 
-You can create, access and manage your buckets from the minIO console (or use [minIO Python package](https://min.io/docs/minio/linux/developers/python/minio-py.html)). The figure below shows the GUI (with several tabs on the left; the bucket tab is selected on the figure): initially, you won't have any buckets so please feel free to create public/privates buckets.
+MinIO コンソールでは、バケットの作成・アクセス・管理ができます（[MinIO の Python パッケージ](https://min.io/docs/minio/linux/developers/python/minio-py.html)を使うこともできます）。下の図はその画面です（左側にいくつかのタブがあり、図ではバケットのタブが選ばれています）。最初はバケットが 1 つもないので、公開・非公開のバケットを自由に作成してください。
 
-![minIO buckets](images/minIO_buckets.png)
+![MinIO のバケット](images/minIO_buckets.png)
 
-In addition to the MinIO console, the API end point is `https://pangeo-eosc-minioapi.vm.fedcloud.eu/` for those who prefer to interact with MinIO via the API.
+API で MinIO を操作したい場合は、MinIO コンソールのほかに API エンドポイント `https://pangeo-eosc-minioapi.vm.fedcloud.eu/` が使えます。
 
-## Support
+## サポート
 
-If you need support, please open an [issue](https://github.com/pangeo-fish/pangeo-fish-fra2026/issues).
+サポートが必要な場合は、[issue](https://github.com/pangeo-fish/pangeo-fish-fra2026/issues) を作成してください。
 
-Please include the output of the last cell of the Pangeo-Fish notebook (appendix **Information for bug reports**): it shows which Docker image, Pangeo-Fish commit and notebook version you used.
+その際、Pangeo-Fish ノートブックの最後のセル（付録 **Information for bug reports**）の出力を添えてください。どの Docker イメージ、Pangeo-Fish のコミット、ノートブックのバージョンを使ったかが分かります。
