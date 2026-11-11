@@ -79,7 +79,7 @@ Pangeo@EOSC を使うには、仮想組織（Virtual Organisation、VO）`vo.pan
 
 # 当日：Pangeo@EOSC の使い方
 
-Pangeo@EOSC は、ヨーロッパの研究者とその共同研究者に開かれた、Pangeo エコシステムの主要な公開環境です。ヨーロッパのインフラ上で運用されており、Pangeo@Europe は研究者向けのトレーニングに主に Pangeo@EOSC を使っています。
+Pangeo@EOSC は、ヨーロッパの研究者とその共同研究者に開かれた、Pangeo エコシステムの主要な公開環境です。ヨーロッパのインフラ上で運用されており、Pangeo@Europe は研究者向けのトレーニングに主に Pangeo@EOSC を使っています。計算資源やストレージ（MinIO）については {doc}`pangeo` を見てください。
 
 ## ワークショップの環境を起動する（ワンクリック）
 
@@ -132,28 +132,8 @@ Docker イメージには 2 つの Python カーネルがあります。**この
 
 JupyterLab の実用的なヒント（すべてのセルの実行、カーネルの終了、サーバーの停止、フォルダの削除など）は {doc}`jupyterlab-basics` にまとめています。
 
-## 計算資源
-
-現在（2023 年 9 月時点）、Pangeo@EOSC は、Jupyter（8 CPU、32 GB RAM）と Dask クラスター（最大 4 ワーカー、各ワーカー 8 CPU・32 GB RAM）を 20 人が同時に使える構成になっています。この構成は、利用状況や CESNET の資源の空き状況によって変わることがあります。
-
-計算をスケールさせるために [Dask Gateway](https://gateway.dask.org/) が使えます。この環境の詳細は [Daskhub の Helm チャート](https://github.com/dask/helm-chart/tree/main/daskhub)を参照してください。
-
-## MinIO へのアクセス
-
-DaskHub は大きなデータを保存するためのものではないので、各ユーザーのローカルストレージはごくわずかです。その代わりに、専用の [MinIO オブジェクトストレージ](https://min.io)が用意されています。
-
-MinIO コンソールのエンドポイントは [https://pangeo-eosc-minio.vm.fedcloud.eu/](https://pangeo-eosc-minio.vm.fedcloud.eu/) です。MinIO オブジェクトストレージには、DaskHub と同じ方法でログインできます。下の図のように、"Select Other Authentication Method" を選び、"Login with SSO (checkin)" から MinIO コンソールに入ってください。そのあと ORCID iD でログインします。
-
-![MinIO のログイン画面](images/minIO_login.png)
-
-MinIO コンソールでは、バケットの作成・アクセス・管理ができます（[MinIO の Python パッケージ](https://min.io/docs/minio/linux/developers/python/minio-py.html)を使うこともできます）。下の図はその画面です（左側にいくつかのタブがあり、図ではバケットのタブが選ばれています）。最初はバケットが 1 つもないので、公開・非公開のバケットを自由に作成してください。
-
-![MinIO のバケット](images/minIO_buckets.png)
-
-API で MinIO を操作したい場合は、MinIO コンソールのほかに API エンドポイント `https://pangeo-eosc-minioapi.vm.fedcloud.eu/` が使えます。
-
 ## サポート
 
 サポートが必要な場合は、[issue](https://github.com/pangeo-fish/pangeo-fish-fra2026/issues) を作成してください。
 
-その際、Pangeo-Fish ノートブックの最後のセル（付録 **Information for bug reports**）の出力を添えてください。どの Docker イメージ、Pangeo-Fish のコミット、ノートブックのバージョンを使ったかが分かります。
+その際、Pangeo-Fish ノートブックの最後のセル（付録「**バグ報告用の情報（Information for bug reports）**」）の出力を添えてください。どの Docker イメージ、Pangeo-Fish のコミット、ノートブックのバージョンを使ったかが分かります。

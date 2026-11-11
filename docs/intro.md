@@ -37,9 +37,20 @@ thumbnail: images/pangeo-fish-logo.png
 
 +++
 
-# 日時・場所・事前登録
+# 日時・場所・時間割・事前登録
 
 ワークショップは **2026年11月25日（水）10:00〜12:00** に、水産研究・教育機構（FRA）**横浜庁舎**で対面開催します。
+
+## 時間割
+
+```{include} agenda.md
+:start-after: <!-- timetable-start -->
+:end-before: <!-- timetable-end -->
+```
+
+詳しくは {doc}`agenda` のページを見てください。
+
+## 事前登録
 
 Pangeo@EOSC の[事前登録](users-getting-started)（3 ステップ）を、**できれば 11 月 22 日までに**済ませてください。参加申請の承認は手作業で行われるため、時間がかかることがあります。
 
