@@ -1,0 +1,1731 @@
+
+<!DOCTYPE html>
+
+
+<html lang="ja" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Pangeo-Fish による魚類の位置推定 &#8212; Pangeo-Fish による魚類の位置推定 - FRA 横浜ワークショップ 2026</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/exercise.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=1cf7f4d9"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="_static/translations.js?v=91613774"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'pangeo-fish';</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="将来の海での魚の姿：GFTS" href="gfts.html" />
+    <link rel="prev" title="Python で海洋モデルデータを扱う：Xarray、Dask、Zarr、HEALPix" href="glorys-xarray-dask-zarr-healpix.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="ja"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">本文へスキップ</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>トップに戻る</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="バージョン警告"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/pangeo-fish-logo.png" class="logo__image only-light" alt="Pangeo-Fish による魚類の位置推定 - FRA 横浜ワークショップ 2026 - Home"/>
+    <img src="_static/pangeo-fish-logo.png" class="logo__image only-dark pst-js-only" alt="Pangeo-Fish による魚類の位置推定 - FRA 横浜ワークショップ 2026 - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="検索" aria-label="検索" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">検索</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Pangeo-Fish による魚類の位置推定
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">このワークショップについて</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="agenda.html">時間割</a></li>
+<li class="toctree-l1"><a class="reference internal" href="users-getting-started.html">事前登録（できれば 11 月 22 日まで）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pangeo-eosc.html">当日：Pangeo@EOSC の使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jupyterlab-basics.html">JupyterLab の使い方のヒント</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pangeo と EOSC の概要</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="pangeo.html">EOSC と Pangeo コミュニティ</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Python で海洋モデルデータを扱う</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="glorys-xarray-dask-zarr-healpix.html">GLORYS で学ぶ Xarray・Dask・Zarr・HEALPix</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">pangeo-fish と GFTS による魚類の位置推定</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Pangeo-Fish による魚類の位置推定</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gfts.html">将来の海での魚の姿：GFTS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cite.html">研究で pangeo-fish を使ったら：引用のしかた</a></li>
+<li class="toctree-l1"><a class="reference internal" href="feedback.html">アンケート</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">チュートリアルの先へ</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="afterword/resources.html">コミュニティに参加しましょう！</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="afterword/pythia.html">Project Pythia</a></li>
+<li class="toctree-l1"><a class="reference internal" href="afterword/edsbook.html">Environmental Data Science Book</a></li>
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://notebooks.gesis.org/binder/v2/gh/pangeo-fish/pangeo-fish-fra2026/main?urlpath=lab/tree/docs/pangeo-fish.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Binder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Binder logo" src="_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://pangeo-eosc.vm.fedcloud.eu/hub/user-redirect/git-pull?repo=https%3A//github.com/pangeo-fish/pangeo-fish-fra2026&urlpath=lab/tree/pangeo-fish-fra2026/docs/pangeo-fish.ipynb&branch=main" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on JupyterHub"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="JupyterHub logo" src="_static/images/logo_jupyterhub.svg">
+  </span>
+<span class="btn__text-container">JupyterHub</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/pangeo-fish/pangeo-fish-fra2026" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="ソースリポジトリ"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/pangeo-fish/pangeo-fish-fra2026/issues/new?title=Issue%20on%20page%20%2Fpangeo-fish.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="問題を報告"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="このページをダウンロード">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/pangeo-fish.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="ソースファイルをダウンロード"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="PDFに印刷"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="全画面モード"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="ライト"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="ダーク"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="検索" aria-label="検索" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Pangeo-Fish による魚類の位置推定</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> 目次 </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">1. 解析の準備</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">解析ツールを読み込む</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">解析の設定</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">計算の準備</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">タグの観測データを読み込む</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#copernicus-marine">Copernicus Marine にサインインする</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">2. タグと海洋モデルの水温を比べる</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">解析する海域の海水温を読み込む</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">候補となる場所で水温を比べる</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">データがそろっているかを時間ごとに確認する</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">3. 候補となる場所を等面積の格子で表す</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">4. 水温と合う場所を見つける</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">5. 音響テレメトリーの受信記録を加える</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">手がかりをまとめる</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">6. 水温と音響テレメトリーの手がかりを統合する</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">7. 魚がどのくらいの範囲を移動できるかを推定する</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">8. 位置を推定し、移動経路をまとめる</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">9. 地図と移動経路を見る</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id18">9.1 移動経路を比べる</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id19">9.2 確率分布の時間変化を見る</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gfts">10. 次のステップ：GFTS で見る、将来の海での魚の姿</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id20">研究で使うときは</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id21">補足の付録：移動の仮定を比べる</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#information-for-bug-reports">付録：バグ報告用の情報（Information for bug reports）</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="pangeo-fish">
+<h1>Pangeo-Fish による魚類の位置推定<a class="headerlink" href="#pangeo-fish" title="Link to this heading">#</a></h1>
+<p><strong>放流から再捕までのあいだ、魚はどこを移動していたのでしょうか？</strong> このワークショップでは、タグが記録した水温を海洋モデルの水温や音響テレメトリーの受信記録と組み合わせ、各時刻に魚がいた可能性のある場所を推定します。</p>
+<p>使うのは、M. Gonse ほかの研究 &quot;Combining acoustic telemetry with archival tagging to investigate the spatial dynamic of the understudied pollack, <em>Pollachius pollachius</em>&quot;（<em>Journal of Fish Biology</em> 106(5): 1400–1421, 2024, <a class="reference external" href="https://doi.org/10.1111/jfb.15750">doi:10.1111/jfb.15750</a>）のタグ <code class="docutils literal notranslate"><span class="pre">A19124</span></code> です。このアーカイバルタグ（Data Storage Tag、DST）は水温と深度を記録しています。放流と再捕（または死亡）の情報も、位置を絞り込む追加の手がかりになります。</p>
+<p>このノートブックは、すぐに使える FRA 横浜ワークショップ用の環境で動かすことを前提にしています。カーネルは <strong>Python (pangeo-fish)</strong> を選んでください。準備の詳細は「<a class="reference internal" href="users-getting-started.html"><span class="std std-doc">事前登録</span></a>」のページにあります。</p>
+<p>Pangeo&#64;EOSC の登録が承認されたら、まず <a class="reference external" href="https://pangeo-eosc.vm.fedcloud.eu/hub/login">Pangeo&#64;EOSC にログイン</a>してください。ログインしたらこのページに戻り、下の起動リンクを使います。ログインしていない状態では、起動リンクが正しく動かないことがあります。</p>
+<p><strong><a href="https://pangeo-eosc.vm.fedcloud.eu/hub/spawn?profile=only-choice&amp;profile-option-only-choice--image--unlisted-choice=ghcr.io%2Ftinaok%2Fpangeo-fish-notebook%3A2026.06.04-10751a5&amp;next=%2Fhub%2Fuser-redirect%2Fgit-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252Fpangeo-fish%252Fpangeo-fish-fra2026%26urlpath%3Dlab%252Ftree%252Fpangeo-fish-fra2026%252Fdocs%252Fpangeo-fish.ipynb%26branch%3Dmain">ここをクリックして、ワークショップの環境を起動し、このノートブックを開きます</a></strong>。</p>
+<p>または、ログインしたあとで、次の URL をコピーしてブラウザのアドレスバーに貼り付けてください。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>https://pangeo-eosc.vm.fedcloud.eu/hub/spawn?profile=only-choice&amp;profile-option-only-choice--image--unlisted-choice=ghcr.io%2Ftinaok%2Fpangeo-fish-notebook%3A2026.06.04-10751a5&amp;next=%2Fhub%2Fuser-redirect%2Fgit-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252Fpangeo-fish%252Fpangeo-fish-fra2026%26urlpath%3Dlab%252Ftree%252Fpangeo-fish-fra2026%252Fdocs%252Fpangeo-fish.ipynb%26branch%3Dmain
+</pre></div>
+</div>
+<p>ワークショップの内容を絞るため、ここでは水温と音響テレメトリーの観測だけを使います。水深（海底地形）による尤度、潮汐、光による位置推定、行動解析は、このチュートリアルでは扱いません。海底地形や潮汐・行動解析のツールはすでにあり、光による尤度も開発済みで、ワークショップ版への組み込みを待っている段階です。これらのテーマでワークショップを希望される場合は、<a class="reference external" href="https://github.com/pangeo-fish/pangeo-fish/issues/new/choose">Pangeo-Fish のメインリポジトリで issue を作成</a>してください。</p>
+<p><strong>解析の流れ</strong></p>
+<ol class="arabic simple">
+<li><p><strong>解析の準備：</strong> ツールを読み込み、解析の設定を選びます。</p></li>
+<li><p><strong>水温の比較：</strong> 候補となる場所ごとに、タグの観測値と海洋モデルの水温を比べます。</p></li>
+<li><p><strong>等面積の格子を使う：</strong> 候補となる場所を HEALPix のセルで表します。</p></li>
+<li><p><strong>水温と合う場所を見つける：</strong> 水温がよく一致する場所ほど大きな重みを与えます。</p></li>
+<li><p><strong>音響テレメトリーの受信記録を加える：</strong> 受信機での受信記録を使って場所を絞り込みます。</p></li>
+<li><p><strong>手がかりを統合する：</strong> 各時刻で、これらの観測をひとつにまとめます。</p></li>
+<li><p><strong>移動を推定する：</strong> 時刻と時刻のあいだに魚がどのくらいの範囲を移動できるかを推定します。</p></li>
+<li><p><strong>位置と移動経路を推定する：</strong> 観測と移動モデルを組み合わせます。</p></li>
+<li><p><strong>結果を見る：</strong> 地図を確認し、移動経路を比べ、動画を作ります。</p></li>
+<li><p><strong>次のステップ（GFTS）：</strong> Destination Earth で、自分の魚を将来の海水温と並べて見てみます。</p></li>
+</ol>
+<p>観測を時間方向につなぐために、隠れマルコフモデル（Hidden Markov Model、HMM）を使います。魚の位置は直接わかりません。このモデルは、観測と移動についての仮定の両方を使って、魚がいた可能性のある場所を推定します。</p>
+<section id="id1">
+<h2>1. 解析の準備<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<p>セルは上から順に実行してください。コードセルをクリックして <strong>Shift+Enter</strong> を押すと、そのセルが実行され、次のセルに移ります。計算が終わるのを待ってから次に進んでください。セルでエラーが出たら、そのあとのステップを実行する前に講師に声をかけてください。あとで問題を報告するときは、このノートブックの最後にある付録「<strong>バグ報告用の情報（Information for bug reports）</strong>」のセルを実行し、その出力を報告に貼り付けてください。</p>
+<p>ワークショップの環境には、必要な Python パッケージがすでに入っています。下の準備用のセルは、変更せずにそのまま実行してください。</p>
+<p>このセルは、ワークショップで使う計算環境を選びます。そのまま実行してください。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># CPU で実行します。</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"CUDA_VISIBLE_DEVICES"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">""</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="id2">
+<h3>解析ツールを読み込む<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pint_xarray</span><span class="w"> </span><span class="kn">import</span> <span class="n">unit_registry</span> <span class="k">as</span> <span class="n">ureg</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">hvplot.xarray</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+<span class="c1"># sys.path.append("../")</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pangeo_fish</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pangeo_fish.xarray_update</span><span class="w"> </span><span class="kn">import</span> <span class="n">Accessor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pangeo_fish.helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">multiplot_healpix</span><span class="p">,</span> <span class="n">multi_map_with_synced_sliders</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id3">
+<h3>解析の設定<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<p>設定はすべてここにまとめ、使うセクションごとに分けてあります。最初は、用意された値のまま実行してください。ご自身の研究で使うときは、タグ、解析する海域、水温の許容幅、受信機の受信範囲の 4 つが特に重要な選択になります。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># セクション 1 — 初期化と設定</span>
+<span class="c1"># タグの ID。最後の代入で、このワークショップで使う A19124 を選んでいます。</span>
+<span class="n">tag_name</span> <span class="o">=</span> <span class="s2">"A18828"</span>
+<span class="n">tag_name</span> <span class="o">=</span> <span class="s2">"A19124"</span>
+
+<span class="c1"># タグデータの場所：公開 URL、ローカルのパス、または s3:// のバケットのパス。</span>
+<span class="n">tag_root</span> <span class="o">=</span> <span class="s2">"https://data-taos.ifremer.fr/demo/tag/tag/"</span>
+<span class="n">tag_storage_options</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="c1"># 予備：同じタグデータを Pangeo@EOSC の MinIO にミラーしたもの（公開、読み取り専用）。</span>
+<span class="c1"># data-taos.ifremer.fr につながらないときは、上の 2 行の代わりにこちらを使います。</span>
+<span class="c1"># tag_root = "s3://todaka-pangeo-fish-demo/tag"</span>
+<span class="c1"># tag_storage_options = {</span>
+<span class="c1">#     "anon": True,</span>
+<span class="c1">#     "client_kwargs": {"endpoint_url": "https://pangeo-eosc-minioapi.vm.fedcloud.eu"},</span>
+<span class="c1"># }</span>
+
+<span class="c1"># このワークショップで結果を保存するフォルダー。</span>
+<span class="n">scratch_root</span> <span class="o">=</span> <span class="s2">"./test"</span>
+
+<span class="c1"># scratch_root の下で結果を読み書きするための接続設定。</span>
+<span class="c1"># None ではデフォルトの設定を使います。このワークショップではこれで十分です。</span>
+<span class="c1"># scratch_root が s3:// の場合は、認証情報・プロファイルやエンドポイントの設定を指定します。</span>
+<span class="n">storage_options</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="c1"># まとめて処理する時刻の数。ワークショップではこの値のままにしてください。</span>
+<span class="c1"># 1 = チャンクごとに 1 時刻、-1 = すべての時刻を 1 つのチャンクに。</span>
+<span class="n">chunk_time</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="c1"># セクション 2 — 参照モデルの海洋データとアーカイバルタグ（DST）の観測を比べる</span>
+<span class="c1"># Copernicus Marine の海洋モデルを選びます。有効にする代入は 1 つだけにしてください。</span>
+<span class="c1"># どちらもワークショップの環境で動きます。最初は IBI を使ってください。</span>
+
+<span class="c1"># IBI 再解析 — 領域モデル、約 3 km、日ごと（デフォルト）</span>
+<span class="c1"># https://data.marine.copernicus.eu/product/IBI_MULTIYEAR_PHY_005_002</span>
+<span class="n">copernicus_model_name</span> <span class="o">=</span> <span class="s2">"cmems_mod_ibi_phy-temp_my_0.027deg_P1D-m"</span>
+
+<span class="c1"># GLORYS12 再解析 — 全球モデル、約 9 km、日ごと</span>
+<span class="c1"># https://data.marine.copernicus.eu/product/GLOBAL_MULTIYEAR_PHY_001_030</span>
+<span class="c1"># copernicus_model_name = "cmems_mod_glo_phy_my_0.083deg_P1D-m"</span>
+
+<span class="c1"># 選んだモデルを Copernicus Marine から読み込みます。このワークショップでは None のままにします。</span>
+<span class="n">ref_url</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="c1"># モデルを読み込む範囲（緯度・経度）。セクション 3 と 9 でも使います。</span>
+<span class="n">bbox</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"latitude"</span><span class="p">:</span> <span class="p">[</span><span class="mi">46</span><span class="p">,</span> <span class="mf">51.5</span><span class="p">],</span> <span class="s2">"longitude"</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">7</span><span class="p">,</span> <span class="mi">0</span><span class="p">]}</span>
+<span class="c1"># 魚が記録された深度に対して、モデルの海底が浅すぎるセルを除外します。</span>
+<span class="c1"># 同じモデルの時間区間でのタグの最大深度にこの割合を掛けた値よりも</span>
+<span class="c1"># 海底が浅いセルは除外されます。</span>
+<span class="c1"># 範囲：0 以上。実用的な値は 0 から 1 のあいだです。</span>
+<span class="c1">#   0    = フィルターなし：すべてのセルを残す（ワークショップの値）</span>
+<span class="c1">#   0.8  = 海底がタグの最大深度の 80% 以上の深さであること</span>
+<span class="c1">#          （モデルの海底地形の誤差をある程度許容する）</span>
+<span class="c1">#   1    = 海底がタグの最大深度と同じかそれより深いこと</span>
+<span class="c1"># 値が大きいほど多くのセルを除外します（より厳しい）。1 より大きいと、</span>
+<span class="c1"># 海底が魚よりわずかに深いだけのセルも除外されます。</span>
+<span class="n">relative_depth_threshold</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="c1"># セクション 3 — HEALPix への再格子化</span>
+<span class="c1"># 解析には HEALPix のセルを使います。セクション 3〜8 ではこの設定のままにします。</span>
+<span class="n">dims</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"cells"</span><span class="p">]</span>
+
+<span class="c1"># HEALPix の解像度（おおよその相当ピクセルサイズ）</span>
+<span class="c1"># refinement level が 1 つ上がるごとに、セルの面積は 1/4 になります。</span>
+<span class="c1"># セルの総数 = 12 * 4**refinement_level</span>
+<span class="c1"># 相当サイズ = 半径 6371 km の球としての地球上での sqrt(セルの面積)。</span>
+<span class="c1"># 幾何学的な辺の長さそのものではありません。</span>
+<span class="c1">#</span>
+<span class="c1"># refinement_level = 10  # 約 6.4 km</span>
+<span class="n">refinement_level</span> <span class="o">=</span> <span class="mi">11</span>    <span class="c1"># 約 3.2 km（解像度 3 km の IBI モデルに近い）</span>
+<span class="c1"># refinement_level = 12  # 約 1.6 km</span>
+<span class="c1">#</span>
+<span class="c1"># refinement level を上げると空間解像度は細かくなりますが、</span>
+<span class="c1"># セルの数と計算コストが増えます。</span>
+
+<span class="c1"># セクション 3 の HEALPix への再格子化で使う地球の形。格子と一緒に保存され、</span>
+<span class="c1"># 地図の描画と移動の探索はそこから読み込みます。ここでは "sphere" のままにします。</span>
+<span class="n">ellipsoid</span> <span class="o">=</span> <span class="s2">"sphere"</span>
+<span class="c1"># ellipsoid = "WGS84"  # 必要な精度に対して地球の扁平率が無視できないときに推奨。</span>
+
+<span class="c1"># セクション 4 — 水温にもとづく観測確率（emission probability）</span>
+<span class="c1"># 水温の許容幅（°C）：値が大きいほど、タグとモデルの水温の差を</span>
+<span class="c1"># より広く許容します（ガウス分布の標準偏差）。</span>
+<span class="n">differences_std</span> <span class="o">=</span> <span class="mf">0.75</span>
+<span class="c1"># 既知の放流地点と再捕（または死亡）地点のまわりの広がり：ガウス分布の</span>
+<span class="c1"># 標準偏差を、地球上の角度（ラジアン）で表したもの。地球の半径を掛けると</span>
+<span class="c1"># 距離になります：1e-4 rad x 6371 km ≈ 0.64 km。</span>
+<span class="c1"># これは HEALPix のセル 1 つ（レベル 11 で約 3.2 km）より小さいので、位置は</span>
+<span class="c1"># 実質的に放流（または再捕）地点のセルに固定されます。</span>
+<span class="c1"># 値が小さいほど空間的な制約が強くなります。ワークショップの値のままにしてください。</span>
+<span class="n">initial_std</span> <span class="o">=</span> <span class="mf">1e-4</span>
+<span class="n">recapture_std</span> <span class="o">=</span> <span class="mf">1e-4</span>
+
+<span class="c1"># セクション 5 — 音響テレメトリーの受信による確率</span>
+<span class="c1"># 各受信機のまわりで想定する最大受信距離。</span>
+<span class="n">receiver_buffer</span> <span class="o">=</span> <span class="n">ureg</span><span class="o">.</span><span class="n">Quantity</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="s2">"m"</span><span class="p">)</span>
+
+<span class="c1"># セクション 7 — 移動のパラメータの最適化</span>
+<span class="c1"># 移動距離を角度に変換するための地球の半径は、HEALPix 格子に保存された</span>
+<span class="c1"># 楕円体から求めます（"sphere" の場合は約 6371 km）。</span>
+<span class="c1"># 移動のパラメータの探索上限を決めるための速度の目安。</span>
+<span class="c1"># ありうる移動のひとつひとつに対する厳密な速度制限ではありません。</span>
+<span class="n">maximum_speed</span> <span class="o">=</span> <span class="n">ureg</span><span class="o">.</span><span class="n">Quantity</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s2">"km / day"</span><span class="p">)</span>
+<span class="c1"># 推定のときに試す sigma の値の上限に掛ける倍率。</span>
+<span class="c1"># 1 では maximum_speed とモデルの時間間隔で決まる上限をそのまま使い、</span>
+<span class="c1"># 2 ではその上限を 2 倍にします。推定される移動そのものを直接何倍かにするわけではありません。</span>
+<span class="c1"># このワークショップでは 1 のままにします。動画のコマの間引きとは関係ありません。</span>
+<span class="n">adjustment_factor</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="c1"># HealpixConv で使います。LargeHealpixConv や FoscatConv では使いません。</span>
+<span class="c1"># ワークショップではこの値のままにしてください。</span>
+<span class="n">truncate</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="c1"># パラメータ探索の数値精度。ワークショップの値のままにしてください。</span>
+<span class="n">tolerance</span> <span class="o">=</span> <span class="mf">1e-6</span>
+
+<span class="c1"># セクション 8 — 状態確率と移動経路</span>
+<span class="c1"># 移動経路の要約：各時刻の平均の位置と、もっとも確率の高いセル。</span>
+<span class="c1"># セクション 9 の描画でも使います。</span>
+<span class="n">track_modes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"mean"</span><span class="p">,</span> <span class="s2">"mode"</span><span class="p">]</span>
+<span class="c1"># ここで指定できるのは "speed"（km/h）と、1 つ前の点からの "distance"（km）です。</span>
+<span class="c1"># ほかの量はあとから計算できます。セクション 8 の補足を参照してください。</span>
+<span class="n">additional_track_quantities</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"speed"</span><span class="p">,</span> <span class="s2">"distance"</span><span class="p">]</span>
+
+<span class="c1"># セクション 9 — 可視化と動画の作成</span>
+<span class="c1"># 動画のフレームとフレームのあいだのデータの時刻数</span>
+<span class="c1"># 1 = すべての時刻を含める</span>
+<span class="c1"># 3 = 3 時刻ごとに含める</span>
+<span class="c1"># 現在の動画作成ツールでは最後の時刻が含まれません。セクション 9 を参照してください。</span>
+<span class="n">time_step</span> <span class="o">=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 解析結果を保存するルートディレクトリを決めます。</span>
+<span class="n">target_root</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">scratch_root</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">tag_name</span><span class="si">}</span><span class="s2">"</span>
+
+<span class="c1"># 最適化で使うデフォルトのチャンクサイズを決めます。</span>
+<span class="n">default_chunk</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"time"</span><span class="p">:</span> <span class="n">chunk_time</span><span class="p">,</span> <span class="s2">"lat"</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"lon"</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">}</span>
+<span class="n">default_chunk_dims</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"time"</span><span class="p">:</span> <span class="n">chunk_time</span><span class="p">}</span>
+<span class="n">default_chunk_dims</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">d</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">dims</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id4">
+<h3>計算の準備<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<p>このセルを実行すると Dask が起動し、使える計算資源に計算を分担させます。ここで変更する設定はありません。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 分散計算のためのローカルクラスターを準備します。</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">distributed</span><span class="w"> </span><span class="kn">import</span> <span class="n">LocalCluster</span>
+
+<span class="n">cluster</span> <span class="o">=</span> <span class="n">LocalCluster</span><span class="p">()</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">cluster</span><span class="o">.</span><span class="n">get_client</span><span class="p">()</span>
+<span class="n">client</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id5">
+<h3>タグの観測データを読み込む<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<p>選んだ魚の水温・深度・イベント（放流や再捕など）の情報を読み込みます。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pangeo_fish.helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_tag</span>
+
+<span class="n">tag</span><span class="p">,</span> <span class="n">tag_log</span><span class="p">,</span> <span class="n">time_slice</span> <span class="o">=</span> <span class="n">load_tag</span><span class="p">(</span>
+    <span class="n">tag_root</span><span class="o">=</span><span class="n">tag_root</span><span class="p">,</span> <span class="n">tag_name</span><span class="o">=</span><span class="n">tag_name</span><span class="p">,</span> <span class="n">storage_options</span><span class="o">=</span><span class="n">tag_storage_options</span>
+<span class="p">)</span>
+<span class="n">tag</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>位置を推定する前に、記録された水温と深度の時系列をプロットして、観測データを確認します。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pangeo_fish.helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_tag</span>
+
+<span class="n">plot</span> <span class="o">=</span> <span class="n">plot_tag</span><span class="p">(</span>
+    <span class="n">tag</span><span class="o">=</span><span class="n">tag</span><span class="p">,</span>
+    <span class="n">tag_log</span><span class="o">=</span><span class="n">tag_log</span><span class="p">,</span>
+    <span class="c1"># 必要ならプロットをそのまま保存できます</span>
+    <span class="n">save_html</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">,</span>
+    <span class="n">target_root</span><span class="o">=</span><span class="n">target_root</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plot</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>赤い点は、タグが生きた魚に付いていたとみなす期間の観測で、解析に使われます。この期間が放流と再捕（または死亡）の情報と合っているかを確認し、記録に欠けている部分がないかも見てください。</p>
+</section>
+<section id="copernicus-marine">
+<h3>Copernicus Marine にサインインする<a class="headerlink" href="#copernicus-marine" title="Link to this heading">#</a></h3>
+<p>次のセルを実行してください。求められたら、Copernicus Marine のユーザー名とパスワードを入力します。ログイン情報は保存され、次回以降のセッションでも使われます。すでに保存されている場合は、もう一度聞かれることはありません。</p>
+<p>サインインできないときは、講師に声をかけるか、<a class="reference external" href="https://help.marine.copernicus.eu/en/articles/8185007-copernicus-marine-toolbox-credentials-configuration">Copernicus Marine の認証情報ガイド</a>を参照してください。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">copernicusmarine</span>
+
+<span class="n">credentials_file</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">()</span> <span class="o">/</span> <span class="s2">".copernicusmarine"</span> <span class="o">/</span> <span class="s2">".copernicusmarine-credentials"</span>
+
+<span class="k">if</span> <span class="n">credentials_file</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Using saved Copernicus Marine credentials."</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">copernicusmarine</span><span class="o">.</span><span class="n">login</span><span class="p">()</span>  <span class="c1"># 必要なときにユーザー名とパスワードを尋ねます。</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="id6">
+<h2>2. タグと海洋モデルの水温を比べる<a class="headerlink" href="#id6" title="Link to this heading">#</a></h2>
+<section id="id7">
+<h3>解析する海域の海水温を読み込む<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
+<p>ここでは <a class="reference external" href="https://data.marine.copernicus.eu/product/IBI_MULTIYEAR_PHY_005_002/services">IBI 再解析</a>を使います。この海域をカバーする領域海洋モデルで、日ごとのデータ、解像度は約 3 km です。次のセルで、選んだ海域とタグの装着期間のデータを読み込みます。</p>
+<p><a class="reference external" href="https://data.marine.copernicus.eu/product/GLOBAL_MULTIYEAR_PHY_001_030/services">GLORYS12</a> は全球モデルの選択肢で、日ごとのデータ、解像度は約 9 km です。モデルを切り替えるには、上の設定セルで、いま有効な <code class="docutils literal notranslate"><span class="pre">copernicus_model_name</span></code> の行の先頭に <code class="docutils literal notranslate"><span class="pre">#</span></code> を付け、もう一方の行の先頭の <code class="docutils literal notranslate"><span class="pre">#</span></code> を外します。最初は IBI で実行してください。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pangeo_fish.helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_model</span><span class="p">,</span> <span class="n">compute_diff</span>
+
+<span class="n">reference_model</span> <span class="o">=</span> <span class="n">load_model</span><span class="p">(</span>
+    <span class="n">uri</span><span class="o">=</span><span class="n">ref_url</span><span class="p">,</span>
+    <span class="n">tag_log</span><span class="o">=</span><span class="n">tag_log</span><span class="p">,</span>
+    <span class="n">time_slice</span><span class="o">=</span><span class="n">time_slice</span><span class="p">,</span>
+    <span class="n">bbox</span><span class="o">=</span><span class="p">(</span><span class="n">bbox</span> <span class="o">|</span> <span class="p">{</span><span class="s2">"max_depth"</span><span class="p">:</span> <span class="n">tag_log</span><span class="p">[</span><span class="s2">"pressure"</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()}),</span>
+    <span class="n">chunk_time</span><span class="o">=</span><span class="n">chunk_time</span><span class="p">,</span>
+    <span class="n">remote_options</span><span class="o">=</span><span class="p">{},</span>
+    <span class="n">copernicus_model_name</span><span class="o">=</span><span class="n">copernicus_model_name</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id8">
+<h3>候補となる場所で水温を比べる<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
+<p>候補となる場所ごとに、タグの水温と、観測された深度でのモデルの水温を比べます。観測はモデルの時間間隔ごとにまとめられます。差が 0 に近いほど水温がよく一致していることを示しますが、似た水温の場所が複数あることもあります。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%time</span>
+<span class="n">diff</span> <span class="o">=</span> <span class="n">compute_diff</span><span class="p">(</span>
+    <span class="n">reference_model</span><span class="o">=</span><span class="n">reference_model</span><span class="p">,</span>
+    <span class="n">tag_log</span><span class="o">=</span><span class="n">tag_log</span><span class="p">,</span>
+    <span class="n">relative_depth_threshold</span><span class="o">=</span><span class="n">relative_depth_threshold</span><span class="p">,</span>
+    <span class="n">chunk_time</span><span class="o">=</span><span class="n">chunk_time</span><span class="p">,</span>
+<span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">diff</span> <span class="o">=</span> <span class="n">diff</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+<span class="n">diff</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id9">
+<h3>データがそろっているかを時間ごとに確認する<a class="headerlink" href="#id9" title="Link to this heading">#</a></h3>
+<p>このプロットは、各時刻でデータのある空間セルの数を数えたものです。欠損値（Python では <code class="docutils literal notranslate"><span class="pre">NaN</span></code> と表されます）は数えません。HMM を実行する前に、この確認が大切です。</p>
+<p>急に減っているところや、途切れているところがないかを見てください。数が多少変動するのは問題ありませんが、急に減っている場合はデータの欠損や処理の問題かもしれません。<strong>数が 0 になっている時刻は、その時刻に使える空間データがまったくないことを意味します。先に進む前に、講師と一緒に原因を調べてください。</strong></p>
+<p>水温の差が 0 というのは完全に一致しているということなので、<code class="docutils literal notranslate"><span class="pre">.count()</span></code> ではデータのあるセルとして数えられます。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%time</span>
+<span class="n">diff</span><span class="p">[</span><span class="s2">"diff"</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">([</span><span class="s2">"lat"</span><span class="p">,</span> <span class="s2">"lon"</span><span class="p">])</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">"Valid grid cells"</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%time</span>
+<span class="n">diff</span><span class="o">.</span><span class="n">to_zarr</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">target_root</span><span class="si">}</span><span class="s2">/diff.zarr"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"w"</span><span class="p">,</span> <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">,</span> <span class="n">zarr_format</span><span class="o">=</span><span class="mi">2</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="id10">
+<h2>3. 候補となる場所を等面積の格子で表す<a class="headerlink" href="#id10" title="Link to this heading">#</a></h2>
+<p>水温の比較結果を、<strong>HEALPix</strong> と呼ばれる格子に移します。HEALPix は等面積の離散全球格子システム（DGGS）で、どのセルも地球表面上で同じ面積を持ちます。階層構造になっているため、細かい格子と粗い格子を選べます。このワークショップでは、セルの大きさを約 <strong>3.2 km</strong> にしています。</p>
+<p>このセルの大きさは、推定した魚の位置の精度ではありません。位置の不確かさは、観測、海洋モデル、移動の仮定にも左右されます。また、等面積だからといって、セルの形がすべて同じになるわけでも、空間のゆがみがすべてなくなるわけでもありません。詳しくは <a class="reference external" href="https://healpix.sourceforge.io/">HEALPix のドキュメント</a>を参照してください。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pangeo_fish.helpers</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">open_diff_dataset</span><span class="p">,</span>
+    <span class="n">regrid_dataset_hpresample</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 前のステップのデータセットを開きます（ノートブックをここから再開するときだけ必要です）</span>
+<span class="n">diff</span> <span class="o">=</span> <span class="n">open_diff_dataset</span><span class="p">(</span><span class="n">target_root</span><span class="o">=</span><span class="n">target_root</span><span class="p">,</span> <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">)</span>
+<span class="n">diff</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">reshaped</span><span class="p">,</span> <span class="n">resampling_info</span> <span class="o">=</span> <span class="n">regrid_dataset_hpresample</span><span class="p">(</span>
+    <span class="n">ds</span><span class="o">=</span><span class="n">diff</span><span class="p">,</span> <span class="n">refinement_level</span><span class="o">=</span><span class="n">refinement_level</span><span class="p">,</span> <span class="n">ellipsoid</span><span class="o">=</span><span class="n">ellipsoid</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">dims</span>
+<span class="p">)</span>
+<span class="n">reshaped</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">resampling_info</span><span class="p">[</span><span class="s2">"bbox"</span><span class="p">]</span> <span class="o">=</span> <span class="n">bbox</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+<span class="c1"># 再格子化のメタデータと地理的な範囲を、結果と一緒に保存します。</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">target_root</span><span class="si">}</span><span class="s2">/resampling_info.json"</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">resampling_info</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">target_root</span><span class="si">}</span><span class="s2">/resampling_info.json"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">resampling_info</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<span class="n">resampling_info</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>格子を変えたので、データがそろっているかをもう一度確認します。セルの大きさや範囲が変わったため、セルの数は前と異なることがあります。急に減っているところがないかを見て、数が 0 の時刻があれば、先に進む前に原因を調べてください。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">reshaped</span><span class="p">[</span><span class="s2">"diff"</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">dims</span><span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">"Valid HEALPix cells"</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 結果を保存します</span>
+<span class="n">reshaped</span><span class="o">.</span><span class="n">chunk</span><span class="p">(</span><span class="n">default_chunk_dims</span><span class="p">)</span><span class="o">.</span><span class="n">to_zarr</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">target_root</span><span class="si">}</span><span class="s2">/diff-regridded.zarr"</span><span class="p">,</span>
+    <span class="n">mode</span><span class="o">=</span><span class="s2">"w"</span><span class="p">,</span>
+    <span class="n">consolidated</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">compute</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">,</span>
+    <span class="n">zarr_format</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>次の地図は、水温の差（<code class="docutils literal notranslate"><span class="pre">diff</span></code>）とモデルの海底の深さ（<code class="docutils literal notranslate"><span class="pre">H0</span></code>）を示しています。水温の差の地図では、0 に近い値を探してください。よく一致する場所は 1 か所に集まっていますか、それとも何か所かに分かれていますか？ このパターンが時間とともにどう変わるかも確認してください。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">reshaped</span><span class="o">.</span><span class="n">healpix</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">var</span><span class="o">=</span><span class="p">[</span><span class="s2">"diff"</span><span class="p">,</span> <span class="s2">"H0"</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id11">
+<h2>4. 水温と合う場所を見つける<a class="headerlink" href="#id11" title="Link to this heading">#</a></h2>
+<p>モデルの水温がタグの観測と一致する場所ほど、大きな重みを与えます。この重みを<strong>観測確率（emission probability）</strong> と呼びます（統計学では尤度（likelihood）にあたります）。観測が、それぞれの候補の場所とどのくらい整合するかを表します。</p>
+<p>水温の差 0 を中心とするガウス分布（正規分布）の曲線を使います。設定 <code class="docutils literal notranslate"><span class="pre">differences_std</span></code> はその幅を決めます。値を大きくすると、より大きな水温の差まで許容します。放流と再捕（または死亡）の場所も、位置を絞り込む追加の手がかりになります。</p>
+<p><code class="docutils literal notranslate"><span class="pre">emission_pdf[&quot;pdf&quot;]</span></code> に保存される水温の重みは、この段階ではまだ場所全体で合計しても 1 になりません。セクション 6 で手がかりを統合し、正規化します。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pangeo_fish.helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_emission_pdf</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 前のステップのデータセットを開きます（ノートブックをここから再開するときだけ必要です）</span>
+<span class="n">differences</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">target_root</span><span class="si">}</span><span class="s2">/diff-regridded.zarr"</span><span class="p">,</span>
+    <span class="n">engine</span><span class="o">=</span><span class="s2">"zarr"</span><span class="p">,</span>
+    <span class="n">chunks</span><span class="o">=</span><span class="p">{},</span>
+    <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># ……そして観測確率の行列を計算します</span>
+<span class="n">emission_pdf</span> <span class="o">=</span> <span class="n">compute_emission_pdf</span><span class="p">(</span>
+    <span class="n">diff_ds</span><span class="o">=</span><span class="n">differences</span><span class="p">,</span>
+    <span class="n">events_ds</span><span class="o">=</span><span class="n">tag</span><span class="p">[</span><span class="s2">"tagging_events"</span><span class="p">]</span><span class="o">.</span><span class="n">ds</span><span class="p">,</span>
+    <span class="n">differences_std</span><span class="o">=</span><span class="n">differences_std</span><span class="p">,</span>
+    <span class="n">initial_std</span><span class="o">=</span><span class="n">initial_std</span><span class="p">,</span>
+    <span class="n">recapture_std</span><span class="o">=</span><span class="n">recapture_std</span><span class="p">,</span>
+    <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span>
+    <span class="n">chunk_time</span><span class="o">=</span><span class="n">chunk_time</span><span class="p">,</span>
+<span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">emission_pdf</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>水温の重み（<code class="docutils literal notranslate"><span class="pre">pdf</span></code>）を、放流（<code class="docutils literal notranslate"><span class="pre">initial</span></code>）と最終位置（<code class="docutils literal notranslate"><span class="pre">final</span></code>、ある場合）の地図と比べてください。水温の観測から、狭い範囲に絞り込めていますか？ それとも、可能性のある海域がいくつも残っていますか？</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">emission_pdf</span><span class="o">.</span><span class="n">healpix</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="s2">"initial"</span><span class="p">,</span> <span class="s2">"final"</span><span class="p">,</span> <span class="s2">"pdf"</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>各時刻の水温による尤度の合計 <code class="docutils literal notranslate"><span class="pre">total</span> <span class="pre">=</span> <span class="pre">sum(dims,</span> <span class="pre">min_count=1)</span></code> を確認します。この段階では 1 になる必要はありません。</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">NaN</span></code>：その時刻にはデータがありません。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0</span></code>：データはありますが、タグの水温と一致する場所がひとつもありません。</p></li>
+</ul>
+<p>どちらかが現れたら、先に進む前に原因を調べてください。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">emission_pdf</span> <span class="o">=</span> <span class="n">emission_pdf</span><span class="o">.</span><span class="n">chunk</span><span class="p">(</span><span class="n">default_chunk_dims</span><span class="p">)</span><span class="o">.</span><span class="n">persist</span><span class="p">()</span>
+<span class="n">total</span> <span class="o">=</span> <span class="n">emission_pdf</span><span class="p">[</span><span class="s2">"pdf"</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="n">min_count</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">"Total temperature likelihood"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Time steps without data (NaN):"</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">total</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Time steps with zero total weight:"</span><span class="p">,</span> <span class="nb">int</span><span class="p">((</span><span class="n">total</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()))</span>
+<span class="n">total</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># データセットを保存します</span>
+<span class="n">emission_pdf</span><span class="o">.</span><span class="n">to_zarr</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">target_root</span><span class="si">}</span><span class="s2">/emission_diff.zarr"</span><span class="p">,</span>
+    <span class="n">mode</span><span class="o">=</span><span class="s2">"w"</span><span class="p">,</span>
+    <span class="n">consolidated</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">,</span>
+    <span class="n">zarr_format</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">emission_pdf</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">"sources"</span><span class="p">]</span> <span class="o">=</span> <span class="n">emission_pdf</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"sources"</span><span class="p">,</span> <span class="p">[])</span> <span class="o">+</span> <span class="p">[</span>
+    <span class="s2">"temperature"</span>
+<span class="p">]</span>  <span class="c1"># これまでに加えた手がかりの種類を記録します。</span>
+<span class="n">emission_pdf</span><span class="o">.</span><span class="n">to_zarr</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">target_root</span><span class="si">}</span><span class="s2">/total_pdf.zarr"</span><span class="p">,</span>
+    <span class="n">mode</span><span class="o">=</span><span class="s2">"w"</span><span class="p">,</span>
+    <span class="n">consolidated</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">,</span>
+    <span class="n">zarr_format</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id12">
+<h2>5. 音響テレメトリーの受信記録を加える<a class="headerlink" href="#id12" title="Link to this heading">#</a></h2>
+<p>受信記録は、その時刻に魚が受信機の想定受信範囲の中にいたことを教えてくれます。この情報を使って、水温による手がかりを補いながら、魚がいた可能性のある場所を絞り込みます。</p>
+<p>このステップには、タグのデータに音響テレメトリーの受信記録と受信機の位置が含まれている必要があります。設定 <code class="docutils literal notranslate"><span class="pre">receiver_buffer</span></code> で想定する受信範囲を決めます。この手がかりは、セクション 6 で水温の手がかりと統合します。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pangeo_fish.helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_acoustic_pdf</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 前のステップの観測確率を読み込み、音響テレメトリーの受信記録にもとづく観測確率を計算します</span>
+<span class="n">emission_diff</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">target_root</span><span class="si">}</span><span class="s2">/emission_diff.zarr"</span><span class="p">,</span>
+    <span class="n">engine</span><span class="o">=</span><span class="s2">"zarr"</span><span class="p">,</span>
+    <span class="n">chunks</span><span class="o">=</span><span class="p">{},</span>
+    <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">acoustic_pdf</span> <span class="o">=</span> <span class="n">compute_acoustic_pdf</span><span class="p">(</span>
+    <span class="n">emission_ds</span><span class="o">=</span><span class="n">emission_diff</span><span class="p">,</span>
+    <span class="n">tag</span><span class="o">=</span><span class="n">tag</span><span class="p">,</span>
+    <span class="n">receiver_buffer</span><span class="o">=</span><span class="n">receiver_buffer</span><span class="p">,</span>
+    <span class="n">chunk_time</span><span class="o">=</span><span class="n">chunk_time</span><span class="p">,</span>
+    <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span>
+<span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">acoustic_pdf</span> <span class="o">=</span> <span class="n">acoustic_pdf</span><span class="o">.</span><span class="n">persist</span><span class="p">()</span>
+<span class="n">acoustic_pdf</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">acoustic_pdf</span><span class="o">.</span><span class="n">healpix</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s2">"acoustic"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>次のプロットは、受信の時刻と、セル数を数えた診断用の曲線を比べるものです。受信の時刻の前後で変化があるかを見てください。</p>
+<p>ここでは、<code class="docutils literal notranslate"><span class="pre">acoustic</span> <span class="pre">!=</span> <span class="pre">0</span></code> を満たすセルを数えています。欠損値もこの条件を満たすため、この曲線は魚がいた可能性のある場所の正確な数ではありません。この点に注意して読み取ってください。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tag</span><span class="p">[</span><span class="s2">"acoustic"</span><span class="p">][</span><span class="s2">"deployment_id"</span><span class="p">]</span><span class="o">.</span><span class="n">hvplot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="s2">"red"</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">"x"</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span>
+    <span class="n">acoustic_pdf</span><span class="p">[</span><span class="s2">"acoustic"</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span>
+<span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="n">dims</span><span class="p">)</span><span class="o">.</span><span class="n">hvplot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>受信があった時刻には、想定した受信範囲のもとで、可能性のある場所が受信機の周りに一気に絞り込まれることがあります。受信記録は、位置を強く制約する手がかりです。曲線の高さを可能性のある場所の正確な数と考えるのではなく、受信の時刻と合わせて曲線の変化を読み取ってください。</p>
+<p>次のセルでは、必要に応じて音響テレメトリーの結果を別に保存します。このあとの解析では、すでに計算した結果をそのまま使えます。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">acoustic_pdf</span><span class="o">.</span><span class="n">to_zarr</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">target_root</span><span class="si">}</span><span class="s2">/acoustic.zarr"</span><span class="p">,</span>
+    <span class="n">mode</span><span class="o">=</span><span class="s2">"w"</span><span class="p">,</span>
+    <span class="n">consolidated</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="id13">
+<h3>手がかりをまとめる<a class="headerlink" href="#id13" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># いま保存されている手がかりを開きます。</span>
+<span class="n">current_total</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">target_root</span><span class="si">}</span><span class="s2">/total_pdf.zarr"</span><span class="p">,</span>
+    <span class="n">engine</span><span class="o">=</span><span class="s2">"zarr"</span><span class="p">,</span>
+    <span class="n">chunks</span><span class="o">=</span><span class="p">{},</span>
+    <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">current_total</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="s2">"acoustic"</span> <span class="ow">in</span> <span class="n">current_total</span><span class="o">.</span><span class="n">data_vars</span><span class="p">:</span>
+    <span class="k">pass</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">current_total</span> <span class="o">=</span> <span class="n">current_total</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+    <span class="n">current_total</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">"sources"</span><span class="p">]</span> <span class="o">=</span> <span class="n">current_total</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"sources"</span><span class="p">,</span> <span class="p">[])</span> <span class="o">+</span> <span class="p">[</span>
+        <span class="s2">"acoustic"</span>
+    <span class="p">]</span>
+
+    <span class="n">merged_pdf</span> <span class="o">=</span> <span class="n">current_total</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+        <span class="n">acoustic_pdf</span><span class="o">.</span><span class="n">drop_indexes</span><span class="p">([</span><span class="s2">"cell_ids"</span><span class="p">]),</span> <span class="n">compat</span><span class="o">=</span><span class="s2">"override"</span>
+    <span class="p">)</span>
+
+    <span class="n">merged_pdf</span><span class="o">.</span><span class="n">to_zarr</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">target_root</span><span class="si">}</span><span class="s2">/total_pdf.zarr"</span><span class="p">,</span>
+        <span class="n">mode</span><span class="o">=</span><span class="s2">"w"</span><span class="p">,</span>
+        <span class="n">consolidated</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">,</span>
+        <span class="n">zarr_format</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="n">merged_pdf</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="id14">
+<h2>6. 水温と音響テレメトリーの手がかりを統合する<a class="headerlink" href="#id14" title="Link to this heading">#</a></h2>
+<p>水温の重みと音響テレメトリーの重みを掛け合わせ、最終位置の情報があればそれも加えます。そのうえで、各時刻で合計が 1 になるように、セル全体の重みの合計で割ります。これを<strong>正規化</strong>と呼びます。</p>
+<p>この結果は、観測から見て、それぞれの候補の場所がどのくらい支持されるかを表します。場所を時間方向につなぐには、さらに移動モデルが必要です。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pangeo_fish.helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">combine_pdfs</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pangeo_fish.helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">normalize_pdf</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">current_total</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">target_root</span><span class="si">}</span><span class="s2">/total_pdf.zarr"</span><span class="p">,</span>
+    <span class="n">engine</span><span class="o">=</span><span class="s2">"zarr"</span><span class="p">,</span>
+    <span class="n">chunks</span><span class="o">=</span><span class="p">{},</span>
+    <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">current_total</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">emission_pdf</span> <span class="o">=</span> <span class="n">normalize_pdf</span><span class="p">(</span>
+    <span class="n">ds</span><span class="o">=</span><span class="n">current_total</span><span class="p">,</span>
+    <span class="n">chunks</span><span class="o">=</span><span class="n">default_chunk_dims</span><span class="p">,</span>
+    <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span>
+    <span class="n">exclude</span><span class="o">=</span><span class="p">(</span><span class="s2">"initial"</span><span class="p">,</span> <span class="s2">"final"</span><span class="p">,</span> <span class="s2">"mask"</span><span class="p">),</span>
+    <span class="n">excluded_pdf</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># ("acoustic",)</span>
+<span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="n">emission_pdf</span><span class="o">.</span><span class="n">to_zarr</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">target_root</span><span class="si">}</span><span class="s2">/combined.zarr"</span><span class="p">,</span>
+    <span class="n">mode</span><span class="o">=</span><span class="s2">"w"</span><span class="p">,</span>
+    <span class="n">consolidated</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">,</span>
+    <span class="n">zarr_format</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">combined</span> <span class="o">=</span> <span class="n">emission_pdf</span>
+
+<span class="n">emission_pdf</span><span class="p">[</span><span class="s2">"pdf"</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dims</span><span class="p">)</span><span class="o">.</span><span class="n">hvplot</span><span class="p">(</span>
+    <span class="n">width</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="s2">"Total probability per time step"</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>確率の合計は、どの時刻でもほぼ <strong>1</strong> になるはずです。データのない時刻も、1 からずれた値（合計が 0）として現れます。そのような時刻があれば、移動モデルを推定する前に原因を調べてください。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">combined</span><span class="o">.</span><span class="n">healpix</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s2">"pdf"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id15">
+<h2>7. 魚がどのくらいの範囲を移動できるかを推定する<a class="headerlink" href="#id15" title="Link to this heading">#</a></h2>
+<p>移動モデルは、連続する時刻のあいだで、魚がいた可能性のある場所どうしをつなぎます。そのパラメータ <code class="docutils literal notranslate"><span class="pre">sigma</span></code> は、移動がどのくらい広がりうるかを決めます。値が大きいほど、より広い範囲の移動を許します。このパラメータを観測から推定します。</p>
+<p>次のセルを実行して、移動のパラメータを推定し、保存します。探索が警告なしに終わることを確認してください。表示される <code class="docutils literal notranslate"><span class="pre">f(x)</span></code> の値は、試した <code class="docutils literal notranslate"><span class="pre">sigma</span></code> の値での当てはまりの良さを表します。探索ではいろいろな値を試すので、毎回改善しなくても問題ありません。</p>
+<p>移動の時間間隔は、データの日付から決まります。動画の設定 <code class="docutils literal notranslate"><span class="pre">time_step</span></code> を変えても、モデルの中の魚の移動は変わりません。</p>
+<details>
+<summary>補足：パラメータの探索のしくみ</summary>
+<p>探索にはブレント法（Brent's method）を使い、<code class="docutils literal notranslate"><span class="pre">1e-4</span></code> ラジアンから上限 <code class="docutils literal notranslate"><span class="pre">maximum_speed</span> <span class="pre">×</span> <span class="pre">Δt</span> <span class="pre">×</span> <span class="pre">adjustment_factor</span> <span class="pre">/</span> <span class="pre">earth_radius</span></code> までの範囲で探します。ここで Δt は観測確率の時間座標の間隔、<code class="docutils literal notranslate"><span class="pre">earth_radius</span></code> は HEALPix 格子に保存された楕円体から求めた地球の半径（<code class="docutils literal notranslate"><span class="pre">&quot;sphere&quot;</span></code> の場合は約 6371 km）です。速度の設定は <code class="docutils literal notranslate"><span class="pre">sigma</span></code> の探索範囲を決めるもので、ありうる移動のひとつひとつを厳密に制限するものではありません。</p>
+<p>推定された値が探索範囲の端に近くないかを確認してください。探索が収束しても、その解がただひとつであることや、全体での最適解であることが保証されるわけではありません。付録では、別の値と比べることができます。推定したパラメータと計算の設定は、次のステップのために JSON ファイルに保存されます。</p>
+</details><div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pangeo_fish.helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">optimize_pdf</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 確率分布を開きます</span>
+<span class="n">emission</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">target_root</span><span class="si">}</span><span class="s2">/combined.zarr"</span><span class="p">,</span>
+    <span class="n">engine</span><span class="o">=</span><span class="s2">"zarr"</span><span class="p">,</span>
+    <span class="n">chunks</span><span class="o">=</span><span class="n">default_chunk_dims</span><span class="p">,</span>
+    <span class="n">inline_array</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">emission</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># パラメータの範囲を決め、最適な値を探します</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">optimize_pdf</span><span class="p">(</span>
+    <span class="n">ds</span><span class="o">=</span><span class="n">emission</span><span class="p">,</span>
+    <span class="n">adjustment_factor</span><span class="o">=</span><span class="n">adjustment_factor</span><span class="p">,</span>
+    <span class="n">truncate</span><span class="o">=</span><span class="n">truncate</span><span class="p">,</span>
+    <span class="n">maximum_speed</span><span class="o">=</span><span class="n">maximum_speed</span><span class="p">,</span>
+    <span class="n">tolerance</span><span class="o">=</span><span class="n">tolerance</span><span class="p">,</span>
+    <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span>
+    <span class="c1"># 結果はそのまま保存できます</span>
+    <span class="n">save_parameters</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">,</span>
+    <span class="n">target_root</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">target_root</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+    <span class="n">conv_method</span><span class="o">=</span><span class="s2">"LargeHealpixConv"</span><span class="p">,</span>  <span class="c1"># 高速な多重解像度の畳み込み。"HealpixConv" は時間のかかる基準となる手法</span>
+<span class="p">)</span>
+<span class="n">params</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id16">
+<h2>8. 位置を推定し、移動経路をまとめる<a class="headerlink" href="#id16" title="Link to this heading">#</a></h2>
+<p>観測による手がかりと、推定した移動モデルを組み合わせて、各時刻にそれぞれの候補の場所に魚がいた確率を推定します。この確率分布を、次の 2 通りの方法でまとめます。</p>
+<ul class="simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">mean</span></code>：</strong> 各時刻の平均の位置。</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">mode</span></code>：</strong> 各時刻で確率がもっとも高いセル（最頻値）。</p></li>
+</ul>
+<p>これらの線は推定した確率分布の要約であり、実際に観測された経路ではありません。読み取るときは、確率が地図上でどのくらい広がっているかもあわせて確認してください。移動経路の連続する点のあいだの距離を km で、それに対応する速度を km/h で計算します。</p>
+<details>
+<summary>補足：ほかの移動経路の求め方と計測値</summary>
+<p>ビタビ（Viterbi）アルゴリズムは、時刻ごとに別々に要約するのではなく、もっとも確からしい位置の系列全体を求めます。このワークショップの解析では有効にしていないので、<code class="docutils literal notranslate"><span class="pre">track_modes</span> <span class="pre">=</span> <span class="pre">[&quot;mean&quot;,</span> <span class="pre">&quot;mode&quot;]</span></code> のままにしてください。</p>
+<p><code class="docutils literal notranslate"><span class="pre">additional_track_quantities</span></code> の設定に指定できるのは <code class="docutils literal notranslate"><span class="pre">&quot;speed&quot;</span></code> と <code class="docutils literal notranslate"><span class="pre">&quot;distance&quot;</span></code> だけです。解析のあとで、返された移動経路から MovingPandas を使って、加速度（<code class="docutils literal notranslate"><span class="pre">add_acceleration</span></code>）、方向（<code class="docutils literal notranslate"><span class="pre">add_direction</span></code>）、方向の変化（<code class="docutils literal notranslate"><span class="pre">add_angular_difference</span></code>）、時間間隔（<code class="docutils literal notranslate"><span class="pre">add_timedelta</span></code>）を計算できます。これらは別の処理ステップです。<a class="reference external" href="https://movingpandas.readthedocs.io/en/main/api/trajectory.html">MovingPandas の trajectory API</a> を参照してください。</p>
+</details><div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pangeo_fish.helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">predict_positions</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">states</span><span class="p">,</span> <span class="n">trajectories</span> <span class="o">=</span> <span class="n">predict_positions</span><span class="p">(</span>
+    <span class="n">target_root</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">target_root</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+    <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">,</span>
+    <span class="n">chunks</span><span class="o">=</span><span class="n">default_chunk_dims</span><span class="p">,</span>
+    <span class="n">track_modes</span><span class="o">=</span><span class="n">track_modes</span><span class="p">,</span>
+    <span class="n">additional_track_quantities</span><span class="o">=</span><span class="n">additional_track_quantities</span><span class="p">,</span>
+    <span class="n">save</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">states</span></code> の確率は、各時刻で合計がほぼ <strong>1</strong> になるはずです。1 からずれている場合は、その時刻に欠損値や不正な値があることを意味します。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">states</span><span class="p">[</span><span class="s2">"states"</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dims</span><span class="p">)</span><span class="o">.</span><span class="n">hvplot</span><span class="p">(</span>
+    <span class="n">width</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="s2">"Total probability per time step"</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id17">
+<h2>9. 地図と移動経路を見る<a class="headerlink" href="#id17" title="Link to this heading">#</a></h2>
+<p>平均（mean）と最頻値（mode）の移動経路を比べ、確率の地図が時間とともにどう変わるかを見てみましょう。魚の位置がはっきり絞り込まれているのはどこでしょうか？ 可能性のある海域がいくつも残っているのはどこでしょうか？</p>
+<p><strong>観測確率（emission）</strong> の地図は、観測による手がかりを示します。<strong>状態確率（state）</strong> の地図は、時刻間の移動も考慮しています。両者のパターンを比べて、移動モデルが推定位置にどう影響しているかを確認してください。</p>
+<section id="id18">
+<h3>9.1 移動経路を比べる<a class="headerlink" href="#id18" title="Link to this heading">#</a></h3>
+<p>平均と最頻値の移動経路は、どこで一致し、どこで食い違っていますか？ 確率の地図を使って、その違いを読み解いてください。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pangeo_fish.helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_trajectories</span>
+
+<span class="n">plot_trajectories</span><span class="p">(</span>
+    <span class="n">target_root</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">target_root</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+    <span class="n">track_modes</span><span class="o">=</span><span class="n">track_modes</span><span class="p">,</span>
+    <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">,</span>
+    <span class="n">save_html</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id19">
+<h3>9.2 確率分布の時間変化を見る<a class="headerlink" href="#id19" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pangeo_fish.helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">open_distributions</span><span class="p">,</span> <span class="n">render_distributions</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">open_distributions</span><span class="p">(</span>
+    <span class="n">target_root</span><span class="o">=</span><span class="n">target_root</span><span class="p">,</span>
+    <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">,</span>
+    <span class="n">chunks</span><span class="o">=</span><span class="n">default_chunk_dims</span><span class="p">,</span>
+    <span class="n">chunk_time</span><span class="o">=</span><span class="n">chunk_time</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">data</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>上の出力は、プロットに使えるデータの概要です。次のセルを実行すると、MP4 のアニメーションが作られ、コードのすぐ下で再生されます。</p>
+<p><code class="docutils literal notranslate"><span class="pre">time_step</span> <span class="pre">=</span> <span class="pre">1</span></code> はデータのすべての時刻でフレームを作り、<code class="docutils literal notranslate"><span class="pre">3</span></code> は 3 時刻ごとにフレームを作ります。変わるのは動画のコマの間引きだけです。現在の動画作成ツールでは、この設定が 1 でも、最後の時刻は含まれません。</p>
+<p>可能性のある場所が絞り込まれる時期や広がる時期に注目し、音響テレメトリーの受信の時刻と比べてみてください。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="n">lon</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"longitude"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>  <span class="c1"># (nx,)</span>
+<span class="n">lat</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"latitude"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>  <span class="c1"># (ny,)</span>
+<span class="n">lon_2d</span><span class="p">,</span> <span class="n">lat_2d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">)</span>  <span class="c1"># (ny, nx)、2 次元の地理座標</span>
+
+<span class="n">data_2d</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">rename</span><span class="p">({</span><span class="s2">"latitude"</span><span class="p">:</span> <span class="s2">"y"</span><span class="p">,</span> <span class="s2">"longitude"</span><span class="p">:</span> <span class="s2">"x"</span><span class="p">})</span>
+<span class="n">data_2d</span> <span class="o">=</span> <span class="n">data_2d</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">(</span>
+    <span class="n">longitude</span><span class="o">=</span><span class="p">((</span><span class="s2">"y"</span><span class="p">,</span> <span class="s2">"x"</span><span class="p">),</span> <span class="n">lon_2d</span><span class="p">),</span>
+    <span class="n">latitude</span><span class="o">=</span><span class="p">((</span><span class="s2">"y"</span><span class="p">,</span> <span class="s2">"x"</span><span class="p">),</span> <span class="n">lat_2d</span><span class="p">),</span>
+<span class="p">)</span>
+<span class="n">data_2d</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">video_filename</span> <span class="o">=</span> <span class="n">render_distributions</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">data_2d</span><span class="p">,</span>
+    <span class="n">output_path</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">target_root</span><span class="si">}</span><span class="s2">/states"</span><span class="p">,</span>
+    <span class="n">xlim</span><span class="o">=</span><span class="n">bbox</span><span class="p">[</span><span class="s2">"longitude"</span><span class="p">],</span>
+    <span class="n">ylim</span><span class="o">=</span><span class="n">bbox</span><span class="p">[</span><span class="s2">"latitude"</span><span class="p">],</span>
+    <span class="n">time_step</span><span class="o">=</span><span class="n">time_step</span><span class="p">,</span>
+    <span class="n">extension</span><span class="o">=</span><span class="s2">"mp4"</span><span class="p">,</span>
+    <span class="n">frames_dir</span><span class="o">=</span><span class="s2">"video"</span><span class="p">,</span>
+    <span class="n">remove_frames</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">Video</span><span class="p">,</span> <span class="n">display</span>
+
+<span class="n">display</span><span class="p">(</span><span class="n">Video</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">video_filename</span><span class="p">,</span> <span class="n">embed</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="gfts">
+<h2>10. 次のステップ：GFTS で見る、将来の海での魚の姿<a class="headerlink" href="#gfts" title="Link to this heading">#</a></h2>
+<p>結果は、次のセルで表示される出力フォルダーに保存されています（<code class="docutils literal notranslate"><span class="pre">states.zarr</span></code> と <code class="docutils literal notranslate"><span class="pre">trajectories.parq</span></code>）。これらを Destination Earth の Global Fish Tracking Service で将来の海水温と並べて表示する方法は、「<a class="reference external" href="https://pangeo-fish.github.io/pangeo-fish-fra2026/gfts.html">将来の海での魚の姿：GFTS</a>」に進んでご覧ください。そのあと、短い<a class="reference external" href="https://pangeo-fish.github.io/pangeo-fish-fra2026/feedback.html">アンケート</a>へのご回答をお願いします。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">"Your results are in:"</span><span class="p">,</span> <span class="n">target_root</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id20">
+<h2>研究で使うときは<a class="headerlink" href="#id20" title="Link to this heading">#</a></h2>
+<p>このノートブックの手法を自分の研究で使った場合は、pangeo-fish の論文（Magin et al., 2026, <em>Journal of Open Source Software</em>, <a class="reference external" href="https://doi.org/10.21105/joss.08332">doi:10.21105/joss.08332</a>）を引用してください。一緒に引用するデータやツール、pangeo-fish を使った研究の一覧は「<a class="reference internal" href="cite.html"><span class="std std-doc">研究で pangeo-fish を使ったら：引用のしかた</span></a>」のページにまとめています。</p>
+</section>
+<section id="id21">
+<h2>補足の付録：移動の仮定を比べる<a class="headerlink" href="#id21" title="Link to this heading">#</a></h2>
+<p>ワークショップの本編はここまでです。移動の仮定がどう影響するかを調べたい方のために、次のセルでは、推定したモデルと、指定した 2 つの <code class="docutils literal notranslate"><span class="pre">sigma</span></code> の値によるモデルを比べます。確率の地図と移動経路がどう変わるかを見てください。</p>
+<p>比較ごとに別の出力フォルダーを使います。最初の比較では、用意された設定のまま使ってください。より発展的な解析では、期間ごとに異なる移動のパラメータを使うこともできます。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">fsspec</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pangeo_fish.helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_parameters</span><span class="p">,</span> <span class="n">test_parameter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pangeo_fish.helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">optimize_pdf</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>まず、統合した観測確率の分布を別の出力フォルダーにコピーします。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 確率分布を開きます</span>
+<span class="n">emission</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">target_root</span><span class="si">}</span><span class="s2">/combined.zarr"</span><span class="p">,</span>
+    <span class="n">engine</span><span class="o">=</span><span class="s2">"zarr"</span><span class="p">,</span>
+    <span class="n">chunks</span><span class="o">=</span><span class="n">default_chunk_dims</span><span class="p">,</span>
+    <span class="n">inline_array</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="c1"># 新しいフォルダーを作ります</span>
+<span class="n">emission</span><span class="o">.</span><span class="n">to_zarr</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">target_root</span><span class="si">}</span><span class="s2">/hand_sigma/combined.zarr"</span><span class="p">,</span>  <span class="c1"># "hand_sigma" は別の名前に変えてもかまいません</span>
+    <span class="n">mode</span><span class="o">=</span><span class="s2">"w"</span><span class="p">,</span>
+    <span class="n">consolidated</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">,</span>
+    <span class="n">zarr_format</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>指定した移動のパラメータを、同じフォルダーに保存します。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">params</span> <span class="o">=</span> <span class="n">create_parameters</span><span class="p">(</span>
+    <span class="n">sigma</span><span class="o">=</span><span class="p">[</span><span class="mf">0.002708796991645453</span><span class="p">],</span>
+    <span class="n">sigma_indices</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">class_name</span><span class="o">=</span><span class="s2">"UpDownGaussian1DHealpix"</span><span class="p">,</span>  <span class="c1"># 移動モデルの畳み込みクラス。</span>
+    <span class="n">target_root</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">target_root</span><span class="si">}</span><span class="s2">/hand_sigma"</span><span class="p">,</span>  <span class="c1"># 上で使ったフォルダーと同じにします。</span>
+    <span class="n">save_parameters</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>別の方法として、<code class="docutils literal notranslate"><span class="pre">test_parameter()</span></code> を使うと、統合した観測確率の分布と指定したパラメータを比較用のフォルダーに保存できます。既存のデータセットを <code class="docutils literal notranslate"><span class="pre">emission</span></code> として渡すか、<code class="docutils literal notranslate"><span class="pre">None</span></code> のままにしてセクション 6 の <code class="docutils literal notranslate"><span class="pre">combined.zarr</span></code> を読み込みます。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">params</span> <span class="o">=</span> <span class="n">test_parameter</span><span class="p">(</span>
+    <span class="n">emission</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">sigma_tested</span><span class="o">=</span><span class="p">[</span><span class="mf">0.001</span><span class="p">],</span>
+    <span class="n">sigma_indices</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">Conv_method</span><span class="o">=</span><span class="s2">"UpDownGaussian1DHealpix"</span><span class="p">,</span>
+    <span class="n">target_root</span><span class="o">=</span><span class="n">target_root</span><span class="p">,</span>
+    <span class="n">saving_root</span><span class="o">=</span><span class="s2">"/hand_sigma_UDG1D"</span><span class="p">,</span>
+    <span class="n">default_chunk_dims</span><span class="o">=</span><span class="n">default_chunk_dims</span><span class="p">,</span>
+    <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pangeo_fish.helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">predict_positions</span>
+
+<span class="n">states_list</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">predict_positions</span><span class="p">(</span>
+        <span class="n">target_root</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">target_root</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">subfolder</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+        <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">,</span>
+        <span class="n">chunks</span><span class="o">=</span><span class="n">default_chunk_dims</span><span class="p">,</span>
+        <span class="n">track_modes</span><span class="o">=</span><span class="n">track_modes</span><span class="p">,</span>
+        <span class="n">additional_track_quantities</span><span class="o">=</span><span class="n">additional_track_quantities</span><span class="p">,</span>
+        <span class="n">save</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">subfolder</span> <span class="ow">in</span> <span class="p">[</span>
+        <span class="s2">""</span><span class="p">,</span>
+        <span class="s2">"hand_sigma"</span><span class="p">,</span>
+        <span class="s2">"hand_sigma_UDG1D"</span><span class="p">,</span>
+    <span class="p">]</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>同期した地図で状態確率の分布を比べ、その下で移動経路を比べます。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pangeo_fish.helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">multi_map_with_synced_sliders</span><span class="p">,</span> <span class="n">multiplot_healpix</span>
+
+<span class="n">liste</span> <span class="o">=</span> <span class="n">multiplot_healpix</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="p">(</span><span class="n">states_list</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="s2">"states"</span><span class="p">]),</span>
+        <span class="p">(</span><span class="n">states_list</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="s2">"states"</span><span class="p">]),</span>
+        <span class="p">(</span><span class="n">states_list</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="s2">"states"</span><span class="p">]),</span>
+    <span class="p">],</span>
+    <span class="n">refinement_level</span><span class="o">=</span><span class="n">refinement_level</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">liste</span>
+
+<span class="n">multi_map_with_synced_sliders</span><span class="p">(</span><span class="n">liste</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pangeo_fish.helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_trajectories</span>
+
+<span class="n">traj_plots</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">plot_trajectories</span><span class="p">(</span>
+        <span class="n">target_root</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">target_root</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">subfolder</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+        <span class="n">track_modes</span><span class="o">=</span><span class="n">track_modes</span><span class="p">,</span>
+        <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">,</span>
+        <span class="n">save_html</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">options</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">"Model's Folder: </span><span class="si">{</span><span class="n">subfolder</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">subfolder</span> <span class="ow">in</span> <span class="p">[</span>
+        <span class="s2">""</span><span class="p">,</span>
+        <span class="s2">"hand_sigma"</span><span class="p">,</span>
+        <span class="s2">"hand_sigma_UDG1D"</span><span class="p">,</span>
+    <span class="p">]</span>
+<span class="p">]</span>
+<span class="p">(</span><span class="n">traj_plots</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">traj_plots</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">traj_plots</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">.</span><span class="n">cols</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="information-for-bug-reports">
+<h2>付録：バグ報告用の情報（Information for bug reports）<a class="headerlink" href="#information-for-bug-reports" title="Link to this heading">#</a></h2>
+<p>うまく動かないときは、どのソフトウェアを使っていたかを正確に知る必要があります。次のセルを実行し（前のセルでエラーが出ていても、いつでも実行できます）、<strong>出力をすべて</strong>コピーして、エラーメッセージと一緒に <a class="reference external" href="https://github.com/pangeo-fish/pangeo-fish-fra2026/issues">issue</a> やメールに貼り付けてください。</p>
+<p>出力からは、次の 3 つのことがわかります。</p>
+<ul class="simple">
+<li><p><strong>どの計算環境か：</strong> Jupyter サーバーの起動に使った Docker イメージ（レジストリ、名前、タグ。例：<code class="docutils literal notranslate"><span class="pre">ghcr.io/tinaok/pangeo-fish-notebook:2026.06.04-10751a5</span></code>）。タグの末尾は、イメージの作成に使った Pangeo-Fish のコミットです。</p></li>
+<li><p><strong>どの Pangeo-Fish のコードか：</strong> そのイメージにインストールされている Pangeo-Fish のソースの Git リポジトリとコミット。</p></li>
+<li><p><strong>どのノートブックか：</strong> このワークショップのリポジトリのコミットと、ノートブックを変更したかどうか。</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># バグ報告用のソフトウェア情報：出力をすべてコピーして報告に貼り付けてください。</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">platform</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">importlib.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">PackageNotFoundError</span><span class="p">,</span> <span class="n">version</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="o">*</span><span class="n">cmd</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"unavailable (</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">)"</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">pkg_version</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">version</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">PackageNotFoundError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">"not installed"</span>
+
+
+<span class="n">git</span> <span class="o">=</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">"git"</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span> <span class="s2">"bin"</span><span class="p">))</span> <span class="ow">or</span> <span class="s2">"git"</span>
+<span class="n">fish_src</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"PANGEO_FISH_SRC"</span><span class="p">,</span> <span class="s2">"/srv/pangeo-fish"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Docker image       :"</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"JUPYTER_IMAGE"</span><span class="p">,</span> <span class="s2">"unknown (not set by the hub)"</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"JupyterHub         :"</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"JUPYTERHUB_SERVICE_URL"</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"JUPYTERHUB_API_URL"</span><span class="p">,</span> <span class="s2">"unknown"</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Pangeo-Fish version:"</span><span class="p">,</span> <span class="n">pkg_version</span><span class="p">(</span><span class="s2">"pangeo-fish"</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Pangeo-Fish source :"</span><span class="p">,</span> <span class="n">run</span><span class="p">(</span><span class="n">git</span><span class="p">,</span> <span class="s2">"-C"</span><span class="p">,</span> <span class="n">fish_src</span><span class="p">,</span> <span class="s2">"remote"</span><span class="p">,</span> <span class="s2">"get-url"</span><span class="p">,</span> <span class="s2">"origin"</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Pangeo-Fish commit :"</span><span class="p">,</span> <span class="n">run</span><span class="p">(</span><span class="n">git</span><span class="p">,</span> <span class="s2">"-C"</span><span class="p">,</span> <span class="n">fish_src</span><span class="p">,</span> <span class="s2">"log"</span><span class="p">,</span> <span class="s2">"-1"</span><span class="p">,</span> <span class="s2">"--format=%H (</span><span class="si">%c</span><span class="s2">s) </span><span class="si">%s</span><span class="s2">"</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Notebook repository:"</span><span class="p">,</span> <span class="n">run</span><span class="p">(</span><span class="n">git</span><span class="p">,</span> <span class="s2">"remote"</span><span class="p">,</span> <span class="s2">"get-url"</span><span class="p">,</span> <span class="s2">"origin"</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Notebook commit    :"</span><span class="p">,</span> <span class="n">run</span><span class="p">(</span><span class="n">git</span><span class="p">,</span> <span class="s2">"log"</span><span class="p">,</span> <span class="s2">"-1"</span><span class="p">,</span> <span class="s2">"--format=%H (</span><span class="si">%c</span><span class="s2">s) </span><span class="si">%s</span><span class="s2">"</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Notebook changes   :"</span><span class="p">,</span> <span class="n">run</span><span class="p">(</span><span class="n">git</span><span class="p">,</span> <span class="s2">"status"</span><span class="p">,</span> <span class="s2">"--short"</span><span class="p">,</span> <span class="s2">"."</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">"none"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Python             :"</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">version</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">"on"</span><span class="p">,</span> <span class="n">platform</span><span class="o">.</span><span class="n">platform</span><span class="p">())</span>
+<span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"xarray"</span><span class="p">,</span> <span class="s2">"dask"</span><span class="p">,</span> <span class="s2">"numpy"</span><span class="p">,</span> <span class="s2">"xdggs"</span><span class="p">,</span> <span class="s2">"healpix-geo"</span><span class="p">,</span> <span class="s2">"copernicusmarine"</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">:</span><span class="s2">19</span><span class="si">}</span><span class="s2">:"</span><span class="p">,</span> <span class="n">pkg_version</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "pangeo-fish"
+        },
+        kernelOptions: {
+            name: "pangeo-fish",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'pangeo-fish'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="glorys-xarray-dask-zarr-healpix.html"
+       title="前のページ">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">前へ</p>
+        <p class="prev-next-title">Python で海洋モデルデータを扱う：Xarray、Dask、Zarr、HEALPix</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="gfts.html"
+       title="次ページ">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">次へ</p>
+        <p class="prev-next-title">将来の海での魚の姿：GFTS</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> 目次
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">1. 解析の準備</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">解析ツールを読み込む</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">解析の設定</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">計算の準備</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">タグの観測データを読み込む</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#copernicus-marine">Copernicus Marine にサインインする</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">2. タグと海洋モデルの水温を比べる</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">解析する海域の海水温を読み込む</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">候補となる場所で水温を比べる</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">データがそろっているかを時間ごとに確認する</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">3. 候補となる場所を等面積の格子で表す</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">4. 水温と合う場所を見つける</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">5. 音響テレメトリーの受信記録を加える</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">手がかりをまとめる</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">6. 水温と音響テレメトリーの手がかりを統合する</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">7. 魚がどのくらいの範囲を移動できるかを推定する</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">8. 位置を推定し、移動経路をまとめる</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">9. 地図と移動経路を見る</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id18">9.1 移動経路を比べる</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id19">9.2 確率分布の時間変化を見る</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gfts">10. 次のステップ：GFTS で見る、将来の海での魚の姿</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id20">研究で使うときは</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id21">補足の付録：移動の仮定を比べる</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#information-for-bug-reports">付録：バグ報告用の情報（Information for bug reports）</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+著者 Pangeo-Fish プロジェクト
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
