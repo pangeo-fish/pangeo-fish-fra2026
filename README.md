@@ -1,27 +1,39 @@
-# Fish geolocation with Pangeo-Fish - ETN Symposium 2026 workshop
+# Pangeo-Fish による魚類の位置推定 - FRA 横浜ワークショップ 2026
 
-The content of this repository (folder `docs`) is rendered as an online document using [Jupyter Book](https://jupyterbook.org/en/stable/intro.html). **You can access it [here](https://pangeo-fish.github.io/pangeo-fish-fra2026)**.
+*Fish geolocation with Pangeo-Fish — hands-on workshop (in Japanese) at the Japan Fisheries Research and Education Agency (FRA), Yokohama, 25 November 2026.*
 
-## Workshop: Fish geolocation with Pangeo-Fish
+このリポジトリの内容（`docs` フォルダ）は、[Jupyter Book](https://jupyterbook.org/en/stable/intro.html) でウェブ上の教材として公開しています。**教材は[こちら](https://pangeo-fish.github.io/pangeo-fish-fra2026)から読めます。**
 
-This hands-on workshop is given at the [European Tracking Network (ETN) Symposium 2026](https://europeantrackingnetwork.org/) (Thursday 15 October 2026, 15:00 - 16:00 CET, B!NGS Copenhagen). It introduces the [Pangeo](https://pangeo.io) ecosystem (Xarray, Dask, HEALPix) and walks participants through a complete [pangeo-fish](https://github.com/pangeo-fish/pangeo-fish) geolocation workflow on biologging data.
+## ワークショップ：Pangeo-Fish による魚類の位置推定
 
-The notebooks run on [Pangeo@EOSC](https://pangeo-data.github.io/pangeo-eosc/) with the Docker image [`ghcr.io/tinaok/pangeo-fish-notebook:2026.06.04-10751a5`](https://github.com/tinaok/pangeo-fish-docker).
+このハンズオンワークショップは、**2026年11月25日（水）10:00〜12:00** に、水産研究・教育機構（FRA）横浜庁舎で、対面とリモートのハイブリッドで開催します。リモート参加を希望する方は、FRA 研究戦略部 研究調整課にご連絡ください。
 
-See [事前登録 (pre-registration)](https://pangeo-fish.github.io/pangeo-fish-fra2026/users-getting-started.html) for the registration steps (to be done **before** the workshop).
+[Pangeo](https://pangeo.io) のエコシステム（Xarray、Dask、HEALPix）を紹介したうえで、バイオロギングデータを使い、[pangeo-fish](https://github.com/pangeo-fish/pangeo-fish) による位置推定の一連の流れを体験します。
 
-Once your registration has been approved, first [log in to Pangeo@EOSC](https://pangeo-eosc.vm.fedcloud.eu/hub/login). After logging in, return to this page and use the launch link below. The launch link may not work correctly if you are not already logged in.
+ノートブックは [Pangeo@EOSC](https://pangeo-data.github.io/pangeo-eosc/) 上で、Docker イメージ [`ghcr.io/tinaok/pangeo-fish-notebook:2026.06.04-10751a5`](https://github.com/tinaok/pangeo-fish-docker) を使って実行します。
 
-👉 **One-click start on Pangeo@EOSC** (start the pangeo-fish image, clone/update this repository and open the notebook):
-[Start the workshop environment](https://pangeo-eosc.vm.fedcloud.eu/hub/spawn?profile=only-choice&profile-option-only-choice--image--unlisted-choice=ghcr.io%2Ftinaok%2Fpangeo-fish-notebook%3A2026.06.04-10751a5&next=%2Fhub%2Fuser-redirect%2Fgit-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252Fpangeo-fish%252Fpangeo-fish-fra2026%26urlpath%3Dlab%252Ftree%252Fpangeo-fish-fra2026%252Fdocs%252Fpangeo-fish.ipynb%26branch%3Dmain)
+## 事前登録（できれば 11 月 22 日まで）
 
-Alternatively, after logging in, copy and paste this URL into your browser's address bar:
+ワークショップの前に、[事前登録](https://pangeo-fish.github.io/pangeo-fish-fra2026/users-getting-started.html)の 3 つのステップを済ませてください。
+
+1. EGI Check-in のアカウントを作る（ORCID でサインイン）
+2. `vo.pangeo.eu` に参加申請する（承認は手作業なので早めに）
+3. Copernicus Marine の無料アカウントを作る
+
+## 環境を起動する（ワンクリック）
+
+参加申請が承認されたら、まず [Pangeo@EOSC にログイン](https://pangeo-eosc.vm.fedcloud.eu/hub/login)します。ログインしたらこのページに戻り、下の起動リンクを使います。ログインしていない状態では、起動リンクが正しく動かないことがあります。
+
+👉 **Pangeo@EOSC でワンクリック起動**（pangeo-fish のイメージでサーバーを起動し、このリポジトリをクローン・更新して、ノートブックを開きます）：
+[ワークショップの環境を起動する](https://pangeo-eosc.vm.fedcloud.eu/hub/spawn?profile=only-choice&profile-option-only-choice--image--unlisted-choice=ghcr.io%2Ftinaok%2Fpangeo-fish-notebook%3A2026.06.04-10751a5&next=%2Fhub%2Fuser-redirect%2Fgit-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252Fpangeo-fish%252Fpangeo-fish-fra2026%26urlpath%3Dlab%252Ftree%252Fpangeo-fish-fra2026%252Fdocs%252Fpangeo-fish.ipynb%26branch%3Dmain)
+
+または、ログインしたあとで、次の URL をブラウザのアドレスバーにコピー＆ペーストしてください。
 
 ```
 https://pangeo-eosc.vm.fedcloud.eu/hub/spawn?profile=only-choice&profile-option-only-choice--image--unlisted-choice=ghcr.io%2Ftinaok%2Fpangeo-fish-notebook%3A2026.06.04-10751a5&next=%2Fhub%2Fuser-redirect%2Fgit-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252Fpangeo-fish%252Fpangeo-fish-fra2026%26urlpath%3Dlab%252Ftree%252Fpangeo-fish-fra2026%252Fdocs%252Fpangeo-fish.ipynb%26branch%3Dmain
 ```
 
-## Build the book locally
+## 教材を手元でビルドする
 
 ```bash
 micromamba create -n fra2026 -f .binder/environment.yml
@@ -29,16 +41,16 @@ micromamba activate fra2026
 jupyter-book build docs
 ```
 
-The HTML is generated in `docs/_build/html`. The book is deployed automatically to GitHub Pages by [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) on every push to `main` touching `docs/`.
+HTML は `docs/_build/html` に作られます。`docs/` を変更して `main` に push すると、[`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) が GitHub Pages に自動で公開します。
 
-## Citing pangeo-fish
+## pangeo-fish の引用
 
-If you use pangeo-fish in your research, please cite:
+研究で pangeo-fish を使った場合は、次の論文を引用してください。
 
 Magin, J., Mazouni, Q., Cap, E., Gonse, M., Woillez, M., Fouilloux, A., Delouis, J.-M., and Odaka, T.: pangeo-fish: A Python package for studying fish movement using biologging and earth science data, *Journal of Open Source Software*, 11(122), 8332, https://doi.org/10.21105/joss.08332, 2026.
 
-See [研究で pangeo-fish を使ったら：引用のしかた](https://pangeo-fish.github.io/pangeo-fish-fra2026/cite.html) for the data and tools to cite as well, and a list of studies that used pangeo-fish.
+一緒に引用するデータやツール、pangeo-fish を使った研究の一覧は「[研究で pangeo-fish を使ったら：引用のしかた](https://pangeo-fish.github.io/pangeo-fish-fra2026/cite.html)」にまとめています。
 
-## Acknowledgements
+## 謝辞
 
-This repository is derived from [pangeo-data/pangeo-bids25](https://github.com/pangeo-data/pangeo-bids25) (Pangeo tutorial at BiDS 2025). The GLORYS notebook (Xarray, Dask, Zarr, HEALPix) is adapted from its *Introduction to HEALPix and Dask* notebook. The pangeo-fish notebook comes from [pangeo-fish/pangeo-fish](https://github.com/pangeo-fish/pangeo-fish/blob/main/notebooks/pangeo-fish.ipynb).
+この教材は、ETN Symposium 2026（コペンハーゲン）のワークショップ教材 [pangeo-fish/pangeo-fish-etn2026](https://github.com/pangeo-fish/pangeo-fish-etn2026) をもとに、FRA 横浜ワークショップ向けに日本語化・改訂したものです。その元になったのは [pangeo-data/pangeo-bids25](https://github.com/pangeo-data/pangeo-bids25)（BiDS 2025 の Pangeo チュートリアル）です。GLORYS のノートブック（Xarray、Dask、Zarr、HEALPix）は、その *Introduction to HEALPix and Dask* ノートブックを改変したものです。pangeo-fish のノートブックは [pangeo-fish/pangeo-fish](https://github.com/pangeo-fish/pangeo-fish/blob/main/notebooks/pangeo-fish.ipynb) から取っています。
