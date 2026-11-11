@@ -1,0 +1,30 @@
+format: jb-book
+root: intro
+parts:
+  - caption: このワークショップについて
+    chapters:
+      - file: agenda
+      - file: users-getting-started
+      - file: jupyterlab-basics
+  - caption: Pangeo と EOSC の概要
+    chapters:
+      - file: pangeo
+  - caption: Python で海洋モデルデータを扱う
+    chapters:
+      - file: glorys-xarray-dask-zarr-healpix
+        title: GLORYS で学ぶ Xarray・Dask・Zarr・HEALPix
+  - caption: pangeo-fish と GFTS による魚類の位置推定
+    chapters:
+      - file: pangeo-fish
+      - file: gfts
+      # 次の行は fra-roms.md を作成したら有効にする（手順7）。ファイルがないとビルドが失敗する。
+      # - file: fra-roms
+      - file: feedback
+  - caption: チュートリアルの先へ
+    chapters:
+      - file: afterword/resources
+        title: 参考資料
+      - file: afterword/pythia
+        title: Project Pythia
+      - file: afterword/edsbook
+        title: Environmental Data Science Book
