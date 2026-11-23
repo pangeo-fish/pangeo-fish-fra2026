@@ -10,7 +10,20 @@
 
 [Pangeo](https://pangeo.io) のエコシステム（Xarray、Dask、HEALPix）を紹介したうえで、バイオロギングデータを使い、[pangeo-fish](https://github.com/pangeo-fish/pangeo-fish) による位置推定の一連の流れを体験します。
 
-ノートブックは [Pangeo@EOSC](https://pangeo-data.github.io/pangeo-eosc/) 上で、Docker イメージ [`ghcr.io/tinaok/pangeo-fish-notebook:2026.06.04-10751a5`](https://github.com/tinaok/pangeo-fish-docker) を使って実行します。
+ノートブックは [Pangeo@EOSC](https://pangeo-data.github.io/pangeo-eosc/) 上で、このワークショップ用に固定した Docker イメージを使って実行します。
+
+## このワークショップで使うソフトウェア
+
+<!-- versions:start -->
+| 項目 | このワークショップで使うもの |
+| --- | --- |
+| pangeo-fish | `main` ブランチのコミット [`8fb0870`](https://github.com/pangeo-fish/pangeo-fish/tree/8fb0870d023b313e9f019eff14a3dfd9d99ee0b2) |
+| Docker イメージ | `ghcr.io/pangeo-fish/pangeo-fish-notebook:2026.10.21-8fb0870`（[pangeo-fish/pangeo-fish-docker](https://github.com/pangeo-fish/pangeo-fish-docker) でビルド） |
+| ノートブック | pangeo-fish の [base demo](https://github.com/pangeo-fish/pangeo-fish/blob/8fb0870d023b313e9f019eff14a3dfd9d99ee0b2/notebooks/pangeo-fish-base-demo.ipynb) と [complete demo](https://github.com/pangeo-fish/pangeo-fish/blob/8fb0870d023b313e9f019eff14a3dfd9d99ee0b2/notebooks/pangeo-fish-complete-demo.ipynb) を日本語にしたもの |
+| 計算環境 | [Pangeo@EOSC](https://pangeo-eosc.vm.fedcloud.eu/) |
+<!-- versions:end -->
+
+Docker イメージのタグの末尾は、イメージに入っている pangeo-fish のコミットです。全員が同じ環境で作業できるよう、`latest` ではなくこの固定タグを使います。
 
 ## 事前登録（できれば 11 月 22 日まで）
 
@@ -25,12 +38,12 @@
 参加申請が承認されたら、まず [Pangeo@EOSC にログイン](https://pangeo-eosc.vm.fedcloud.eu/hub/login)します。ログインしたらこのページに戻り、下の起動リンクを使います。ログインしていない状態では、起動リンクが正しく動かないことがあります。
 
 👉 **Pangeo@EOSC でワンクリック起動**（pangeo-fish のイメージでサーバーを起動し、このリポジトリをクローン・更新して、ノートブックを開きます）：
-[ワークショップの環境を起動する](https://pangeo-eosc.vm.fedcloud.eu/hub/spawn?profile=only-choice&profile-option-only-choice--image--unlisted-choice=ghcr.io%2Ftinaok%2Fpangeo-fish-notebook%3A2026.06.04-10751a5&next=%2Fhub%2Fuser-redirect%2Fgit-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252Fpangeo-fish%252Fpangeo-fish-fra2026%26urlpath%3Dlab%252Ftree%252Fpangeo-fish-fra2026%252Fdocs%252Fpangeo-fish.ipynb%26branch%3Dmain)
+[ワークショップの環境を起動する](https://pangeo-eosc.vm.fedcloud.eu/hub/spawn?profile=only-choice&profile-option-only-choice--image--unlisted-choice=ghcr.io%2Fpangeo-fish%2Fpangeo-fish-notebook%3A2026.10.21-8fb0870&next=%2Fhub%2Fuser-redirect%2Fgit-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252Fpangeo-fish%252Fpangeo-fish-fra2026%26urlpath%3Dlab%252Ftree%252Fpangeo-fish-fra2026%252Fdocs%252Fpangeo-fish.ipynb%26branch%3Dmain)
 
 または、ログインしたあとで、次の URL をブラウザのアドレスバーにコピー＆ペーストしてください。
 
 ```
-https://pangeo-eosc.vm.fedcloud.eu/hub/spawn?profile=only-choice&profile-option-only-choice--image--unlisted-choice=ghcr.io%2Ftinaok%2Fpangeo-fish-notebook%3A2026.06.04-10751a5&next=%2Fhub%2Fuser-redirect%2Fgit-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252Fpangeo-fish%252Fpangeo-fish-fra2026%26urlpath%3Dlab%252Ftree%252Fpangeo-fish-fra2026%252Fdocs%252Fpangeo-fish.ipynb%26branch%3Dmain
+https://pangeo-eosc.vm.fedcloud.eu/hub/spawn?profile=only-choice&profile-option-only-choice--image--unlisted-choice=ghcr.io%2Fpangeo-fish%2Fpangeo-fish-notebook%3A2026.10.21-8fb0870&next=%2Fhub%2Fuser-redirect%2Fgit-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252Fpangeo-fish%252Fpangeo-fish-fra2026%26urlpath%3Dlab%252Ftree%252Fpangeo-fish-fra2026%252Fdocs%252Fpangeo-fish.ipynb%26branch%3Dmain
 ```
 
 ## 教材を手元でビルドする
@@ -53,4 +66,4 @@ Magin, J., Mazouni, Q., Cap, E., Gonse, M., Woillez, M., Fouilloux, A., Delouis,
 
 ## 謝辞
 
-この教材は、ETN Symposium 2026（コペンハーゲン）のワークショップ教材 [pangeo-fish/pangeo-fish-etn2026](https://github.com/pangeo-fish/pangeo-fish-etn2026) をもとに、FRA 横浜ワークショップ向けに日本語化・改訂したものです。その元になったのは [pangeo-data/pangeo-bids25](https://github.com/pangeo-data/pangeo-bids25)（BiDS 2025 の Pangeo チュートリアル）です。GLORYS のノートブック（Xarray、Dask、Zarr、HEALPix）は、その *Introduction to HEALPix and Dask* ノートブックを改変したものです。pangeo-fish のノートブックは [pangeo-fish/pangeo-fish](https://github.com/pangeo-fish/pangeo-fish/blob/main/notebooks/pangeo-fish.ipynb) から取っています。
+この教材は、ETN Symposium 2026（コペンハーゲン）のワークショップ教材 [pangeo-fish/pangeo-fish-etn2026](https://github.com/pangeo-fish/pangeo-fish-etn2026) をもとに、FRA 横浜ワークショップ向けに日本語化・改訂したものです。その元になったのは [pangeo-data/pangeo-bids25](https://github.com/pangeo-data/pangeo-bids25)（BiDS 2025 の Pangeo チュートリアル）です。GLORYS のノートブック（Xarray、Dask、Zarr、HEALPix）は、その *Introduction to HEALPix and Dask* ノートブックを改変したものです。pangeo-fish のノートブックは、[pangeo-fish/pangeo-fish](https://github.com/pangeo-fish/pangeo-fish/tree/main/notebooks) の base demo と complete demo を日本語にしたものです。

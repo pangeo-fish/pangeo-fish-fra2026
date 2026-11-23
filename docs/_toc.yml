@@ -17,6 +17,7 @@ parts:
   - caption: pangeo-fish と GFTS による魚類の位置推定
     chapters:
       - file: pangeo-fish
+      - file: pangeo-fish-complete
       - file: gfts
       # 次の行は fra-roms.md を作成したら有効にする（手順7）。ファイルがないとビルドが失敗する。
       # - file: fra-roms

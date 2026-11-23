@@ -3,21 +3,34 @@
 
 Pangeo@EOSC は、ヨーロッパの研究者とその共同研究者に開かれた、Pangeo エコシステムの主要な公開環境です。ヨーロッパのインフラ上で運用されており、Pangeo@Europe は研究者向けのトレーニングに主に Pangeo@EOSC を使っています。計算資源やストレージ（MinIO）については {doc}`pangeo` を見てください。
 
+## このワークショップで使うソフトウェア
+
+<!-- versions:start -->
+| 項目 | このワークショップで使うもの |
+| --- | --- |
+| pangeo-fish | `main` ブランチのコミット [`8fb0870`](https://github.com/pangeo-fish/pangeo-fish/tree/8fb0870d023b313e9f019eff14a3dfd9d99ee0b2) |
+| Docker イメージ | `ghcr.io/pangeo-fish/pangeo-fish-notebook:2026.10.21-8fb0870`（[pangeo-fish/pangeo-fish-docker](https://github.com/pangeo-fish/pangeo-fish-docker) でビルド） |
+| ノートブック | pangeo-fish の [base demo](https://github.com/pangeo-fish/pangeo-fish/blob/8fb0870d023b313e9f019eff14a3dfd9d99ee0b2/notebooks/pangeo-fish-base-demo.ipynb) と [complete demo](https://github.com/pangeo-fish/pangeo-fish/blob/8fb0870d023b313e9f019eff14a3dfd9d99ee0b2/notebooks/pangeo-fish-complete-demo.ipynb) を日本語にしたもの |
+| 計算環境 | [Pangeo@EOSC](https://pangeo-eosc.vm.fedcloud.eu/) |
+<!-- versions:end -->
+
+Docker イメージのタグの末尾は、イメージに入っている pangeo-fish のコミットです。全員が同じ環境で作業できるよう、`latest` ではなくこの固定タグを使います。
+
 ## ワークショップの環境を起動する（ワンクリック）
 
 参加申請が承認されたら、まず [Pangeo@EOSC にログイン](https://pangeo-eosc.vm.fedcloud.eu/hub/login)します。**Sign in with EGI Check-in** をクリックし、登録に使ったのと同じ ORCID iD / EGI アカウントでログインしてください。ログインしたらこのページに戻り、下の起動リンクを使います。ログインしていない状態では、起動リンクが正しく動かないことがあります。
 
 起動リンクは次のことを行います。
 
-1. **pangeo-fish の Docker イメージ**（`ghcr.io/tinaok/pangeo-fish-notebook:2026.06.04-10751a5`）で JupyterLab サーバーを起動します。
+1. **pangeo-fish の Docker イメージ**（`ghcr.io/pangeo-fish/pangeo-fish-notebook:2026.10.21-8fb0870`）で JupyterLab サーバーを起動します。
 2. **このリポジトリ**（`pangeo-fish-fra2026`）をホームディレクトリに**クローン**し（すでにある場合は更新し）、pangeo-fish のノートブックを開きます。
 
-👉 **<a href="https://pangeo-eosc.vm.fedcloud.eu/hub/spawn?profile=only-choice&amp;profile-option-only-choice--image--unlisted-choice=ghcr.io%2Ftinaok%2Fpangeo-fish-notebook%3A2026.06.04-10751a5&amp;next=%2Fhub%2Fuser-redirect%2Fgit-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252Fpangeo-fish%252Fpangeo-fish-fra2026%26urlpath%3Dlab%252Ftree%252Fpangeo-fish-fra2026%252Fdocs%252Fpangeo-fish.ipynb%26branch%3Dmain">FRA 2026 pangeo-fish ワークショップの環境を起動する</a>** 👈
+👉 **<a href="https://pangeo-eosc.vm.fedcloud.eu/hub/spawn?profile=only-choice&amp;profile-option-only-choice--image--unlisted-choice=ghcr.io%2Fpangeo-fish%2Fpangeo-fish-notebook%3A2026.10.21-8fb0870&amp;next=%2Fhub%2Fuser-redirect%2Fgit-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252Fpangeo-fish%252Fpangeo-fish-fra2026%26urlpath%3Dlab%252Ftree%252Fpangeo-fish-fra2026%252Fdocs%252Fpangeo-fish.ipynb%26branch%3Dmain">FRA 2026 pangeo-fish ワークショップの環境を起動する</a>** 👈
 
 または、ログインしたあとで、次の URL をブラウザのアドレスバーにコピー＆ペーストしてください。
 
 ```
-https://pangeo-eosc.vm.fedcloud.eu/hub/spawn?profile=only-choice&profile-option-only-choice--image--unlisted-choice=ghcr.io%2Ftinaok%2Fpangeo-fish-notebook%3A2026.06.04-10751a5&next=%2Fhub%2Fuser-redirect%2Fgit-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252Fpangeo-fish%252Fpangeo-fish-fra2026%26urlpath%3Dlab%252Ftree%252Fpangeo-fish-fra2026%252Fdocs%252Fpangeo-fish.ipynb%26branch%3Dmain
+https://pangeo-eosc.vm.fedcloud.eu/hub/spawn?profile=only-choice&profile-option-only-choice--image--unlisted-choice=ghcr.io%2Fpangeo-fish%2Fpangeo-fish-notebook%3A2026.10.21-8fb0870&next=%2Fhub%2Fuser-redirect%2Fgit-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252Fpangeo-fish%252Fpangeo-fish-fra2026%26urlpath%3Dlab%252Ftree%252Fpangeo-fish-fra2026%252Fdocs%252Fpangeo-fish.ipynb%26branch%3Dmain
 ```
 
 :::{note}
@@ -33,10 +46,10 @@ JupyterLab サーバーが**すでに動いている**場合（たとえば別�
 サーバーのオプションの **Image** で **"Specify an existing docker image"**（カスタムイメージ）を選び、次を入力します。
 
 ```
-ghcr.io/tinaok/pangeo-fish-notebook:2026.06.04-10751a5
+ghcr.io/pangeo-fish/pangeo-fish-notebook:2026.10.21-8fb0870
 ```
 
-固定タグ `2026.06.04-10751a5` には、このワークショップ用に準備した Pangeo-Fish のバージョンが入っています。全員が同じ環境で作業できるよう、この固定タグを使ってください。イメージは [tinaok/pangeo-fish-docker](https://github.com/tinaok/pangeo-fish-docker) でビルド・テストされています。
+固定タグ `2026.10.21-8fb0870` には、このワークショップ用に準備した Pangeo-Fish のバージョンが入っています。全員が同じ環境で作業できるよう、この固定タグを使ってください。イメージは [pangeo-fish/pangeo-fish-docker](https://github.com/pangeo-fish/pangeo-fish-docker) でビルド・テストされています。
 
 JupyterLab が起動したら、ターミナルを開いてこのリポジトリをクローンします。
 
