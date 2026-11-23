@@ -23,6 +23,23 @@ parts:
       # - file: fra-roms
       - file: cite
       - file: feedback
+  - caption: 科学・技術解説
+    chapters:
+      - file: science/00_guide
+      - file: science/01_scientific_lineage
+      - file: science/02_hmm
+      - file: science/03_temperature
+      - file: science/04_observations_models
+      - file: science/05_acoustic
+      - file: science/06_bathymetry
+      - file: science/07_tides
+      - file: science/08_comparison_validation
+      - file: science/09_ellipsoidal_healpix
+      - file: science/09b_regridding_alignment
+      - file: science/10_computing
+      - file: science/11_parameters_versions
+      - file: science/12_consultation
+      - file: science/13_references
   - caption: チュートリアルの先へ
     chapters:
       - file: afterword/resources

@@ -39,3 +39,10 @@ pangeo-fish を使った論文の一覧です。
 - Gonse, M., Laurans, M., Magin, J., Odaka, T., Delouis, J.-M., Martin, S., Garren, F., Lazard, C., Drogou, M., Stamp, T., Davies, P., Hall, A., Sheehan, E., and Woillez, M.: Combining acoustic telemetry with archival tagging to investigate the spatial dynamic of the understudied pollack, *Pollachius pollachius*, *Journal of Fish Biology*, 106(5), 1400–1421, [https://doi.org/10.1111/jfb.15750](https://doi.org/10.1111/jfb.15750), 2024.
 
 pangeo-fish を使った論文を発表したら、[issue](https://github.com/pangeo-fish/pangeo-fish-fra2026/issues) でお知らせください。この一覧に追加します。
+
+## 科学・技術解説で引用した文献
+
+「科学・技術解説」の各章で引用した文献の一覧です。章ごとの読む目的と確認範囲は、{doc}`science/13_references` にまとめています。
+
+```{bibliography}
+```
