@@ -6,7 +6,7 @@ Pangeo-Fish の位置推定では、魚の候補位置を有限個のセルに�
 
 この区別は沿岸で特に大切です。受信局、海底地形、水温場、推定経路が同じ緯度・経度を表しているつもりでも、格子の地球形状や緯度の解釈が異なれば、同じセル番号を照合しても同じ場所を指しません。
 
-本章の幾何学的説明は、Górski et al. の HEALPix、Karney の補助緯度、GRID4EARTH の楕円体への適用に基づきます。計算例と図は定義式から新たに作成しました。Pangeo-Fish の具体的な実装は、`main` の `e2877f2` のソースを読んで確認した内容を、第7節に分けて記します。{cite:p}`gorski2005healpix,karney2024auxiliary,odaka2026grid4earth`
+本章の幾何学的説明は、Górski et al. の HEALPix、Karney の補助緯度、GRID4EARTH の楕円体への適用に基づきます。計算例と図は定義式から新たに作成しました。Pangeo-Fish の具体的な実装は、`main` の `361e9b7` のソースを読んで確認した内容を、第7節に分けて記します。{cite:p}`gorski2005healpix,karney2024auxiliary,odaka2026grid4earth`
 
 ## 1. HEALPix がそろえるもの
 
@@ -166,9 +166,9 @@ HEALPix には RING と NESTED などの番号付けがあります。同じ格�
 
 DGGS はセル識別子を用いて空間を参照する枠組みであり、特定の整数配列だけを指す名称ではありません。概念モデルは OGC Topic 21、Web API は別の OGC API – DGGS 文書で扱われます。本教材で「DGGS Core」とだけ書いてこの二つを混同しません。{cite:p}`ogc2021dggs,ogc2025apidggs`
 
-## 7. Pangeo-Fish `main`（e2877f2）は楕円体をどう扱うか
+## 7. Pangeo-Fish `main`（361e9b7）は楕円体をどう扱うか
 
-以下は、`main` の `e2877f2` のソースを読んで確認した内容です。ノートブックを実行して確かめたものではありません。
+以下は、`main` の `361e9b7` のソースを読んで確認した内容です。ノートブックを実行して確かめたものではありません。
 
 ### 7.1 設定と既定値
 
@@ -184,8 +184,8 @@ HEALPix 格子を新しく作るときの関数側の既定値も `"WGS84"` で�
 | 格子属性 | `grid_name`、`level`、`indexing_scheme`、`ellipsoid` を `cell_ids` の属性として書き出し、保存・再読込でも保つ | `storage.py` `_with_dggs_attrs` |
 | 海底地形 | `ellipsoid` を `lonlat_to_healpix` に渡してセルIDを決め、出力の `latitude`／`longitude` も `healpix_to_lonlat(..., ellipsoid=...)` で計算する。`cell_ids` の属性には `grid_name`、`level`、`indexing_scheme`、`ellipsoid` が付く。`batch_compute_pdf_bathy` は、ヒストグラムと `diff-regridded.zarr` で level・番号付け・楕円体が違うと `ValueError` にする | `bathy.py` 137、161、177–186、319–337、430–434 |
 | 音響の受信域 | 格子の `ellipsoid` 属性を読み、受信域の計算に渡す。WGS84 のときは地心緯度から測地緯度へ換算する式を持つ。受信半径（距離）を角度にする換算だけは、楕円体によらず固定の 6371 km を使い、その角度の円錐を格子の楕円体上で作る | `helpers.py` 1761–1785、`acoustic.py` 22–49、107–179 |
-| 潮汐（TPXO 緯度経度格子から HEALPix への変換） | `tide_to_healpix(..., ellipsoid)` が再格子化に渡す。日平均した潮汐 PDF を総合 PDF に結合するときは、`grid_name`・`level`・`indexing_scheme`・`ellipsoid` の属性が両者で食い違うと `ValueError`。`ellipsoid` の属性がない側は `"sphere"` とみなして比較する（古い保存データの読み戻し用） | `tide.py` 535–631、657–671 |
-| 潮汐（HEALPix、FES2022b） | セル中心を `cell_ids` の楕円体で計算し、FES2022b は `WGS84` のセルだけを受け付ける（`WGS84` は測地緯度で、潮汐モデルの緯度に当たる） | `tide_healpix.py` 1–36、95–106、1046–1124 |
+| 潮汐（調和定数をセルへ移す） | 調和定数はセル中心で評価する。`cell_ids` に `level` と `ellipsoid` の属性が必要で（欠けると `ValueError`）、セル中心は `healpix_to_lonlat(..., ellipsoid=...)` でその楕円体について計算する。TPXO9 は `constants_to_healpix` が緯度経度格子の定数をセル中心へ双一次補間し、FES2022b は `fes2022b_constants_to_healpix` が PyFES のネイティブ格子の補間でセル中心へ移す。FES2022b は `WGS84` のセルだけを受け付ける（`WGS84` は測地緯度で、潮汐モデルの緯度に当たる）。Complete デモの設定セルも、FES2022b と `ellipsoid != "WGS84"` の組合せを `ValueError` にする | `tide_healpix.py` 1–36、65–107、1586–1650、1653–1743、Complete デモ セル 8 |
+| 潮汐（総合 PDF との結合） | `merge_tide_with_total` は、日ごとの潮汐 PDF と総合 PDF で `grid_name`・`level`・`indexing_scheme`・`ellipsoid` の属性が食い違うと `ValueError`。`ellipsoid` の属性がない側は `"sphere"` とみなして比較する（古い保存データの読み戻し用）。潮汐 PDF は、どちらの方式でも調和定数と同じセルの上で作られる | `tide.py` 929–1078 |
 | 移動の σ の上限 | 格子に記録された `ellipsoid` から地球半径を求める。WGS84 では**長半径**6378.137 km である（距離を長半径で割ると、その距離が楕円体上で張る最小の角度になるので、保守的な上限になる、と docstring は説明する）。属性がなければ球面とみなす（古い保存データの読み戻し用） | `helpers.py` 2085–2129、2179–2205 |
 | 畳み込み（`conv_method`） | `HealpixAnalyseConv` と `HealpixAnalyseLargeConv` は WGS84 のみ（docstring）。`FFTConv` と `LargeHealpixConv` は `ellipsoid` を受け取る | `helpers.py` 2000–2082、2311–2315 |
 | Viterbi（`viterbi_healpix`） | `EagerEstimator.decode` が予測器の楕円体を渡し、指定がなければ（`ellipsoid=None`）格子に記録された楕円体（記録がなければ `"sphere"`）を使う。`decode_trajectories` 経由では、予測器が格子の楕円体で作られるので、Viterbi の位置も WGS84 で計算される。遷移の距離は、二つのセル中心の位置ベクトル間の地心角で、docstring は「楕円体上の測地線距離ではない。差は小さいが高緯度で大きくなる」と注意する。遷移の打ち切りは4σ（`truncate` は渡されない） | `hmm/decode.py` 317–473、476–578、`hmm/estimator/eager.py` 50–60、330–336 |
@@ -207,7 +207,7 @@ from healpix_geo.nested import lonlat_to_healpix
 # WGS84 の測地緯度を入力する。等積緯度へ手動変換してから
 # ellipsoid="WGS84" を指定すると、変換を二重に適用しかねない。
 # （pangeo-fish は healpix_to_lonlat が返す緯度を、潮汐モデルの測地緯度として
-#  そのまま PyFES に渡している。tide_healpix.py 1067、1122）
+#  そのまま PyFES に渡している。tide_healpix.py 97–107、1674、1729）
 longitude = np.array([139.7, 142.0], dtype="float64")
 latitude = np.array([35.0, 40.0], dtype="float64")
 

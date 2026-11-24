@@ -2,7 +2,7 @@
 
 海底地形から得られる基本的な条件は、魚が記録した水深まで潜れる水柱が、その場所に存在することです。これは、魚が常に海底にいるという仮定より弱い条件です。浮魚性の魚にも、観測した潜水深度より浅い海域を候補から減らすという使い方ができます。
 
-**実装の基準**：以下の関数、数値、挙動は、pangeo-fish `main` の `e2877f2` のソース（`pangeo_fish/bathy.py` と `notebooks/pangeo-fish-complete-demo.ipynb`）を読んで確認したものです。コードの記述は読解にもとづくもので、ノートブックを実行して確かめたものではありません。説明用の理想式と実際の実装は分けて示します。
+**実装の基準**：以下の関数、数値、挙動は、pangeo-fish `main` の `361e9b7` のソース（`pangeo_fish/bathy.py` と `notebooks/pangeo-fish-complete-demo.ipynb`）を読んで確認したものです。コードの記述は読解にもとづくもので、ノートブックを実行して確かめたものではありません。説明用の理想式と実際の実装は分けて示します。
 
 ## 1. 水深の符号と基準面
 
@@ -61,7 +61,7 @@ Nielsenらは、北太平洋の平坦・斜面・不均質な海底で模擬移�
 
 `ellipsoid` は、地理座標からセルIDを求める段階（`lonlat_to_healpix`）と、出力のセル中心の `latitude`／`longitude` を求める段階（`healpix_to_lonlat`）の両方に渡されます。出力の `cell_ids` には、属性として `grid_name`、`level`、`indexing_scheme`、`ellipsoid` が付きます。`batch_compute_pdf_bathy` は、ヒストグラムと `diff-regridded.zarr` で level・番号付け・楕円体が違うと `ValueError` にします。
 
-実装出典：[bathy.py のヒストグラム](https://github.com/pangeo-fish/pangeo-fish/blob/e2877f2/pangeo_fish/bathy.py#L50-L214)、[Complete デモの設定](https://github.com/pangeo-fish/pangeo-fish/blob/e2877f2/notebooks/pangeo-fish-complete-demo.ipynb)（Section 6）。
+実装出典：[bathy.py のヒストグラム](https://github.com/pangeo-fish/pangeo-fish/blob/361e9b7/pangeo_fish/bathy.py#L50-L214)、[Complete デモの設定](https://github.com/pangeo-fish/pangeo-fish/blob/361e9b7/notebooks/pangeo-fish-complete-demo.ipynb)（Section 6）。
 
 ### 水深ビンと `stdev` の単位
 
@@ -73,7 +73,7 @@ Nielsenらは、北太平洋の平坦・斜面・不均質な海底で模擬移�
 
 現段階では、この項を「水深との適合度」または「セル内の水深分布に基づく位置重み」と説明するのが明確です。特定海域の測深誤差を校正し、魚のセル内分布を含めて妥当性を確かめる前に、校正済みの確率と呼びません。
 
-実装出典：[水深値の索引、床値、欠測処理](https://github.com/pangeo-fish/pangeo-fish/blob/e2877f2/pangeo_fish/bathy.py#L216-L257)、[セルへの割当てと出力](https://github.com/pangeo-fish/pangeo-fish/blob/e2877f2/pangeo_fish/bathy.py#L382-L499)。
+実装出典：[水深値の索引、床値、欠測処理](https://github.com/pangeo-fish/pangeo-fish/blob/361e9b7/pangeo_fish/bathy.py#L216-L257)、[セルへの割当てと出力](https://github.com/pangeo-fish/pangeo-fish/blob/361e9b7/pangeo_fish/bathy.py#L382-L499)。
 
 ## 4. 欠測、床値、正規化
 
@@ -89,9 +89,9 @@ Nielsenらは、北太平洋の平坦・斜面・不均質な海底で模擬移�
 
 ## 5. 潮汐項との組み合わせ
 
-水深の最大値から海底地形項を作り、同じ時系列の周期変動から潮汐項を作ります。情報の特徴は異なるが、元の観測は共有されています。legacy 潮汐のように、モデルの水柱厚 `WCT` を使って絶対水深を既に比較に含める場合は、海底地形の条件が重複する可能性を特に説明します。
+水深の最大値から海底地形項を作り、同じ時系列の周期変動から潮汐項を作ります。情報の特徴は異なるが、元の観測は共有されています。
 
-HEALPix 方式の潮汐（`water_column=None`）は、セルごと・日ごとに平均水深を推定して取り除くため、絶対水深と波形の役割を分けやすいです。Complete デモは、絶対水深の情報を別の海底地形項に任せています。ただし、そのことだけで両項の条件付き独立性が証明されたわけではありません。比較実験では、海底地形の追加で分布が狭くなるだけでなく、独立の既知位置をどれだけ含むかを調べます。
+Complete デモの既定の潮汐方式 `tide_method = "healpix"`（`water_column=None`）は、セルごと・日ごとに平均水深を推定して取り除くため、絶対水深と波形の役割を分けやすいです。この場合、絶対水深の情報は別の海底地形項が担います。もう一つの `tide_method = "pedersen"` は、GEBCO から作ったセルの平均水深（標準偏差 10 m）を潮汐の窓の比較に含めるので、弱いながら絶対水深の情報も使います。海底地形項と条件が重複する可能性を、方式ごとに確認します（[潮汐](07_tides.md)3 節）。ただし、そのことだけで両項の条件付き独立性が証明されたわけではありません。比較実験では、海底地形の追加で分布が狭くなるだけでなく、独立の既知位置をどれだけ含むかを調べます。
 
 ## 6. 面談で使う確認表
 

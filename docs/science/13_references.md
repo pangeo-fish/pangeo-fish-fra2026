@@ -1,6 +1,6 @@
 # 参考文献・データ出典と、確認した範囲
 
-この一覧は「どの説明に、どの文献を使うか」を示します。論文の方法、ワークショップのノートブックの実装、将来試す比較実験を同一視しません。実装の説明は、ワークショップで固定したpangeo-fishのコミット`af4fe17`に基づき、論文の記述からコードの挙動を推測したものではありません。
+この一覧は「どの説明に、どの文献を使うか」を示します。論文の方法、ワークショップのノートブックの実装、将来試す比較実験を同一視しません。実装の説明は、ワークショップで固定したpangeo-fishのコミット`361e9b7`に基づき、論文の記述からコードの挙動を推測したものではありません。
 
 以下の「本文」は関連する方法節等を確認したことを指し、論文全体の再現実験を行ったという意味ではありません。「要旨」「書誌」のみの文献は、その範囲で利用しています。DOIのある文献は、2026年11月23日にCrossref（データセットはDataCite）の記録で著者・題名・掲載誌・巻・ページ・年を照合し、DOIのないウェブ資料は同日にページが存在し題名が一致することを確認しました。「本文」と記した確認範囲は、この照合より前の調査で付けた区分をそのまま残したもので、上位の区分に引き上げてはいません。
 
@@ -9,7 +9,7 @@
 | 文献 | 本資料で読む目的 | 確認範囲・扱い |
 |---|---|---|
 | Magin et al. (2026), *pangeo-fish: A Python package for studying fish movement using biologging and earth science data*. [DOI](https://doi.org/10.21105/joss.08332) | ソフトウェア自体の引用 | JOSSの公開論文と書誌。個々の現行パラメータの根拠はコード調査 |
-| Pedersen et al. (2008), *Geolocation of North Sea cod … using Hidden Markov Models and behavioural switching*. [DOI](https://doi.org/10.1139/F08-144) | HMMを使う魚の位置推定の背景 | 著者所属機関の書誌・要旨。Completeの二つのσと同一モデルとはしない |
+| Pedersen et al. (2008), *Geolocation of North Sea cod … using Hidden Markov Models and behavioural switching*. [DOI](https://doi.org/10.1139/F08-144) | HMMを使う魚の位置推定の背景 | 著者所属機関の書誌・要旨。Completeの二つのσと同一モデルとはしない。Completeの`tide_method = "pedersen"`はこの論文の潮汐尤度の移植（`docs/tide.rst`の説明）だが、論文本文とMATLABコードは本書では未確認で、移植の忠実度は確認していない。誤差パラメータは未較正 |
 | Thygesen et al. (2009), *Geolocating Fish Using Hidden Markov Models and Data Storage Tags*. [DOI](https://doi.org/10.1007/978-1-4020-9640-2_17) | HMMと記録型タグをつなぐ解説 | 書誌（Crossref）を確認。要旨・章の本文は未取得 |
 | Woillez et al. (2016), *A HMM-based model to geolocate pelagic fish from high-resolution individual temperature and depth histories …*. [DOI](https://doi.org/10.1016/j.ecolmodel.2015.10.024) | 水温・深度と移動モデルを結び付ける先行法 | 著者公開PDFの方法節・式を確認。現在の平均符号付き残差とは区別 |
 | Braun et al. (2018), *HMMoce: An R package for improved geolocation …*. [DOI](https://doi.org/10.1111/2041-210X.12959) | 他のHMM構成（水温・深度の記録と海洋データの統合）を比較する | 公開本文の関連節。Crossrefのオンライン公開日は2018年1月23日、巻号は2018年5月 |
@@ -78,6 +78,6 @@
 
 ## 6. 実装の出典を残す
 
-実装について引用するときは、論文のDOIに加えて、pangeo-fishのコミット（ワークショップでは`e2877f2`）、ノートブック名、データ製品と版、実行したPython環境を記録してください。プルリクエストの説明は、PR番号だけでなくheadのコミットも残してください。実行環境のイメージタグだけでは、実際にimportされたパッケージの版を確認したことにはなりません。
+実装について引用するときは、論文のDOIに加えて、pangeo-fishのコミット（ワークショップでは`361e9b7`）、ノートブック名、データ製品と版、実行したPython環境を記録してください。プルリクエストの説明は、PR番号だけでなくheadのコミットも残してください。実行環境のイメージタグだけでは、実際にimportされたパッケージの版を確認したことにはなりません。
 
 この資料のBibTeXは`references_fra.bib`に収録しています。ブック全体の文献一覧`references.bib`とはDOI・題名で照合済みで、同じ文献を二重に登録していません。

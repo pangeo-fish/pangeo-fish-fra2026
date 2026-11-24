@@ -10,8 +10,8 @@
 
 | 対象 | 版 |
 |---|---|
-| pangeo-fish | `main` ブランチのコミット `e2877f2` |
-| Docker イメージ | `ghcr.io/pangeo-fish/pangeo-fish-notebook:2026.10.21-e2877f2` |
+| pangeo-fish | `main` ブランチのコミット `361e9b7` |
+| Docker イメージ | `ghcr.io/pangeo-fish/pangeo-fish-notebook:2026.10.21-361e9b7` |
 
 各章の実装の説明は、特に断りがない限り、この固定版に対するものです。開発中の変更（プルリクエストなど）は、本文でそのことを明記したうえで別に扱います。
 

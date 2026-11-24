@@ -82,7 +82,7 @@ Viterbi は「魚が実際に通った唯一の線」を確定するものでは
 
 合成データによる数値例と図は[比較と検証](08_comparison_validation.md)に示します。これは pangeo-fish のコードではなく、2状態・6時刻の教科書的な HMM を独立に計算した例です。2の6乗＝64通りの状態列をすべて列挙し、フィルタ・平滑化の周辺分布および Viterbi の結果と一致することを確認しています。初期分布は教科書通りの $\pi L_0$ で、pangeo-fish の前向き処理（放流分布のみで開始）とは異なります。
 
-### 実装上、三つの線の違いと揃えてある点（e2877f2）
+### 実装上、三つの線の違いと揃えてある点（361e9b7）
 
 ソースを読んで確認した点です。いずれも実行して数値で検証したものではありません。
 
@@ -122,7 +122,7 @@ $$
 
 Base の一つの移動幅に対し、Complete Notebook には二つの移動幅を使う例があります。Complete は日ごとの `behav_found` を読み、`behav_found > 0` なら1、そうでなければ0という整数の列を作って `stamp_parameter_indices_from_mask` で `predictor_index` として与えます。この列が、各遷移にどちらの移動幅を使うかを指定します。
 
-`behav_found` は `detect_tide` が作るフラグです。タグの深度記録に対し、16時間の窓ごとに12.42時間周期の正弦波を当てはめ、その RMSE・決定係数 $R^2$・振幅が閾値（既定は順に 0.42 m 未満、0.70 超、0.2 m 超）を満たすかどうかで 0/1 を決めます。つまり、あらかじめ決めた規則による分類であり、HMM の中で推定されるものではありません。
+`behav_found` は `detect_tide` が作るフラグです。タグの深度記録に対し、25時間の窓ごとに線形トレンドと12.42時間周期の正弦波を当てはめ、その RMSE・決定係数 $R^2$・振幅が閾値（既定は順に 0.42 m 未満、0.70 超、0.2 m 超）を満たすかどうかで 0/1 を決めます。フラグは窓の中心に記録され、Complete は日（$T$ は $(T-12\,\mathrm{h},\,T+12\,\mathrm{h}]$）ごとの最大値を使います。つまり、あらかじめ決めた規則による分類であり、HMM の中で推定されるものではありません。
 
 この例の未知の隠れ状態は位置であり、フラグによる分類自体を位置と同時に推定しているわけではありません。「HMM が休息・遊泳行動を自動推定する」と説明すると、実装より広い機能を述べることになります。行動状態自体も隠れ状態にするモデルは別の構成であり、HMMoce の説明などと比較する際はこの違いを示します。{cite:p}`Braun2018`
 
@@ -132,7 +132,7 @@ Base の一つの移動幅に対し、Complete Notebook には二つの移動幅
 
 ## 6. 今回の実装・設定との対応
 
-以下は pangeo-fish の `e2877f2`（main）のソースコードと、同コミットの Base／Complete Notebook の設定値に基づきます。ソースを読んで確認したもので、実行して得た結果ではありません。Notebook に書かれた値を、関数の普遍的な既定値と混同しません。
+以下は pangeo-fish の `361e9b7`（main）のソースコードと、同コミットの Base／Complete Notebook の設定値に基づきます。ソースを読んで確認したもので、実行して得た結果ではありません。Notebook に書かれた値を、関数の普遍的な既定値と混同しません。
 
 | 項目 | 今回確認された内容 | 教材で補う説明 |
 |---|---|---|
@@ -148,7 +148,7 @@ Base の一つの移動幅に対し、Complete Notebook には二つの移動幅
 | `modal_track` | 時刻ごとに状態確率が最大のセル | 経路全体の確率は最大化していない |
 | 二つの移動幅 | `stamp_parameter_indices_from_mask` で指定したグループを利用 | 行動分類を隠れ状態として推定する例とは区別 |
 
-実装へのリンク：[フィルタと平滑化](https://github.com/pangeo-fish/pangeo-fish/blob/e2877f2/pangeo_fish/hmm/filter.py)、[最適化ヘルパー](https://github.com/pangeo-fish/pangeo-fish/blob/e2877f2/pangeo_fish/helpers.py)、[デコード](https://github.com/pangeo-fish/pangeo-fish/blob/e2877f2/pangeo_fish/hmm/decode.py)、[畳み込み方式の説明](https://github.com/pangeo-fish/pangeo-fish/blob/e2877f2/docs/choosing-conv-method.md)。
+実装へのリンク：[フィルタと平滑化](https://github.com/pangeo-fish/pangeo-fish/blob/361e9b7/pangeo_fish/hmm/filter.py)、[最適化ヘルパー](https://github.com/pangeo-fish/pangeo-fish/blob/361e9b7/pangeo_fish/helpers.py)、[デコード](https://github.com/pangeo-fish/pangeo-fish/blob/361e9b7/pangeo_fish/hmm/decode.py)、[畳み込み方式の説明](https://github.com/pangeo-fish/pangeo-fish/blob/361e9b7/docs/choosing-conv-method.md)。
 
 ### 海岸線の扱い
 

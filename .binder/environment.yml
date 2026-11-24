@@ -1,6 +1,6 @@
 # Environment used to build the Jupyter Book (GitHub Actions) and by Binder.
 # The workshop itself runs on Pangeo@EOSC with the Docker image
-# ghcr.io/pangeo-fish/pangeo-fish-notebook:2026.10.21-e2877f2 (see docs/users-getting-started.md).
+# ghcr.io/pangeo-fish/pangeo-fish-notebook:2026.10.21-361e9b7 (see docs/users-getting-started.md).
 name: fra2026
 channels:
   - conda-forge

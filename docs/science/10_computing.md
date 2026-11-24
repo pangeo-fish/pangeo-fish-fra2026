@@ -1,6 +1,6 @@
 # Xarray・Dask・Zarrと計算の大きさ
 
-この章の実装記述は、pangeo-fish `main` の `af4fe17` のソースを読んで確認した内容です（ノートブックを実行して確かめたものではありません）。
+この章の実装記述は、pangeo-fish `main` の `af4fe17` のソースを読んで確認した内容です（潮汐の書き出しと Complete デモのリンクは `361e9b7` で確認。ノートブックを実行して確かめたものではありません）。
 
 計算設計を説明するときは、科学的な状態の数、データを保存する単位、並列処理する単位を分けます。HEALPixを細かくすると位置状態が増えます。ZarrとDaskは、そのデータをどう読み、どの単位で計算するかを扱います。
 
@@ -40,10 +40,10 @@ Zarrの適切なチャンク形状は、どの向きにスライスするか、�
 - 再格子化した水温差（`diff-regridded.zarr`）、水温の観測確率（emission probability、`emission_diff.zarr`）、統合後の PDF（`combined.zarr`）は、このチャンクに揃えて `to_zarr(..., zarr_format=2, consolidated=True)` で書き出されます。つまりこれらの保存チャンクは「1つの時間ステップ × 全セル」の形で、デモでは保存チャンクと計算チャンクが一致します。音響・海底地形・総合 PDF（`total_pdf.zarr`）の書き出しでは、デモは明示的な再チャンクを行いません。
 - 読み込みは `xr.open_dataset(..., engine="zarr", chunks={})`（保存チャンクのまま Dask 配列にする）で行い、HMM の最適化の前に `.chunk(default_chunk_dims)` で計算チャンクを明示します。
 - パッケージは Zarr-Python 3 を使うが、書き出しは Zarr format 2 を明示しています（`pyproject.toml` のコメントと `storage.py` の docstring）。
-- 潮汐の日平均 PDF（`tide_to_healpix`）は `storage.write_time_blocks` で書かれます。時間方向の保存チャンクは `gcd(10, step)`（`step` の既定は200なので10）で、`cells` は分割せず、領域書き込みを保存チャンクの境界に揃えます（`safe_chunks` を有効にしたまま）。時間に依存しない変数は最後に書きます。総合 PDF との結合（`merge_tide_with_total`）の後は `{"time": 3, "cells": -1}` に再チャンクし、元ストアのチャンク情報を捨てます。
+- 潮汐の日ごとの PDF（`write_tide_pdf_healpix`）は `storage.write_time_blocks` で書かれます。時間方向の保存チャンクは `gcd(10, step)`（`step` の既定は200なので10）で、`cells` は分割せず、領域書き込みを保存チャンクの境界に揃えます（`safe_chunks` を有効にしたまま）。時間に依存しない変数は最後に書きます。総合 PDF との結合（`merge_tide_with_total`）の後は `{"time": 3, "cells": -1}` に再チャンクし、元ストアのチャンク情報を捨てます。
 - `pdf.normal`（水温の観測確率の計算）は要素ごとの計算なので、`cells` が複数のチャンクに分かれていても再チャンクなしで動きます（docstring）。
 
-`pangeo_fish` が保存チャンクのサイズを自動的に決める仕組みは、このコミットにはありません。上の形（1ステップ × 全セル）は、セル数が増えたときの1チャンクのサイズ（時刻数に依存せず $N\times b$ バイト程度）に直結するので、レベルを上げる実験では1チャンクのメモリを先に見積もります。実装参照：[storage.py](https://github.com/pangeo-fish/pangeo-fish/blob/af4fe17/pangeo_fish/storage.py)、[Complete デモ](https://github.com/pangeo-fish/pangeo-fish/blob/af4fe17/notebooks/pangeo-fish-complete-demo.ipynb)（Section 1、3）。
+`pangeo_fish` が保存チャンクのサイズを自動的に決める仕組みは、このコミットにはありません。上の形（1ステップ × 全セル）は、セル数が増えたときの1チャンクのサイズ（時刻数に依存せず $N\times b$ バイト程度）に直結するので、レベルを上げる実験では1チャンクのメモリを先に見積もります。実装参照：[storage.py](https://github.com/pangeo-fish/pangeo-fish/blob/af4fe17/pangeo_fish/storage.py)、[Complete デモ](https://github.com/pangeo-fish/pangeo-fish/blob/361e9b7/notebooks/pangeo-fish-complete-demo.ipynb)（Section 1、3）。
 
 再チャンクはまず遅延計算のグラフを作る場合があり、実行時には全配列の読込・転送・再配置を伴うことがあります。空間・期間の切り出しと、再利用する中間生成物の保存を、処理手順の中で決めます。
 
