@@ -1,0 +1,1048 @@
+
+<!DOCTYPE html>
+
+
+<html lang="ja" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>実装・パラメータ・対象版の対応 &#8212; Pangeo-Fish による魚類の位置推定 - FRA 横浜ワークショップ 2026</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=6a604523" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=1cf7f4d9"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/translations.js?v=91613774"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../_static/design-tabs.js?v=fcb327ea"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'science/11_parameters_versions';</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="個別相談：自分の魚・タグ・海域へ適用する" href="12_consultation.html" />
+    <link rel="prev" title="Xarray・Dask・Zarrと計算の大きさ" href="10_computing.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="ja"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">本文へスキップ</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>トップに戻る</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="バージョン警告"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/pangeo-fish-logo.png" class="logo__image only-light" alt="Pangeo-Fish による魚類の位置推定 - FRA 横浜ワークショップ 2026 - Home"/>
+    <img src="../_static/pangeo-fish-logo.png" class="logo__image only-dark pst-js-only" alt="Pangeo-Fish による魚類の位置推定 - FRA 横浜ワークショップ 2026 - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="検索" aria-label="検索" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">検索</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Pangeo-Fish による魚類の位置推定
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">このワークショップについて</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../agenda.html">時間割</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../users-getting-started.html">事前登録（できれば 11 月 22 日まで）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pangeo-eosc.html">当日：Pangeo@EOSC の使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../jupyterlab-basics.html">JupyterLab の使い方のヒント</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pangeo と EOSC の概要</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../pangeo.html">EOSC と Pangeo コミュニティ</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Python で海洋モデルデータを扱う</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../glorys-xarray-dask-zarr-healpix.html">GLORYS で学ぶ Xarray・Dask・Zarr・HEALPix</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">pangeo-fish と GFTS による魚類の位置推定</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../pangeo-fish.html">Pangeo-Fish による魚類の位置推定</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pangeo-fish-complete.html">Pangeo-Fish による魚類の位置推定：海底地形と潮汐を加える</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gfts.html">将来の海での魚の姿：GFTS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cite.html">研究で pangeo-fish を使ったら：引用のしかた</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feedback.html">アンケート</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">科学・技術解説</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="00_guide.html">日本語の科学・技術解説を読むために</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01_scientific_lineage.html">科学的背景と先行研究の読み方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_hmm.html">HMM による位置分布と移動経路の推定</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_temperature.html">水温・深度履歴から位置の適合度を作る</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_observations_models.html">観測データと海洋モデル：時刻・単位・鉛直座標</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_acoustic.html">音響観測による位置制約：検出と非検出</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_bathymetry.html">海底地形による制約：潜れた深さとセル内の地形</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_tides.html">潮汐から位置を絞る：海面高度、着底区間、調和定数</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_comparison_validation.html">手法を比較し、推定結果を検証する</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_ellipsoidal_healpix.html">楕円体 HEALPix：位置・面積・解像度を区別する</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09b_regridding_alignment.html">再格子化と格子・時刻の整合</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_computing.html">Xarray・Dask・Zarrと計算の大きさ</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">実装・パラメータ・対象版の対応</a></li>
+<li class="toctree-l1"><a class="reference internal" href="12_consultation.html">個別相談：自分の魚・タグ・海域へ適用する</a></li>
+<li class="toctree-l1"><a class="reference internal" href="13_references.html">参考文献・データ出典</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">チュートリアルの先へ</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../afterword/resources.html">参考資料</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../afterword/pythia.html">Project Pythia</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../afterword/edsbook.html">Environmental Data Science Book</a></li>
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/pangeo-fish/pangeo-fish-fra2026" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="ソースリポジトリ"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/pangeo-fish/pangeo-fish-fra2026/issues/new?title=Issue%20on%20page%20%2Fscience/11_parameters_versions.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="問題を報告"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="このページをダウンロード">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/science/11_parameters_versions.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="ソースファイルをダウンロード"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="PDFに印刷"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="全画面モード"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="ライト"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="ダーク"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="検索" aria-label="検索" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>実装・パラメータ・対象版の対応</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> 目次 </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">1. どこで何を設定するか</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">2. 水温・初期位置・音響</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">3. 海底地形</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">4. 潮汐</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">区間を選ぶ処理</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#complete">Complete デモの潮汐の設定</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#healpix"><code class="docutils literal notranslate"><span class="pre">healpix</span></code> 方式の観測重み</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pedersen"><code class="docutils literal notranslate"><span class="pre">pedersen</span></code> 方式の観測重み</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">5. 移動と最適化</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">6. 対象版・格子設定</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>実装・パラメータ・対象版の対応<a class="headerlink" href="#id1" title="Link to this heading">#</a></h1>
+<p>このページは、ワークショップで使う pangeo-fish（<code class="docutils literal notranslate"><span class="pre">361e9b7</span></code>）の Complete デモ（<code class="docutils literal notranslate"><span class="pre">notebooks/pangeo-fish-complete-demo.ipynb</span></code>）で、利用者が設定する項目をまとめたものです。<strong>関数の既定値とノートブックで明示的に与えた値を別々に記します。</strong> ワークショップの環境はイメージ <code class="docutils literal notranslate"><span class="pre">ghcr.io/pangeo-fish/pangeo-fish-notebook:2026.11.2</span></code> で、デモの HEALPix レベルは10です。</p>
+<section id="id2">
+<h2>1. どこで何を設定するか<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>目的</p></th>
+<th class="head"><p>主な関数</p></th>
+<th class="head"><p>設定する項目</p></th>
+<th class="head"><p>変えると何が変わるか</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>タグとモデルの温度差</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">compute_diff</span></code></p></td>
+<td><p>深度、time bounds、<code class="docutils literal notranslate"><span class="pre">min_water_depth</span></code></p></td>
+<td><p>比較するサンプル・モデル深度と有効セル</p></td>
+</tr>
+<tr class="row-odd"><td><p>水温の観測確率（emission probability）</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">compute_emission_pdf</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">differences_std</span></code></p></td>
+<td><p>温度差をどの程度許すか</p></td>
+</tr>
+<tr class="row-even"><td><p>放流・終点</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">compute_emission_pdf</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">initial_std</span></code>, <code class="docutils literal notranslate"><span class="pre">recapture_std</span></code></p></td>
+<td><p>既知位置を格子上でどれだけ広げるか</p></td>
+</tr>
+<tr class="row-odd"><td><p>音響</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">compute_acoustic_pdf</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">receiver_buffer</span></code></p></td>
+<td><p>受信範囲</p></td>
+</tr>
+<tr class="row-even"><td><p>海底地形</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">compute_healpix_histogram_region_bin_size</span></code>、<code class="docutils literal notranslate"><span class="pre">batch_compute_pdf_bathy</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">depth_bin_size</span></code>等</p></td>
+<td><p>セル内の深度分布の表現と深さの整合</p></td>
+</tr>
+<tr class="row-odd"><td><p>潮汐の区間検出</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">detect_tide</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tideFL</span></code>・<code class="docutils literal notranslate"><span class="pre">tideLV</span></code>・<code class="docutils literal notranslate"><span class="pre">behavFL</span></code>・<code class="docutils literal notranslate"><span class="pre">behavLV</span></code>（窓長、RMSE・<span class="math notranslate nohighlight">\(R^2\)</span>・振幅の閾値）</p></td>
+<td><p>どの区間に潮汐情報があるとみなすか</p></td>
+</tr>
+<tr class="row-even"><td><p>潮汐（<code class="docutils literal notranslate"><span class="pre">healpix</span></code>、既定）</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">still_tag_tide_likelihood</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sigma</span></code>, <code class="docutils literal notranslate"><span class="pre">n_eff</span></code>, <code class="docutils literal notranslate"><span class="pre">water_column</span></code>等</p></td>
+<td><p>波形のずれ、オフセット、観測の情報量</p></td>
+</tr>
+<tr class="row-odd"><td><p>潮汐（<code class="docutils literal notranslate"><span class="pre">pedersen</span></code>）</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">pedersen_tide_likelihood</span></code>、<code class="docutils literal notranslate"><span class="pre">cell_bathymetry</span></code>（セルの平均水深）</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">window_hours</span></code>、誤差のパラメータ（<code class="docutils literal notranslate"><span class="pre">white_noise_sd</span></code>・<code class="docutils literal notranslate"><span class="pre">depth_offset_sd</span></code>等）</p></td>
+<td><p>時間相関のある誤差を考えた水深の比較。誤差パラメータは較正していません</p></td>
+</tr>
+<tr class="row-even"><td><p>潮汐を総合 PDF に結合</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">write_tide_pdf_healpix</span></code> → <code class="docutils literal notranslate"><span class="pre">merge_tide_with_total</span></code></p></td>
+<td><p>なし</p></td>
+<td><p>セル・日の対応、欠けた分の中立な因子</p></td>
+</tr>
+<tr class="row-odd"><td><p>観測を組み合わせる</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">normalize_pdf</span></code> → <code class="docutils literal notranslate"><span class="pre">combine_emission_pdf</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">excluded_pdf</span></code></p></td>
+<td><p>掛け合わせる観測の種類</p></td>
+</tr>
+<tr class="row-even"><td><p>移動を推定する</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">optimize_pdf</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">conv_method</span></code>, <code class="docutils literal notranslate"><span class="pre">maximum_speed</span></code>, <code class="docutils literal notranslate"><span class="pre">truncate</span></code>, <code class="docutils literal notranslate"><span class="pre">tolerance</span></code></p></td>
+<td><p>移動の計算方法、σの探索範囲、数値精度</p></td>
+</tr>
+<tr class="row-odd"><td><p>2種類の移動幅</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">stamp_parameter_indices_from_mask</span></code> と最適化</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">predictor_index</span></code>、行動フラグ</p></td>
+<td><p>各ステップで使うσ</p></td>
+</tr>
+<tr class="row-even"><td><p>結果を要約する</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">decode_trajectories</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">track_modes</span></code>（<code class="docutils literal notranslate"><span class="pre">mean</span></code>・<code class="docutils literal notranslate"><span class="pre">mode</span></code>・<code class="docutils literal notranslate"><span class="pre">viterbi_healpix</span></code>）</p></td>
+<td><p>平均・最頻・連続する最も尤もらしい経路</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id3">
+<h2>2. 水温・初期位置・音響<a class="headerlink" href="#id3" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>引数・設定</p></th>
+<th class="head"><p>関数の既定値／要件</p></th>
+<th class="head"><p>デモの値</p></th>
+<th class="head"><p>科学的・数値的意味</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">differences_std</span></code></p></td>
+<td><p>必須</p></td>
+<td><p>0.75 °C</p></td>
+<td><p>平均した符号付き温度差（モデルの温度の単位）に対する正規分布の標準偏差。センサー精度そのものではない</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">initial_std</span></code></p></td>
+<td><p>必須</p></td>
+<td><p><span class="math notranslate nohighlight">\(10^{-4}\)</span> rad</p></td>
+<td><p>放流位置まわりの正規分布の幅（rad は角度の単位ラジアン。地球の半径を掛けると距離になる）</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">recapture_std</span></code></p></td>
+<td><p>必須</p></td>
+<td><p><span class="math notranslate nohighlight">\(10^{-4}\)</span> rad</p></td>
+<td><p>終点イベントがある場合の広がり。<code class="docutils literal notranslate"><span class="pre">fish_death</span></code> イベントを参照する</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">min_water_depth</span></code>（<code class="docutils literal notranslate"><span class="pre">compute_diff</span></code>）</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;auto&quot;</span></code></p></td>
+<td><p>指定しない</p></td>
+<td><p>干出するセルの扱い。数値ならm、<code class="docutils literal notranslate"><span class="pre">None</span></code> は保持する指定。<code class="docutils literal notranslate"><span class="pre">&quot;auto&quot;</span></code> では干出するセルがあるときだけ除外され、実際に起こるのは North-West Shelf の1時間値の場合に限る</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">relative_depth_threshold</span></code></p></td>
+<td><p>必須</p></td>
+<td><p>0</p></td>
+<td><p>現在は使われません。0 のままにしてください</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">receiver_buffer</span></code></p></td>
+<td><p>必須（長さの単位つき）</p></td>
+<td><p>2,000 m</p></td>
+<td><p>受信可能域を近似する半径</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">chunk_time</span></code></p></td>
+<td><p>24</p></td>
+<td><p><strong>1</strong>（デモで上書き）</p></td>
+<td><p>時間の処理チャンク（デモでは1時間ステップ分）であり、24時間の生物学的仮定ではない</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>音響では、未検出（受信機の近くにいなかったという情報）はマスクとして使われます。</p>
+<p>WGS84 の長半径6,378 kmを用いる単純な角度換算では、<span class="math notranslate nohighlight">\(10^{-4}\)</span> radは約0.64 km、0.0003 radは約1.91 kmです。後者は日本語Baseの手動σ（<code class="docutils literal notranslate"><span class="pre">sigma=[0.0003]</span></code>）の例です。格子レベル10の代表長約6.4 kmより狭い幅も設定されているため、この数値をそのまま達成された位置精度と呼ぶことはできません。</p>
+</section>
+<section id="id4">
+<h2>3. 海底地形<a class="headerlink" href="#id4" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>引数・処理</p></th>
+<th class="head"><p>関数の既定値</p></th>
+<th class="head"><p>Completeの設定</p></th>
+<th class="head"><p>留意点</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">depth_bin_size</span></code></p></td>
+<td><p>1（m）</p></td>
+<td><p>2 m</p></td>
+<td><p>深度ビンの幅（m）。尤度（likelihood）はビン内で線形補間されるので、幅を広げると海底の位置が最大1ビンぶんぼやける</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">max_depth_m</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code>（<code class="docutils literal notranslate"><span class="pre">nb_depth_bins</span></code> とどちらかが必須）</p></td>
+<td><p>1,000 m</p></td>
+<td><p>最後のビン境界がちょうど <code class="docutils literal notranslate"><span class="pre">max_depth_m</span></code> になる。デモでは500区間で、これより深い魚には「<code class="docutils literal notranslate"><span class="pre">max_depth_m</span></code> より深い海底の割合」が使われる</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">depth_offset</span></code></p></td>
+<td><p>0</p></td>
+<td><p>指定なし</p></td>
+<td><p>魚と海底の間の余裕（m）。負の値なら、その分だけ海底より下を許す</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">default_stdev_m</span></code></p></td>
+<td><p>1（m）</p></td>
+<td><p>指定なし</p></td>
+<td><p>水深データに不確かさの値がない点に使う、水深の不確かさ（m）</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">chunk_size</span></code></p></td>
+<td><p>500</p></td>
+<td><p>指定なし</p></td>
+<td><p>一度に読む緯度の行数</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ellipsoid</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;WGS84&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;WGS84&quot;</span></code></p></td>
+<td><p>地球の形。セルIDとセル中心の計算に渡される（<a class="reference internal" href="09_ellipsoidal_healpix.html"><span class="std std-doc">楕円体HEALPix</span></a>第7節）</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">batch_compute_pdf_bathy</span></code> の <code class="docutils literal notranslate"><span class="pre">batch_size</span></code></p></td>
+<td><p>50,000（セル）</p></td>
+<td><p>10,000（セル）</p></td>
+<td><p>一度に計算するセル数</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>水深の不確かさは誤差の仮定であり、推奨される測深誤差ではありません。ビン幅とは独立に m で与えます。</p>
+</section>
+<section id="id5">
+<h2>4. 潮汐<a class="headerlink" href="#id5" title="Link to this heading">#</a></h2>
+<section id="id6">
+<h3>区間を選ぶ処理<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">detect_tide</span></code>は、タグの深度記録に潮汐の波形が見える区間を自動で探します。既定の設定は、潮汐検出が窓25 h・RMSE 0.42 m未満・<span class="math notranslate nohighlight">\(R^2\)</span> 0.85超・振幅0.6 m超（上限5 m未満）、行動フラグが窓25 h・RMSE 0.42 m未満・<span class="math notranslate nohighlight">\(R^2\)</span> 0.70超・振幅0.2 m超（上限5 m未満）です。窓の長さは、主要な潮汐 M2 の周期 12.42 h 以上にします。フラグは窓の中心に記録され、有効なサンプルが80%未満の窓はフラグ0です。</p>
+<p>各窓では、1次の傾きと周期12.42 hの波を当てはめます。これはタグの深度パターンの判定であり、独立な着底の観測ではありません。</p>
+</section>
+<section id="complete">
+<h3>Complete デモの潮汐の設定<a class="headerlink" href="#complete" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>設定</p></th>
+<th class="head"><p>Complete デモの既定値</p></th>
+<th class="head"><p>選択肢・意味</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">tide_method</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;healpix&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;healpix&quot;</span></code> または <code class="docutils literal notranslate"><span class="pre">&quot;pedersen&quot;</span></code>。どちらも <code class="docutils literal notranslate"><span class="pre">pyfes</span></code> が必要</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tide_model</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;tpxo9&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;tpxo9&quot;</span></code>（Ifremer のデモ用データ）または <code class="docutils literal notranslate"><span class="pre">&quot;fes2022b&quot;</span></code>。FES2022b は <code class="docutils literal notranslate"><span class="pre">ellipsoid</span> <span class="pre">=</span> <span class="pre">&quot;WGS84&quot;</span></code> が必須</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">tide_model_source</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code> なら公開の TPXO9 ファイル。FES2022b では、ローカルの <code class="docutils literal notranslate"><span class="pre">.nc</span></code> ファイルのパス</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tide_constants_store</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>FES2022b の事前計算データ（<code class="docutils literal notranslate"><span class="pre">s3://</span></code> またはローカル）。<code class="docutils literal notranslate"><span class="pre">tide_model</span> <span class="pre">=</span> <span class="pre">&quot;fes2022b&quot;</span></code> かつ <code class="docutils literal notranslate"><span class="pre">tide_model_source</span></code> なしの場合のみ</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">tide_s3_endpoint</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>S3 互換のエンドポイント。<code class="docutils literal notranslate"><span class="pre">None</span></code> なら環境の S3 設定</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tide_constituents</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code> なら保存された分潮すべて。リストは FES2022b のみ、空リストは不可</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">tide_sigma_m</span></code></p></td>
+<td><p>2.0</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;healpix&quot;</span></code> のみが使うモデル誤差（m）。<code class="docutils literal notranslate"><span class="pre">&quot;pedersen&quot;</span></code> で2.0以外にすると警告が出る</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tide_min_samples</span></code></p></td>
+<td><p>6</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;healpix&quot;</span></code> のみ。1日に必要な有効な1時間平均の最低数</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="healpix">
+<h3><code class="docutils literal notranslate"><span class="pre">healpix</span></code> 方式の観測重み<a class="headerlink" href="#healpix" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>引数</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">still_tag_tide_likelihood</span></code>の既定値</p></th>
+<th class="head"><p>デモで与える値</p></th>
+<th class="head"><p>意味</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sigma</span></code></p></td>
+<td><p>必須</p></td>
+<td><p>2 m（<code class="docutils literal notranslate"><span class="pre">tide_sigma_m</span></code>）</p></td>
+<td><p>モデル誤差（潮汐モデル・高潮・センサー）の尺度。1時間内の変動ではない</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">freq</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;1h&quot;</span></code></p></td>
+<td><p>既定</p></td>
+<td><p>観測と予測を同じサンプルで集約する時間単位</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">time_step</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;1D&quot;</span></code></p></td>
+<td><p>既定</p></td>
+<td><p>位置の重みを作る時間区間。ラベル <span class="math notranslate nohighlight">\(T\)</span> は <span class="math notranslate nohighlight">\((T-12\,\mathrm{h},\,T+12\,\mathrm{h}]\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">min_samples</span></code></p></td>
+<td><p>12</p></td>
+<td><p>6（<code class="docutils literal notranslate"><span class="pre">tide_min_samples</span></code>）</p></td>
+<td><p>窓内の有効な集約サンプルの最低数。足りない窓は一様な重み</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">n_eff</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code>（窓内のサンプル数）</p></td>
+<td><p>既定</p></td>
+<td><p>尤度（likelihood）の鋭さを左右する情報量</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">water_column</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>指定なし</p></td>
+<td><p>与えなければ各セル・窓で平均水深を推定。与えるときは平均海面基準の水深（m）</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">valid</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tide_found</span> <span class="pre">&gt;</span> <span class="pre">0</span></code></p></td>
+<td><p>使用する観測のフラグ</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">min_tidal_signal</span></code></p></td>
+<td><p>0.05 m</p></td>
+<td><p>既定（効かない）</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">detection_ratio</span></code> を指定したときだけ使われる最小信号</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">detection_ratio</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>指定なし</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code> ならモデルに基づく窓の判定をしない</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="pedersen">
+<h3><code class="docutils literal notranslate"><span class="pre">pedersen</span></code> 方式の観測重み<a class="headerlink" href="#pedersen" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>引数</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">pedersen_tide_likelihood</span></code>の既定値</p></th>
+<th class="head"><p>デモで与える値</p></th>
+<th class="head"><p>意味</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">water_column</span></code></p></td>
+<td><p>必須</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">cell_bathymetry</span></code> が GEBCO から作るセルの平均水深</p></td>
+<td><p>平均海面基準の水深（m、正）</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tide_found</span></code>、<code class="docutils literal notranslate"><span class="pre">rmse</span></code></p></td>
+<td><p>必須／<code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">detect_tide</span></code> の <code class="docutils literal notranslate"><span class="pre">tide_found</span></code>、<code class="docutils literal notranslate"><span class="pre">rmse_tide</span></code></p></td>
+<td><p>窓の中心のフラグと、当てはめの RMSE（当てはめの残りのずれの大きさ）</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">window_hours</span></code></p></td>
+<td><p>25</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tag_test.attrs[&quot;tideFL&quot;]</span></code></p></td>
+<td><p>1つのフラグの窓長</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">freq</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>既定</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code> ならサンプルをそのまま使う</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">white_noise_sd</span></code></p></td>
+<td><p>0.2 m</p></td>
+<td><p>既定</p></td>
+<td><p>センサーの白色ノイズ</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ar_decay_hours</span></code>、<code class="docutils literal notranslate"><span class="pre">ar_level</span></code></p></td>
+<td><p>6.67 h、0.05</p></td>
+<td><p>既定</p></td>
+<td><p>時間相関が 0.05 まで下がるまでの時間</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">epsilon</span></code></p></td>
+<td><p>0.4 m</p></td>
+<td><p>既定（RMSE が取れない窓のみ）</p></td>
+<td><p>時間相関の項の標準偏差の代わりの値</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">depth_offset_sd</span></code></p></td>
+<td><p>10 m</p></td>
+<td><p>既定</p></td>
+<td><p>平均水深に対する一定の標準偏差</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bathy_variance</span></code></p></td>
+<td><p>20 m²</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">cell_bathymetry</span></code> の分散</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">non_tidal=&quot;bathymetry&quot;</span></code> のときだけ効く</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">non_tidal</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;uniform&quot;</span></code></p></td>
+<td><p>既定</p></td>
+<td><p>窓のない日の PDF（一様）。<code class="docutils literal notranslate"><span class="pre">&quot;bathymetry&quot;</span></code> は海底地形のみの尤度（likelihood）</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">min_fraction</span></code>、<code class="docutils literal notranslate"><span class="pre">max_overlap_hours</span></code></p></td>
+<td><p>0.8、1 h</p></td>
+<td><p>既定</p></td>
+<td><p>候補の窓に必要なサンプルの割合、異なる日の窓が共有できる時間</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>これらの誤差パラメータは Pedersen らの MATLAB のコードの値で、このパッケージ向けには較正していません。</p>
+<p>窓のない日の潮汐 PDF は、どちらの方式でも一様です。総合 PDF との結合（<code class="docutils literal notranslate"><span class="pre">merge_tide_with_total</span></code>）では、欠けたセルや日に一定の中立な因子が入ります。詳細は<a class="reference internal" href="07_tides.html"><span class="std std-doc">潮汐</span></a>3.4 節と<a class="reference internal" href="09b_regridding_alignment.html"><span class="std std-doc">再格子化</span></a>を参照します。</p>
+</section>
+</section>
+<section id="id7">
+<h2>5. 移動と最適化<a class="headerlink" href="#id7" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>引数・設定</p></th>
+<th class="head"><p>既定値</p></th>
+<th class="head"><p>デモの値</p></th>
+<th class="head"><p>解釈</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">conv_method</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;FFTConv&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;FFTConv&quot;</span></code></p></td>
+<td><p>移動の確率の計算方法（<a class="reference internal" href="10_computing.html"><span class="std std-doc">計算</span></a>第5節）</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">maximum_speed</span></code></p></td>
+<td><p>必須（速度の単位つき）</p></td>
+<td><p>60 km/day</p></td>
+<td><p>σの探索上限を作る尺度。実現する移動距離の上限ではない</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">adjustment_factor</span></code></p></td>
+<td><p>必須</p></td>
+<td><p>1</p></td>
+<td><p>探索上限の倍率</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">truncate</span></code></p></td>
+<td><p>必須（<code class="docutils literal notranslate"><span class="pre">None</span></code> 可。<code class="docutils literal notranslate"><span class="pre">HealpixConv</span></code> では <code class="docutils literal notranslate"><span class="pre">None</span></code> 不可）</p></td>
+<td><p>5</p></td>
+<td><p>近傍を打ち切る幅（σの倍数）</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">tolerance</span></code></p></td>
+<td><p>必須</p></td>
+<td><p><span class="math notranslate nohighlight">\(10^{-6}\)</span></p></td>
+<td><p>σの探索を止める許容差</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">single_behav</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>1つのσのとき <code class="docutils literal notranslate"><span class="pre">True</span></code>、2つのσの例でも <code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>複数のσのとき、行動の値ごとに1つのσを推定する（<code class="docutils literal notranslate"><span class="pre">False</span></code> は連続区間ごと）</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">multivariate</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+<td><p>二つのσの例で <code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>全σを同時に最適化する</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">final</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+<td><p>指定なし</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code> で、最終状態が観測した最終位置と合うようにσを最適化する。2つのσ（<code class="docutils literal notranslate"><span class="pre">predictor_index</span></code>）とは併用不可</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">projection</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;conservative&quot;</span></code></p></td>
+<td><p>既定</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">FFTConv</span></code> のみ</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">normalization</span></code>、<code class="docutils literal notranslate"><span class="pre">land_barrier</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;full_disc&quot;</span></code>、<code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+<td><p>既定</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">HealpixAnalyseConv</span></code> のみ</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>σの探索範囲は、下限が <span class="math notranslate nohighlight">\(10^{-4}\)</span> rad、上限が <code class="docutils literal notranslate"><span class="pre">maximum_speed</span> <span class="pre">×</span> <span class="pre">Δt</span> <span class="pre">×</span> <span class="pre">adjustment_factor</span></code> を地球の半径で割った角度です。</p>
+<p><code class="docutils literal notranslate"><span class="pre">final=False</span></code>という引数だけを見て、終点情報を使っていないと判断しないでください。<code class="docutils literal notranslate"><span class="pre">combine_emission_pdf</span></code>が最後の観測に終点の情報を掛ける場合もあるため、計算全体で何回条件付けされるかを確認します。</p>
+<p>Completeの二つのσの例では、日別の<code class="docutils literal notranslate"><span class="pre">behav_found</span> <span class="pre">&gt;</span> <span class="pre">0</span></code>から<code class="docutils literal notranslate"><span class="pre">predictor_index</span></code>を作り（<code class="docutils literal notranslate"><span class="pre">stamp_parameter_indices_from_mask</span></code>）、グループごとに60／30 km/dayの速度尺度（<code class="docutils literal notranslate"><span class="pre">maximum_speed</span></code>と<code class="docutils literal notranslate"><span class="pre">maximum_speed</span> <span class="pre">/</span> <span class="pre">2</span></code>）をσの探索上限とします。行動の状態が切り替わる確率まで同時に推定するモデルとは別のものです。</p>
+</section>
+<section id="id8">
+<h2>6. 対象版・格子設定<a class="headerlink" href="#id8" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>項目</p></th>
+<th class="head"><p>内容</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>pangeo-fish</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">main</span></code> のコミット <code class="docutils literal notranslate"><span class="pre">361e9b7</span></code>（<code class="docutils literal notranslate"><span class="pre">361e9b7639b09115c281e13c7fe78da22b2c1711</span></code>）、リリース 2026.11.2</p></td>
+</tr>
+<tr class="row-odd"><td><p>環境イメージ</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ghcr.io/pangeo-fish/pangeo-fish-notebook:2026.11.2</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>格子</p></td>
+<td><p>WGS84 楕円体上の HEALPix（<code class="docutils literal notranslate"><span class="pre">ellipsoid</span> <span class="pre">=</span> <span class="pre">&quot;WGS84&quot;</span></code>）、レベル10</p></td>
+</tr>
+<tr class="row-odd"><td><p>海マスク閾値</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">mask_threshold</span> <span class="pre">=</span> <span class="pre">0.25</span></code>（<code class="docutils literal notranslate"><span class="pre">regrid_dataset_hpresample</span></code> の既定値は0.5）</p></td>
+</tr>
+<tr class="row-even"><td><p>移動</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">FFTConv</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>軌跡</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">track_modes</span> <span class="pre">=</span> <span class="pre">[&quot;viterbi_healpix&quot;,</span> <span class="pre">&quot;mode&quot;,</span> <span class="pre">&quot;mean&quot;]</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>潮汐</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tide_method</span> <span class="pre">=</span> <span class="pre">&quot;healpix&quot;</span></code>、<code class="docutils literal notranslate"><span class="pre">tide_model</span> <span class="pre">=</span> <span class="pre">&quot;tpxo9&quot;</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>格子は WGS84 のみを使います（ノートブックの設定セルで <code class="docutils literal notranslate"><span class="pre">ellipsoid</span> <span class="pre">=</span> <span class="pre">&quot;WGS84&quot;</span></code>）。</p>
+<p>環境は <code class="docutils literal notranslate"><span class="pre">ghcr.io/pangeo-fish/pangeo-fish-notebook:2026.11.2</span></code> で固定されています。実際に入っているパッケージの版は、Complete デモ末尾の付録「Information for bug reports」のセルが表示します。</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./science"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="10_computing.html"
+       title="前のページ">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">前へ</p>
+        <p class="prev-next-title">Xarray・Dask・Zarrと計算の大きさ</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="12_consultation.html"
+       title="次ページ">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">次へ</p>
+        <p class="prev-next-title">個別相談：自分の魚・タグ・海域へ適用する</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> 目次
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">1. どこで何を設定するか</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">2. 水温・初期位置・音響</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">3. 海底地形</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">4. 潮汐</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">区間を選ぶ処理</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#complete">Complete デモの潮汐の設定</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#healpix"><code class="docutils literal notranslate"><span class="pre">healpix</span></code> 方式の観測重み</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pedersen"><code class="docutils literal notranslate"><span class="pre">pedersen</span></code> 方式の観測重み</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">5. 移動と最適化</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">6. 対象版・格子設定</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+著者 Pangeo-Fish プロジェクト
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,815 @@
+
+<!DOCTYPE html>
+
+
+<html lang="ja" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>潮汐から位置を絞る：海面高度、着底区間、調和定数 &#8212; Pangeo-Fish による魚類の位置推定 - FRA 横浜ワークショップ 2026</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=6a604523" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=1cf7f4d9"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/translations.js?v=91613774"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../_static/design-tabs.js?v=fcb327ea"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'science/07_tides';</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="手法を比較し、推定結果を検証する" href="08_comparison_validation.html" />
+    <link rel="prev" title="海底地形による制約：潜れた深さとセル内の地形" href="06_bathymetry.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="ja"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">本文へスキップ</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>トップに戻る</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="バージョン警告"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/pangeo-fish-logo.png" class="logo__image only-light" alt="Pangeo-Fish による魚類の位置推定 - FRA 横浜ワークショップ 2026 - Home"/>
+    <img src="../_static/pangeo-fish-logo.png" class="logo__image only-dark pst-js-only" alt="Pangeo-Fish による魚類の位置推定 - FRA 横浜ワークショップ 2026 - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="検索" aria-label="検索" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">検索</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Pangeo-Fish による魚類の位置推定
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">このワークショップについて</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../agenda.html">時間割</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../users-getting-started.html">事前登録（できれば 11 月 22 日まで）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pangeo-eosc.html">当日：Pangeo@EOSC の使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../jupyterlab-basics.html">JupyterLab の使い方のヒント</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pangeo と EOSC の概要</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../pangeo.html">EOSC と Pangeo コミュニティ</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Python で海洋モデルデータを扱う</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../glorys-xarray-dask-zarr-healpix.html">GLORYS で学ぶ Xarray・Dask・Zarr・HEALPix</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">pangeo-fish と GFTS による魚類の位置推定</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../pangeo-fish.html">Pangeo-Fish による魚類の位置推定</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pangeo-fish-complete.html">Pangeo-Fish による魚類の位置推定：海底地形と潮汐を加える</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gfts.html">将来の海での魚の姿：GFTS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cite.html">研究で pangeo-fish を使ったら：引用のしかた</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feedback.html">アンケート</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">科学・技術解説</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="00_guide.html">日本語の科学・技術解説を読むために</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01_scientific_lineage.html">科学的背景と先行研究の読み方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_hmm.html">HMM による位置分布と移動経路の推定</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_temperature.html">水温・深度履歴から位置の適合度を作る</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_observations_models.html">観測データと海洋モデル：時刻・単位・鉛直座標</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_acoustic.html">音響観測による位置制約：検出と非検出</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_bathymetry.html">海底地形による制約：潜れた深さとセル内の地形</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">潮汐から位置を絞る：海面高度、着底区間、調和定数</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_comparison_validation.html">手法を比較し、推定結果を検証する</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_ellipsoidal_healpix.html">楕円体 HEALPix：位置・面積・解像度を区別する</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09b_regridding_alignment.html">再格子化と格子・時刻の整合</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_computing.html">Xarray・Dask・Zarrと計算の大きさ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_parameters_versions.html">実装・パラメータ・対象版の対応</a></li>
+<li class="toctree-l1"><a class="reference internal" href="12_consultation.html">個別相談：自分の魚・タグ・海域へ適用する</a></li>
+<li class="toctree-l1"><a class="reference internal" href="13_references.html">参考文献・データ出典</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">チュートリアルの先へ</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../afterword/resources.html">参考資料</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../afterword/pythia.html">Project Pythia</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../afterword/edsbook.html">Environmental Data Science Book</a></li>
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/pangeo-fish/pangeo-fish-fra2026" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="ソースリポジトリ"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/pangeo-fish/pangeo-fish-fra2026/issues/new?title=Issue%20on%20page%20%2Fscience/07_tides.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="問題を報告"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="このページをダウンロード">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/science/07_tides.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="ソースファイルをダウンロード"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="PDFに印刷"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="全画面モード"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="ライト"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="ダーク"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="検索" aria-label="検索" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>潮汐から位置を絞る：海面高度、着底区間、調和定数</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> 目次 </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">1. 海底に留まるタグが潮汐を記録する理由</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#likelihood">2. 潮汐の検出と位置の尤度（likelihood）は別の処理</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">2.1 潮汐のある区間の見つけ方</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">2.2 日ごとの区間と、潮汐の情報がない日</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#complete">3. Complete ノートブックの二つの潮汐方式</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#healpix">3.1 既定の <code class="docutils literal notranslate"><span class="pre">"healpix"</span></code>：平均水深を未知として波形を比べる</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pedersen-pedersen-et-al-2008">3.2 <code class="docutils literal notranslate"><span class="pre">"pedersen"</span></code>：Pedersen et al. (2008) の方法</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tpxo9-fes2022b">3.3 調和定数の供給元：TPXO9 と FES2022b</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pdf">3.4 総合 PDF への結合と、欠けているセル・日</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">4. 短い記録で何ができるか</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tpxofes2022bpyfes">5. TPXO、FES2022b、PyFES の出典</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">6. 自分のデータで確認したい条件と比較実験</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>潮汐から位置を絞る：海面高度、着底区間、調和定数<a class="headerlink" href="#id1" title="Link to this heading">#</a></h1>
+<p>この章では、タグの水深記録に現れる潮汐の形を、候補地点の予測潮汐と比べます。使えるのは、水深の変化を海面の昇降として解釈できる区間（魚が海底に留まっている間など）です。</p>
+<p>この章は、ワークショップで使う pangeo-fish（<code class="docutils literal notranslate"><span class="pre">361e9b7</span></code>）の Complete ノートブックに対応しています。詳しい説明は pangeo-fish の <code class="docutils literal notranslate"><span class="pre">docs/tide.rst</span></code> にあります。</p>
+<section id="id2">
+<h2>1. 海底に留まるタグが潮汐を記録する理由<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<p>平均海面から海底までの水深を <span class="math notranslate nohighlight">\(H_c&gt;0\)</span>、海面の高さ（上向きが正）を <span class="math notranslate nohighlight">\(\eta_c(t)\)</span> とします。海底に置かれたタグが測る水深は、満潮のときに増え、干潮のときに減ります。</p>
+<div class="math notranslate nohighlight">
+\[
+d(t)=H_c+\eta_c(t)+\epsilon(t)
+\]</div>
+<p>ここで <span class="math notranslate nohighlight">\(\epsilon(t)\)</span> は観測の誤差です。タグが海底から高さ <span class="math notranslate nohighlight">\(h\)</span> だけ浮いている場合は、<span class="math notranslate nohighlight">\(H_c\)</span> を <span class="math notranslate nohighlight">\(D_c=H_c-h\)</span> に置き換えます。魚が水柱の中を大きく上下する場合は、この単純な式では観測を説明できません。</p>
+<p>歴史的な研究では、Metcalfe &amp; Arnold (1997) が深度・水温を使って魚の移動を復元する方法を示し、Hunter らの潮汐による位置推定法（tidal location method）が発展しました。Hunter et al. (2004) の実例では、海底に留まる区間の満潮の時刻と潮差を、モデルと照らし合わせています。<span class="bibtex-citation" id="id3">[<a class="reference internal" href="../cite.html#id47" title="Ewan Hunter, J. D. Metcalfe, G. P. Arnold, and J. D. Reynolds. Impacts of migratory behaviour on population structure in North Sea plaice. Journal of Animal Ecology, 73(2):377–385, 2004. URL: https://besjournals.onlinelibrary.wiley.com/doi/10.1111/j.0021-8790.2004.00801.x, doi:10.1111/j.0021-8790.2004.00801.x.">HMAR04</a>, <a class="reference internal" href="../cite.html#id45" title="J. D. Metcalfe and G. P. Arnold. Tracking fish with electronic tags. Nature, 387:665–666, 1997. URL: https://www.nature.com/articles/42622, doi:10.1038/42622.">MA97</a>]</span> この方法については Hunter et al. (2003) も参照してください。<span class="bibtex-citation" id="id4">[<a class="reference internal" href="../cite.html#id46" title="Ewan Hunter, J. N. Aldridge, J. D. Metcalfe, and G. P. Arnold. Geolocation of free-ranging fish on the european continental shelf as determined from environmental variables. I. tidal location method. Marine Biology, 142:601–609, 2003. Bibliographic record checked (Crossref); original full text was not accessible in this documentation review. URL: https://doi.org/10.1007/s00227-002-0984-5, doi:10.1007/s00227-002-0984-5.">HAMA03</a>]</span></p>
+</section>
+<section id="likelihood">
+<h2>2. 潮汐の検出と位置の尤度（likelihood）は別の処理<a class="headerlink" href="#likelihood" title="Link to this heading">#</a></h2>
+<p>Complete ノートブックの潮汐の部分は、二段に分かれています。</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">detect_tide</span></code> が、水深の時系列から「潮汐に似た形をしている区間」に印（フラグ）を付けます。この段階では位置は求めません。</p></li>
+<li><p>その印を使って、3 節の二つの方式のどちらかが、候補セルごとの予測潮汐と観測を比べ、位置の重みを作ります。</p></li>
+</ol>
+<section id="id5">
+<h3>2.1 潮汐のある区間の見つけ方<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">detect_tide</span></code> は、次のように区間を探します。</p>
+<ul class="simple">
+<li><p>水深の記録を 10 分間隔にそろえます。圧力の単位は m または dbar でなければならず、Pa や hPa のままだとエラーになります。</p></li>
+<li><p>25 時間の窓を 1 サンプルずつずらしながら、各窓に「ゆっくりした傾き」と「周期約 12.42 時間（M2 分潮）の波」を当てはめます。</p></li>
+<li><p>当てはまりが良く（RMSE が 0.42 m 未満、決定係数 <span class="math notranslate nohighlight">\(R^2\)</span> が 0.85 より大きい）、波の振幅が 0.6 m から 5 m の間なら、その窓の中心のサンプルに「潮汐あり」の印（<code class="docutils literal notranslate"><span class="pre">tide_found</span></code>）を付けます。</p></li>
+<li><p>窓の中の有効なサンプルが 80% に満たなければ、印は付きません。そのため、記録の最初と最後の約 12.5 時間には印が付きません。</p></li>
+</ul>
+<p>もう一つ、緩い基準で付く行動フラグ（<code class="docutils literal notranslate"><span class="pre">behav_found</span></code>）もありますが、これは着底を直接観測したものではありません。</p>
+<p>基準をゆるめて検出区間を増やすと、魚の鉛直移動を潮汐として取り込んでしまうかもしれません。厳しくすると、本当の潮汐区間が減るかもしれません。どちらが起きるかは、自分のデータで比べて確かめます。</p>
+<p>検出には次の限界があります（pangeo-fish の <code class="docutils literal notranslate"><span class="pre">docs/tide.rst</span></code> による）。</p>
+<ul class="simple">
+<li><p><strong>潮汐の振幅が小さい海域では検出されません。</strong> 振幅が 0.6 m 以上必要なので、M2 の振幅がそれより小さい海域（例：バルト海、地中海）では印が付きません。</p></li>
+<li><p><strong>印が付くのは、海底に静止している魚の記録です。</strong> 合成した記録では、M2 と S2 の下で静止している魚はすべての窓で検出され、直線的な上昇、日周的な鉛直移動、ノイズは検出されませんでした。ただし実際のタグで試したものではないので、水柱の中で潮流に乗る魚や、ほとんど着底しない魚では、印が付かないことがあります。</p></li>
+<li><p><strong>日の区切り。</strong> 日 <span class="math notranslate nohighlight">\(T\)</span> は <span class="math notranslate nohighlight">\((T-12\,\mathrm{h},\,T+12\,\mathrm{h}]\)</span> の区間です（水温の観測確率と同じ区切り方）。</p></li>
+</ul>
+</section>
+<section id="id6">
+<h3>2.2 日ごとの区間と、潮汐の情報がない日<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
+<p>位置の尤度（likelihood）は、日 <span class="math notranslate nohighlight">\(T\)</span> ごとに <span class="math notranslate nohighlight">\((T-12\,\mathrm{h},\,T+12\,\mathrm{h}]\)</span> の区間で作られます。<strong>この区間に潮汐の窓がない日は、どちらの方式でも一様な重みになります。</strong> これは「その日の潮汐からは位置を絞らない」という意味です。潮汐のない場所にいた証拠として扱われるわけではありません。</p>
+</section>
+</section>
+<section id="complete">
+<h2>3. Complete ノートブックの二つの潮汐方式<a class="headerlink" href="#complete" title="Link to this heading">#</a></h2>
+<p>Complete ノートブックの設定セルでは、<code class="docutils literal notranslate"><span class="pre">tide_method</span></code> で方式を選びます。既定は <code class="docutils literal notranslate"><span class="pre">&quot;healpix&quot;</span></code>、もう一つは <code class="docutils literal notranslate"><span class="pre">&quot;pedersen&quot;</span></code> です。どちらも、HMM の HEALPix セルごとに調和定数から潮汐を予測し、観測と比べます。調和定数とは、分潮（潮汐を作る周期的な波）ごとの振幅と位相をまとめたものです。予測には PyFES を使うので、<code class="docutils literal notranslate"><span class="pre">pyfes</span></code> を入れておく必要があります（conda-forge から入れることが勧められています）。入っていないと、設定セルの直後の検査（セル 8）でエラーになります。</p>
+<p>潮位の予測は、次の式で行います。</p>
+<div class="math notranslate nohighlight">
+\[
+\eta_c(t)=\sum_k f_k(t) A_{kc}
+\cos\{V_k(t)+u_k(t)-G_{kc}\}
+\]</div>
+<p>分潮 <span class="math notranslate nohighlight">\(k\)</span> ごとの波を足し合わせる式です。<span class="math notranslate nohighlight">\(A\)</span> は振幅（m）、<span class="math notranslate nohighlight">\(G\)</span> は位相の遅れ、<span class="math notranslate nohighlight">\(f_k\)</span> と <span class="math notranslate nohighlight">\(V_k+u_k\)</span> は日付から PyFES が計算する補正量です。使われる分潮は、保存されているものだけです。</p>
+<p>セルの緯度は WGS84 で計算します。</p>
+<section id="healpix">
+<h3>3.1 既定の <code class="docutils literal notranslate"><span class="pre">&quot;healpix&quot;</span></code>：平均水深を未知として波形を比べる<a class="headerlink" href="#healpix" title="Link to this heading">#</a></h3>
+<p>観測と予測潮汐を 1 時間ごとに平均し、日ごとに HEALPix 格子上の尤度（likelihood）を 1 つ作ります。ノートブックは、<code class="docutils literal notranslate"><span class="pre">tide_found</span></code> の印が付いたサンプルだけを使います。</p>
+<p>各セル・各日について、まず平均水深 <span class="math notranslate nohighlight">\(\widehat D_c\)</span> を、観測と予測の差の平均として決めます。次に、その平均水深を差し引いた後の残りの差 <span class="math notranslate nohighlight">\(r_c(t)\)</span> を求めます。</p>
+<div class="math notranslate nohighlight">
+\[
+\widehat D_c=\overline{d-\eta_c},\qquad
+r_c(t)=d(t)-\widehat D_c-\eta_c(t)
+\]</div>
+<p>残りの差が小さいセルほど、重みが大きくなります。</p>
+<div class="math notranslate nohighlight">
+\[
+\log w_c=-\frac{n_{\mathrm{eff}}}{2\sigma_{\mathrm{tide}}^2}
+\overline{r_c(t)^2}
+\]</div>
+<p><span class="math notranslate nohighlight">\(n_{\mathrm{eff}}\)</span> は、その日の 1 時間平均の数（既定）です。平均水深はセルごとに自由に決めるので、この方式は潮汐の「形」だけを使います。<strong>絶対的な水深の情報は、Complete ノートブックの別の項（海底地形）から来ます。</strong></p>
+<p>ノートブックの設定は次の二つです。</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">tide_sigma_m</span> <span class="pre">=</span> <span class="pre">2.0</span></code>：潮汐モデル、高潮、センサーの誤差の大きさ（m）です。1 時間の中の水深の変動ではありません。誤差は互いに独立だと仮定します。<code class="docutils literal notranslate"><span class="pre">&quot;pedersen&quot;</span></code> では使われません。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tide_min_samples</span> <span class="pre">=</span> <span class="pre">6</span></code>：有効な 1 時間平均がこれより少ない日は、一様な重みになります。</p></li>
+</ul>
+<p>調和定数が得られる海のセルだけが候補になります。</p>
+</section>
+<section id="pedersen-pedersen-et-al-2008">
+<h3>3.2 <code class="docutils literal notranslate"><span class="pre">&quot;pedersen&quot;</span></code>：Pedersen et al. (2008) の方法<a class="headerlink" href="#pedersen-pedersen-et-al-2008" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">tide_method</span> <span class="pre">=</span> <span class="pre">&quot;pedersen&quot;</span></code> は、Pedersen et al. (2008) の潮汐尤度（tide likelihood）を、元の研究コードから移したものです。<span class="bibtex-citation" id="id7">[<a class="reference internal" href="../cite.html#id39" title="Martin Wæver Pedersen, David Righton, Uffe Høgsbro Thygesen, Ken Haste Andersen, and Henrik Madsen. Geolocation of north sea cod (Gadus morhua) using hidden markov models and behavioural switching. Canadian Journal of Fisheries and Aquatic Sciences, 65(11):2367–2377, 2008. URL: https://doi.org/10.1139/F08-144, doi:10.1139/F08-144.">PRT+08</a>]</span></p>
+<p>潮汐の印が付いた窓について、窓の中の水深の並び全体を、予測される水深（平均水深と潮位の和）と比べます。10 分間隔のサンプルを平均せずにそのまま使います。</p>
+<div class="math notranslate nohighlight">
+\[
+\mu_c(t)=D_c+\eta_c(t)
+\]</div>
+<p><span class="math notranslate nohighlight">\(D_c\)</span> はセルの平均水深（m、平均海面基準）で、Complete ノートブックでは GEBCO の水深から作ります。観測誤差には、センサーの白色ノイズ、時間的に相関のある潮汐モデルの誤差（約 6.67 時間で相関がほぼなくなる）、平均水深の不確かさ（標準偏差 10 m）が含まれます。平均水深の不確かさが大きいので、窓の内側では絶対的な水深の情報はほとんど効きません。</p>
+<p>日 <span class="math notranslate nohighlight">\(T\)</span> には、窓の中心がその日の区間にある窓のうち、当てはまりが最も良いものを最大 1 つ使います。同じサンプルを二重に数えないよう、異なる日の窓が共有できる時間は 1 時間までです。隣の日に良い窓があると、その日は窓を持てないことがあります。窓のない日は一様な重みになります。海底地形の項が「最も深い記録より浅い海底にはいられない」ことをすでに表しているので、ここで海底地形を重ねて数えないためです。</p>
+<p><strong>誤差の値は、この海域向けには調整されていません。</strong> 誤差の設定値は元の研究コードのものです。主な注意点は次のとおりです。</p>
+<ul class="simple">
+<li><p>平均水深の不確かさ（10 m）が大きいので、窓の内側では絶対水深がほとんど情報にならない。</p></li>
+<li><p>時間相関の項には窓の当てはめの RMSE を使い、検出の基準がそれを 0.42 m 未満に保つ。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bathy_variance</span></code> の既定値は元の研究コードの値で、この海域向けには調整されていません。</p></li>
+<li><p>GEBCO が平均海面基準であることを前提にしていますが、沿岸では成り立たないことがあります。</p></li>
+</ul>
+<p><strong>二つの方式の比較と選び方</strong>（pangeo-fish の <code class="docutils literal notranslate"><span class="pre">docs/tide.rst</span></code> の整理による）</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">&quot;healpix&quot;</span></code>（既定）</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">&quot;pedersen&quot;</span></code></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>使うデータ</p></td>
+<td><p>水深と予測潮汐の 1 時間平均</p></td>
+<td><p>潮汐の印が付いた窓の、そのままのサンプル（1 日 1 窓、25 時間）</p></td>
+</tr>
+<tr class="row-odd"><td><p>平均水深</p></td>
+<td><p>未知として、セルと日ごとに推定。絶対水深は海底地形の項だけが担う</p></td>
+<td><p>GEBCO のセル平均水深を使う（標準偏差 10 m の弱い情報）</p></td>
+</tr>
+<tr class="row-even"><td><p>誤差</p></td>
+<td><p>互いに独立、標準偏差 <code class="docutils literal notranslate"><span class="pre">tide_sigma_m</span></code></p></td>
+<td><p>時間的な相関あり</p></td>
+</tr>
+<tr class="row-odd"><td><p>窓のない日</p></td>
+<td><p>一様</p></td>
+<td><p>一様</p></td>
+</tr>
+<tr class="row-even"><td><p>由来</p></td>
+<td><p>このパッケージ向けに書かれた</p></td>
+<td><p>公表された方法を移したもの</p></td>
+</tr>
+<tr class="row-odd"><td><p>弱点</p></td>
+<td><p>魚が静止していないと、潮汐振幅の小さいセルに偏る（観測された振幅が予測より小さくなるため）</p></td>
+<td><p>海底地形の基準面に敏感。誤差の設定値が未調整。メモリを多く使う</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>海底地形が不確かな場合（沿岸、河口）には <code class="docutils literal notranslate"><span class="pre">&quot;healpix&quot;</span></code> が向いています。公表された方法と比べたい場合で、海底地形が信頼できるときは <code class="docutils literal notranslate"><span class="pre">&quot;pedersen&quot;</span></code> が向いています。どちらも、既知の経路を持つタグでは検証されていません。潮汐の証拠に頼る場合は、両方を実行して比べます。どちらも <code class="docutils literal notranslate"><span class="pre">detect_tide</span></code> が見つけた静止区間に頼るので、印が一つも付かない魚では、すべての日が一様な重みになり、方式の違いは出ません。まず <code class="docutils literal notranslate"><span class="pre">tide_found</span></code> を確認してください。</p>
+</section>
+<section id="tpxo9-fes2022b">
+<h3>3.3 調和定数の供給元：TPXO9 と FES2022b<a class="headerlink" href="#tpxo9-fes2022b" title="Link to this heading">#</a></h3>
+<p>調和定数は、Complete ノートブックでは次の三つの経路で得られます（どちらの方式でも同じです）。</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p><code class="docutils literal notranslate"><span class="pre">tide_model</span></code></p></th>
+<th class="head"><p>調和定数の入手</p></th>
+<th class="head"><p>条件</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;tpxo9&quot;</span></code>（既定）</p></td>
+<td><p>TPXO9 の緯度・経度格子のファイルを読み、HEALPix セル中心へ補間する</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tide_model_source</span> <span class="pre">=</span> <span class="pre">None</span></code> なら Ifremer のデモ用ファイルを使う。ローカルの同形式ファイルも指定できる</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;fes2022b&quot;</span></code> と <code class="docutils literal notranslate"><span class="pre">tide_model_source</span></code></p></td>
+<td><p>AVISO+ のネイティブ格子（LGP2）のファイル <code class="docutils literal notranslate"><span class="pre">FES2022b_OceanTide_NSgrid.nc</span></code> から、PyFES の補間でセル中心へ移す</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ellipsoid</span> <span class="pre">=</span> <span class="pre">&quot;WGS84&quot;</span></code> が必須</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;fes2022b&quot;</span></code> と <code class="docutils literal notranslate"><span class="pre">tide_constants_store</span></code></p></td>
+<td><p>事前に計算した調和定数の Zarr（ローカルまたは <code class="docutils literal notranslate"><span class="pre">s3://</span></code>）を読む</p></td>
+<td><p>同上。候補の全セルを含む必要がある。ネイティブ格子の外のセルは欠測のまま保存される</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">tide_constituents</span></code> に分潮の名前のリストを渡すと、FES2022b の両経路で使う分潮を選べます（<code class="docutils literal notranslate"><span class="pre">None</span></code> ならすべて）。TPXO9 では指定できません。Complete ノートブックが使うのは、FES2022b の海洋潮汐（ocean tide）の海面高度の成分です。</p>
+<p>ネイティブ格子の外のセルでは調和定数が欠測となり、そのセルは候補から外れます。例えば <code class="docutils literal notranslate"><span class="pre">docs/tide.rst</span></code> は、ネイティブ格子が下流スヘルデ川の Bath 付近までで、Temse の放流地点はその外側だと述べています。</p>
+<p>TPXO9 は緯度・経度格子の定数を補間し、FES2022b はネイティブ格子上で PyFES の補間を使うので、補間の方法が異なります。結果の差を調べるときは、<code class="docutils literal notranslate"><span class="pre">scratch_root</span></code> を実行ごとに分け、同じ <code class="docutils literal notranslate"><span class="pre">time</span></code> と <code class="docutils literal notranslate"><span class="pre">cell_ids</span></code> で比べます（<code class="docutils literal notranslate"><span class="pre">docs/tide.rst</span></code>）。</p>
+</section>
+<section id="pdf">
+<h3>3.4 総合 PDF への結合と、欠けているセル・日<a class="headerlink" href="#pdf" title="Link to this heading">#</a></h3>
+<p>潮汐の PDF は、水温や音響などの総合 PDF（<code class="docutils literal notranslate"><span class="pre">total_pdf.zarr</span></code>）に、<code class="docutils literal notranslate"><span class="pre">pdf_tide</span></code> として加えられます。総合 PDF のセルと日はそのまま保たれ、<code class="docutils literal notranslate"><span class="pre">initial</span></code>・<code class="docutils literal notranslate"><span class="pre">final</span></code>・<code class="docutils literal notranslate"><span class="pre">mask</span></code> は変わりません。</p>
+<ul class="simple">
+<li><p>格子の属性（<code class="docutils literal notranslate"><span class="pre">grid_name</span></code>、<code class="docutils literal notranslate"><span class="pre">level</span></code>、<code class="docutils literal notranslate"><span class="pre">indexing_scheme</span></code>、<code class="docutils literal notranslate"><span class="pre">ellipsoid</span></code>）が潮汐側と総合 PDF で食い違うとエラーになります。</p></li>
+<li><p>潮汐の格子にないセル、調和定数（<code class="docutils literal notranslate"><span class="pre">&quot;pedersen&quot;</span></code> では水深も）のないセル、潮汐の結果にない日、潮汐の情報がない日には、<strong>一定の中立な値</strong>が入ります。これらは「不可能」ではなく「不明」として扱われます。潮汐の情報がない日は全セルで <span class="math notranslate nohighlight">\(1/n_{\mathrm{cells}}\)</span>、一部のセルだけが欠ける日は、その日の利用できる値の平均です。該当する件数は警告で報告されます。</p></li>
+<li><p>日ごとの <code class="docutils literal notranslate"><span class="pre">tide_found</span></code>・<code class="docutils literal notranslate"><span class="pre">behav_found</span></code> は、結果にない日を 0 として、別の変数（<code class="docutils literal notranslate"><span class="pre">tide_mask</span></code>・<code class="docutils literal notranslate"><span class="pre">behav_mask</span></code>）で返されます。</p></li>
+</ul>
+</section>
+</section>
+<section id="id8">
+<h2>4. 短い記録で何ができるか<a class="headerlink" href="#id8" title="Link to this heading">#</a></h2>
+<p>M2 と S2 は、どちらも半日周期の主要な分潮です。その角速度は、NOAA の分潮表の値でそれぞれ <span class="math notranslate nohighlight">\(28.9841042\)</span>、<span class="math notranslate nohighlight">\(30.0000000\)</span> 度／時間です。二つの波の位相のずれが一周する時間は、</p>
+<div class="math notranslate nohighlight">
+\[
+T_{\mathrm{beat}}=\frac{360}{30-28.9841042}
+\simeq 354.37\ \mathrm{h}\simeq14.77\ \mathrm{days}
+\]</div>
+<p>です。つまり M2 と S2 を見分けるには、約 15 日以上の記録が必要です。14.77 日は目安であり、信号とノイズの比や解析の方法によって変わります。<span class="bibtex-citation" id="id9">[<a class="reference internal" href="../cite.html#id60" title="Bruce B. Parker. Tidal analysis and prediction. Technical Report NOS CO-OPS 3, National Oceanic and Atmospheric Administration, 2007. Sections 3.3 and 3.4: synodic periods, Rayleigh criterion and harmonic prediction. URL: https://tidesandcurrents.noaa.gov/publications/Tidal_Analysis_and_Predictions.pdf.">Par07</a>, <a class="reference internal" href="../cite.html#id59" title="NOAA. Implementation of model skill assessment software for water level and current in tidal regions. Technical Report NOS CS 24, National Oceanic and Atmospheric Administration, 2006. Appendix C: angular speeds of tidal constituents. URL: https://tidesandcurrents.noaa.gov/ofs/publications/CS_Techrpt_024_SkillAss_WLsCUs_2006.pdf.">NOAA06</a>]</span></p>
+<p>25 時間の検出窓や 1 日の位置の尤度（likelihood）の窓だけでは、M2 と S2 の未知の振幅と位相をタグの記録から独立に求めることはできません（S2 は残差に任せます）。一方、海洋モデルが各候補セルの調和定数をすでに与えているなら、その予測波形を短い記録と比べることはできます。<strong>未知の分潮を分けて求める問題と、既知の候補波形に照らす問題は、別の問題です。</strong> この章の方式は後者を解いています。</p>
+</section>
+<section id="tpxofes2022bpyfes">
+<h2>5. TPXO、FES2022b、PyFES の出典<a class="headerlink" href="#tpxofes2022bpyfes" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>引用対象</p></th>
+<th class="head"><p>出典</p></th>
+<th class="head"><p>役割</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>TPXO のモデル</p></td>
+<td><p>Egbert &amp; Erofeeva (2002) と OSU の使用版ページ</p></td>
+<td><p>モデルの考え方と、使った TPXO9 の版</p></td>
+</tr>
+<tr class="row-odd"><td><p>FES2022b データ</p></td>
+<td><p>CNES (2024), DOI <code class="docutils literal notranslate"><span class="pre">10.24400/527896/A01-2024.004</span></code></p></td>
+<td><p>使ったデータの引用</p></td>
+</tr>
+<tr class="row-even"><td><p>FES2022 の科学的説明</p></td>
+<td><p>Lyard et al. (2026), DOI <code class="docutils literal notranslate"><span class="pre">10.5194/egusphere-2026-6805</span></code></p></td>
+<td><p>査読中のプレプリント（2026年11月時点）</p></td>
+</tr>
+<tr class="row-odd"><td><p>FES2014 の設計・検証</p></td>
+<td><p>Lyard et al. (2021)</p></td>
+<td><p>先行モデルの論文。FES2022b の検証論文ではない</p></td>
+</tr>
+<tr class="row-even"><td><p>潮汐予測ソフトウェア</p></td>
+<td><p>CNES PyFES の公式資料と使った版（<code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> の任意依存 <code class="docutils literal notranslate"><span class="pre">tide</span></code> は <code class="docutils literal notranslate"><span class="pre">pyfes&gt;=2026.10</span></code>）</p></td>
+<td><p>調和定数を時系列に変換する計算の出典</p></td>
+</tr>
+<tr class="row-odd"><td><p>潮汐尤度（tide likelihood）の方法</p></td>
+<td><p>Pedersen et al. (2008)（<code class="docutils literal notranslate"><span class="pre">&quot;pedersen&quot;</span></code> 方式）</p></td>
+<td><p>公表された方法の出典</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>FES2022b の配布元は、規則格子とネイティブ格子を区別しています。Complete ノートブックが使うのは、ネイティブの LGP2 データか、そこから事前に計算した Zarr です。海洋潮汐（ocean tide）と荷重潮汐（loading tide）を混同せず、タグの水深が表す量にどの項が必要かを確認してください。<span class="bibtex-citation" id="id10">[<a class="reference internal" href="../cite.html#id51" title="Gary D. Egbert and Svetlana Y. Erofeeva. Efficient inverse modeling of barotropic ocean tides. Journal of Atmospheric and Oceanic Technology, 19(2):183–204, 2002. URL: https://journals.ametsoc.org/view/journals/atot/19/2/1520-0426_2002_019_0183_eimobo_2_0_co_2.xml, doi:10.1175/1520-0426(2002)019&lt;0183:EIMOBO&gt;2.0.CO;2.">EE02</a>, <a class="reference internal" href="../cite.html#id56" title="F. H. Lyard, D. J. Allain, M. Cancet, L. Carrère, and N. Picot. FES2014 global ocean tide atlas: design and performance. Ocean Science, 17:615–649, 2021. URL: https://os.copernicus.org/articles/17/615/2021/, doi:10.5194/os-17-615-2021.">LAC+21</a>, <a class="reference internal" href="../cite.html#id55" title="Florent H. Lyard, Loren Carrère, Ergane Fouchet, Mathilde Cancet, Ramiro Ferrari, Mei-Ling Dabat, Chafih Skandrani, David Greenberg, Damien Allain, Gérald Dibarboure, and Nicolas Picot. FES2022 global tide atlas: a step towards SWOT-compliant tidal corrections. EGUsphere, 2026. Preprint; discussion started 11 November 2026; the EGUsphere page states it is open for discussion and under review for Ocean Science (checked 2026-11-23). URL: https://egusphere.copernicus.org/preprints/2026/egusphere-2026-6805/, doi:10.5194/egusphere-2026-6805.">LCF+26</a>, <a class="reference internal" href="../cite.html#id39" title="Martin Wæver Pedersen, David Righton, Uffe Høgsbro Thygesen, Ken Haste Andersen, and Henrik Madsen. Geolocation of north sea cod (Gadus morhua) using hidden markov models and behavioural switching. Canadian Journal of Fisheries and Aquatic Sciences, 65(11):2367–2377, 2008. URL: https://doi.org/10.1139/F08-144, doi:10.1139/F08-144.">PRT+08</a>, <a class="reference internal" href="../cite.html#id54" title="AVISO+. FES2022 (finite element solution) ocean tide product handbook. Technical Report SALP-MU-P-EA-23561-CLS, CNES and CLS, 2026. Issue 2.0; document date 03/02/2026; accessed 2026-11-23. URL: https://aviso.altimetry.fr/fileadmin/documents/data/tools/hdbk_FES2022.pdf.">AVISO26</a>, <a class="reference internal" href="../cite.html#id57" title="CNES. PyFES. Official prediction software documentation; record the actual installed version separately; accessed 2026-11-23. URL: https://github.com/CNES/aviso-fes.">CNES</a>, <a class="reference internal" href="../cite.html#id53" title="LEGOS, NOVELTIS, and CLS. FES2022 (finite element solution) ocean tide. 2024. Data set; use the FES2022b release and the actual downloaded file version in the run record. URL: https://doi.org/10.24400/527896/A01-2024.004, doi:10.24400/527896/A01-2024.004.">LEGOSNOVELTISCLS24</a>, <a class="reference internal" href="../cite.html#id52" title="Oregon State University. TPXO global tidal models. Official model documentation; accessed 2026-11-23. URL: https://www.tpxo.net/global.">OregonSUniversity</a>]</span></p>
+<p>TPXO9 の位相は、PyFES が使う基準に直してから使います。調和定数は、振幅と位相をそのまま補間せず、<span class="math notranslate nohighlight">\(A\cos G\)</span>（実部）と <span class="math notranslate nohighlight">\(A\sin G\)</span>（虚部）に分けて補間します。位相をそのまま平均すると、<span class="math notranslate nohighlight">\(359^\circ\)</span> と <span class="math notranslate nohighlight">\(1^\circ\)</span> の近くで不連続になるのを避けるためです。元データの陸の点は除外されます。この補間は、元データと同程度かそれより細かいセルを想定しています。粗いセルでは面積で重み付けした平均が必要です。再格子化した場が、沿岸の細かな潮汐を再現できるとは限りません。</p>
+</section>
+<section id="id11">
+<h2>6. 自分のデータで確認したい条件と比較実験<a class="headerlink" href="#id11" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>海底に固定されている、または着底に近い区間がありますか。単なる半日周期の鉛直移動と区別できますか。<code class="docutils literal notranslate"><span class="pre">tide_found</span></code> が立つ日はどれだけありますか。</p></li>
+<li><p>圧力が m（または dbar）に変換されていますか。時計の UTC、時差、時計のずれ、記録の欠落を確認しましたか。</p></li>
+<li><p>対象の海域で、候補セル間の潮汐波形が十分に違いますか。同じ波形が複数の海域に現れていませんか。振幅が小さい海域では、検出そのものが起きません。</p></li>
+<li><p>同じデータで <code class="docutils literal notranslate"><span class="pre">&quot;healpix&quot;</span></code> と <code class="docutils literal notranslate"><span class="pre">&quot;pedersen&quot;</span></code> を比べるとき、絶対水深の使い方（海底地形の基準面を含む）、時刻の原点、単位、位相、平均のとり方（1 時間平均かそのままのサンプルか）をそろえましたか。</p></li>
+<li><p>同じ水深記録から潮汐の項と海底地形の項を作るので、統合したときに情報を二重に数えていませんか。</p></li>
+</ol>
+<p>最後の点は、二つの項が互いに独立とは限らないということです。<code class="docutils literal notranslate"><span class="pre">&quot;healpix&quot;</span></code> は潮汐の項から絶対水深を除きますが、両方の項が同じタグの記録に由来することは変わりません。<code class="docutils literal notranslate"><span class="pre">&quot;pedersen&quot;</span></code> は平均水深を弱い情報として使うので、海底地形の項との重なりを別に確認します。潮汐あり／なし、海底地形あり／なしの 4 つの条件で、経路だけでなく分布の広がりも比べる進め方が適しています。どれだけ改善するかは、自分のデータで確かめてください。</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./science"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="06_bathymetry.html"
+       title="前のページ">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">前へ</p>
+        <p class="prev-next-title">海底地形による制約：潜れた深さとセル内の地形</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="08_comparison_validation.html"
+       title="次ページ">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">次へ</p>
+        <p class="prev-next-title">手法を比較し、推定結果を検証する</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> 目次
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">1. 海底に留まるタグが潮汐を記録する理由</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#likelihood">2. 潮汐の検出と位置の尤度（likelihood）は別の処理</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">2.1 潮汐のある区間の見つけ方</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">2.2 日ごとの区間と、潮汐の情報がない日</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#complete">3. Complete ノートブックの二つの潮汐方式</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#healpix">3.1 既定の <code class="docutils literal notranslate"><span class="pre">"healpix"</span></code>：平均水深を未知として波形を比べる</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pedersen-pedersen-et-al-2008">3.2 <code class="docutils literal notranslate"><span class="pre">"pedersen"</span></code>：Pedersen et al. (2008) の方法</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tpxo9-fes2022b">3.3 調和定数の供給元：TPXO9 と FES2022b</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pdf">3.4 総合 PDF への結合と、欠けているセル・日</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">4. 短い記録で何ができるか</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tpxofes2022bpyfes">5. TPXO、FES2022b、PyFES の出典</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">6. 自分のデータで確認したい条件と比較実験</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+著者 Pangeo-Fish プロジェクト
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

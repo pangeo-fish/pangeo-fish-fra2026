@@ -1,0 +1,723 @@
+
+<!DOCTYPE html>
+
+
+<html lang="ja" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>HMM による位置分布と移動経路の推定 &#8212; Pangeo-Fish による魚類の位置推定 - FRA 横浜ワークショップ 2026</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=6a604523" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=1cf7f4d9"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/translations.js?v=91613774"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../_static/design-tabs.js?v=fcb327ea"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'science/02_hmm';</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="水温・深度履歴から位置の適合度を作る" href="03_temperature.html" />
+    <link rel="prev" title="科学的背景と先行研究の読み方" href="01_scientific_lineage.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="ja"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">本文へスキップ</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>トップに戻る</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="バージョン警告"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/pangeo-fish-logo.png" class="logo__image only-light" alt="Pangeo-Fish による魚類の位置推定 - FRA 横浜ワークショップ 2026 - Home"/>
+    <img src="../_static/pangeo-fish-logo.png" class="logo__image only-dark pst-js-only" alt="Pangeo-Fish による魚類の位置推定 - FRA 横浜ワークショップ 2026 - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="検索" aria-label="検索" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">検索</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Pangeo-Fish による魚類の位置推定
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">このワークショップについて</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../agenda.html">時間割</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../users-getting-started.html">事前登録（できれば 11 月 22 日まで）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pangeo-eosc.html">当日：Pangeo@EOSC の使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../jupyterlab-basics.html">JupyterLab の使い方のヒント</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pangeo と EOSC の概要</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../pangeo.html">EOSC と Pangeo コミュニティ</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Python で海洋モデルデータを扱う</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../glorys-xarray-dask-zarr-healpix.html">GLORYS で学ぶ Xarray・Dask・Zarr・HEALPix</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">pangeo-fish と GFTS による魚類の位置推定</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../pangeo-fish.html">Pangeo-Fish による魚類の位置推定</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pangeo-fish-complete.html">Pangeo-Fish による魚類の位置推定：海底地形と潮汐を加える</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gfts.html">将来の海での魚の姿：GFTS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cite.html">研究で pangeo-fish を使ったら：引用のしかた</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feedback.html">アンケート</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">科学・技術解説</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="00_guide.html">日本語の科学・技術解説を読むために</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01_scientific_lineage.html">科学的背景と先行研究の読み方</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">HMM による位置分布と移動経路の推定</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_temperature.html">水温・深度履歴から位置の適合度を作る</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_observations_models.html">観測データと海洋モデル：時刻・単位・鉛直座標</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_acoustic.html">音響観測による位置制約：検出と非検出</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_bathymetry.html">海底地形による制約：潜れた深さとセル内の地形</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_tides.html">潮汐から位置を絞る：海面高度、着底区間、調和定数</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_comparison_validation.html">手法を比較し、推定結果を検証する</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_ellipsoidal_healpix.html">楕円体 HEALPix：位置・面積・解像度を区別する</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09b_regridding_alignment.html">再格子化と格子・時刻の整合</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_computing.html">Xarray・Dask・Zarrと計算の大きさ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_parameters_versions.html">実装・パラメータ・対象版の対応</a></li>
+<li class="toctree-l1"><a class="reference internal" href="12_consultation.html">個別相談：自分の魚・タグ・海域へ適用する</a></li>
+<li class="toctree-l1"><a class="reference internal" href="13_references.html">参考文献・データ出典</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">チュートリアルの先へ</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../afterword/resources.html">参考資料</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../afterword/pythia.html">Project Pythia</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../afterword/edsbook.html">Environmental Data Science Book</a></li>
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/pangeo-fish/pangeo-fish-fra2026" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="ソースリポジトリ"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/pangeo-fish/pangeo-fish-fra2026/issues/new?title=Issue%20on%20page%20%2Fscience/02_hmm.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="問題を報告"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="このページをダウンロード">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/science/02_hmm.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="ソースファイルをダウンロード"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="PDFに印刷"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="全画面モード"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="ライト"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="ダーク"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="検索" aria-label="検索" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>HMM による位置分布と移動経路の推定</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> 目次 </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">1. 何を未知量としているか</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">2. 前向きフィルタと後向き平滑化</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">前向きフィルタ：その時点までの観測を使う</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">平滑化：後から得られた観測も使う</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">3. 一本の線にする三つの方法</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sigma">4. 移動のばらつき <span class="math notranslate nohighlight">\(\sigma\)</span> と最大速度</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sigma-sigma">5. 一つの <span class="math notranslate nohighlight">\(\sigma\)</span> と二つの <span class="math notranslate nohighlight">\(\sigma\)</span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">6. ノートブックで変える主な設定</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">海岸線の扱い</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">7. 不確実性をどのように読むか</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="hmm">
+<h1>HMM による位置分布と移動経路の推定<a class="headerlink" href="#hmm" title="Link to this heading">#</a></h1>
+<p>水温や音響記録から各時刻の候補位置を絞れても、複数の離れた海域が同じ観測に適合することがあります。HMM は、記録と移動の両方を使って、この曖昧さを時間方向に扱います。魚の位置推定に格子 HMM を使う方法は、Pedersen ら、Thygesen らが発展させました。<span class="bibtex-citation" id="id1">[<a class="reference internal" href="../cite.html#id39" title="Martin Wæver Pedersen, David Righton, Uffe Høgsbro Thygesen, Ken Haste Andersen, and Henrik Madsen. Geolocation of north sea cod (Gadus morhua) using hidden markov models and behavioural switching. Canadian Journal of Fisheries and Aquatic Sciences, 65(11):2367–2377, 2008. URL: https://doi.org/10.1139/F08-144, doi:10.1139/F08-144.">PRT+08</a>, <a class="reference internal" href="../cite.html#id40" title="Uffe Høgsbro Thygesen, Martin Wæver Pedersen, and Henrik Madsen. Geolocating fish using hidden markov models and data storage tags. In Tagging and Tracking of Marine Animals with Electronic Devices, volume 9 of Reviews: Methods and Technologies in Fish Biology and Fisheries, pages 277–293. Springer, 2009. URL: https://doi.org/10.1007/978-1-4020-9640-2_17, doi:10.1007/978-1-4020-9640-2_17.">TPM09</a>]</span></p>
+<p>以下の式は、一般的な離散 HMM の説明です。式の前に、言葉で何を計算しているかを書いています。</p>
+<section id="id2">
+<h2>1. 何を未知量としているか<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<p>時刻 <span class="math notranslate nohighlight">\(t\)</span> に魚がいるセルを <span class="math notranslate nohighlight">\(X_t\)</span>、その時刻の観測を <span class="math notranslate nohighlight">\(Y_t\)</span> とします。<span class="math notranslate nohighlight">\(Y_t\)</span> には、時刻ビンに集約した水温・深度、音響検出などが含まれます。位置 <span class="math notranslate nohighlight">\(X_t\)</span> は直接は見えないため、隠れ状態と呼びます。</p>
+<p>まず、各セル <span class="math notranslate nohighlight">\(c\)</span> について「記録がどれだけ自然か」を表す尤度（likelihood）を</p>
+<div class="math notranslate nohighlight">
+\[
+L_t(c)=p(Y_t\mid X_t=c)
+\]</div>
+<p>と書きます。これは「魚がセル <span class="math notranslate nohighlight">\(c\)</span> にいる確率」そのものではありません。得られた記録を固定して、候補のセルどうしを比べるための点数です。</p>
+<p>次に、移動を「前の時刻にセル <span class="math notranslate nohighlight">\(c'\)</span> にいた魚が、次の時刻にセル <span class="math notranslate nohighlight">\(c\)</span> へ移る確率」として</p>
+<div class="math notranslate nohighlight">
+\[
+K_t(c\mid c')=P(X_t=c\mid X_{t-1}=c')
+\]</div>
+<p>とします。出発セルごとに、行き先の確率を全部足すと1になります。</p>
+<p>pangeo-fish では、この移動の確率を、出発セルを中心とする釣鐘形（ガウス分布）で表します。釣鐘の広がりの大きさがσです。どの出発セルでも同じ形の釣鐘を使うので、移動の計算は「前の時刻の位置の分布を、この釣鐘でぼかす」計算になります。このように、同じ形の重みを各場所に重ねて足し合わせる計算を、畳み込み（convolution）と呼びます。ノートブックの <code class="docutils literal notranslate"><span class="pre">conv_method</span></code> は、この畳み込みをどの方法で計算するかを選ぶ設定です（<a class="reference internal" href="10_computing.html"><span class="doc">Xarray・Dask・Zarrと計算の大きさ</span></a>）。</p>
+<p>最初の分布（放流位置など）を <span class="math notranslate nohighlight">\(\pi(c)\)</span> とします。「次の位置は直前の位置だけで決まる」と仮定すると、一本の経路の重みは、最初の分布、各時刻の尤度（likelihood）、各時刻の移動確率の積になります。</p>
+<div class="math notranslate nohighlight">
+\[
+p(x_{0:T},y_{0:T})
+=\pi(x_0)L_0(x_0)
+\prod_{t=1}^{T}K_t(x_t\mid x_{t-1})L_t(x_t)
+\]</div>
+<p>HMM の前提は、現在の移動を直前の状態で説明することにあります。魚が数日先の目的地を記憶していることなどは、この単純な状態設定だけでは直接表現していません。</p>
+</section>
+<section id="id3">
+<h2>2. 前向きフィルタと後向き平滑化<a class="headerlink" href="#id3" title="Link to this heading">#</a></h2>
+<p>各時刻の位置の分布の求め方には、二通りあります。</p>
+<ul class="simple">
+<li><p><strong>フィルタ（filtering）</strong>：その時刻までの記録だけを使います。放流の日から順に、時間を前へ進みながら計算します。</p></li>
+<li><p><strong>平滑化（smoothing）</strong>：全期間の記録を使います。その時刻より後の記録（数日後の音響検出や再捕位置など）も使って、フィルタの結果を見直します。</p></li>
+</ul>
+<p>タグを回収してから解析するふつうの使い方では、平滑化した分布のほうが多くの情報を使っています。ノートブックで地図や経路に使う位置の分布（<code class="docutils literal notranslate"><span class="pre">states.zarr</span></code>）は、平滑化した分布です。</p>
+<section id="id4">
+<h3>前向きフィルタ：その時点までの観測を使う<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<p>まず、一つ前の時刻の分布 <span class="math notranslate nohighlight">\(p_{t-1}\)</span> を、移動の確率で広げます（上で説明した畳み込みです）。</p>
+<div class="math notranslate nohighlight">
+\[
+p_t^-(c)=\sum_{c'}K_t(c\mid c')p_{t-1}(c').
+\]</div>
+<p>次に、その時刻の尤度（likelihood）を掛け、全セルの和が1になるように調整します。</p>
+<div class="math notranslate nohighlight">
+\[
+Z_t=\sum_cL_t(c)p_t^-(c),\qquad
+p_t(c)=\frac{L_t(c)p_t^-(c)}{Z_t}.
+\]</div>
+<p>この二段階が、「移動により候補が広がる」「記録により候補が絞られる」という計算に対応します。<span class="math notranslate nohighlight">\(Z_t=0\)</span> になったときは、移動で届くセルと記録に合うセルが重なっていません。単位、時刻、海陸の設定、解析する領域などの食い違いがないか見直してください。</p>
+</section>
+<section id="id5">
+<h3>平滑化：後から得られた観測も使う<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<p>全期間の記録を使った分布を <span class="math notranslate nohighlight">\(q_t(c)=P(X_t=c\mid Y_{0:T})\)</span> とします。これは、最後の時刻から時間をさかのぼる計算 <span class="math notranslate nohighlight">\(b_t\)</span> を、前向きの結果に掛けて求めます。</p>
+<div class="math notranslate nohighlight">
+\[
+b_t(c)=\sum_{c'}K_{t+1}(c'\mid c)L_{t+1}(c')b_{t+1}(c'),
+\qquad q_t(c)\propto p_t(c)b_t(c)
+\]</div>
+<p>例えば、数日後の音響検出や終端位置によって、過去の二つの候補経路の重みが変わります。これが、フィルタの分布と平滑化した分布が異なる理由です。</p>
+<p>計算の詳細は、ノートブックでは利用者が意識する必要はありません。</p>
+</section>
+</section>
+<section id="id6">
+<h2>3. 一本の線にする三つの方法<a class="headerlink" href="#id6" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>出力</p></th>
+<th class="head"><p>定義</p></th>
+<th class="head"><p>読み方と注意</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>平均位置</p></td>
+<td><p>各時刻の分布で位置座標を重み付き平均</p></td>
+<td><p>離れた二つの候補の中間になり、確率が低い海域や陸上に出る場合がある</p></td>
+</tr>
+<tr class="row-odd"><td><p>時刻別の最頻セル</p></td>
+<td><p><span class="math notranslate nohighlight">\(\arg\max_c q_t(c)\)</span></p></td>
+<td><p>各時刻では最も重いセルだが、選んだセル列全体の移動確率を最大化してはいない</p></td>
+</tr>
+<tr class="row-even"><td><p>Viterbi 経路（最も確からしい一本の経路）</p></td>
+<td><p><span class="math notranslate nohighlight">\(\arg\max_{x_{0:T}}P(x_{0:T}\mid Y_{0:T})\)</span></p></td>
+<td><p>使った格子と移動の仮定のもとで、経路全体として最も確からしいセルの列</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>例えば、三日間を通して候補が北側と南側の二群に分かれているとします。平均位置は両者の間に来ます。時刻別の最頻セルは、わずかな重みの差で北・南・北と切り替わることがあります。Viterbi は時刻間の遷移も評価するため、どちらか一方の群を通る列を選ぶことがあります。これは説明のための例で、実際のタグの結果ではありません。</p>
+<p>Viterbi は「魚が実際に通った唯一の線」を確定するものではありません。別の経路にも無視できない確率が残り得るため、分布や高確率領域を併記します。</p>
+<p>合成データによる数値例と図は、<a class="reference internal" href="08_comparison_validation.html"><span class="std std-doc">比較と検証</span></a>にあります。</p>
+</section>
+<section id="sigma">
+<h2>4. 移動のばらつき <span class="math notranslate nohighlight">\(\sigma\)</span> と最大速度<a class="headerlink" href="#sigma" title="Link to this heading">#</a></h2>
+<p>移動の確率は、一回の時間ステップで魚が動く距離のばらつき具合を表す幅 <span class="math notranslate nohighlight">\(\sigma\)</span> で決まります。<span class="math notranslate nohighlight">\(\sigma\)</span> が大きいほど、遠くまで動く可能性を認めることになります。基本の形は、距離 <span class="math notranslate nohighlight">\(d\)</span> が大きいほど急に小さくなるガウス型で、</p>
+<div class="math notranslate nohighlight">
+\[
+w(c,c')\propto\exp\!\left[-\frac{d(c,c')^2}{2\sigma^2}\right]
+\]</div>
+<p>です（<span class="math notranslate nohighlight">\(d\)</span> と <span class="math notranslate nohighlight">\(\sigma\)</span> は角度で表します）。<span class="math notranslate nohighlight">\(\sigma\)</span> は平均の移動距離や最大の移動距離そのものではありません。</p>
+<p>ノートブックで利用者が決めるのは <code class="docutils literal notranslate"><span class="pre">maximum_speed</span></code>（最大速度、例えば 60 km/day）です。<span class="math notranslate nohighlight">\(\sigma\)</span> は記録から自動的に推定され（<code class="docutils literal notranslate"><span class="pre">optimize_pdf</span></code>）、<code class="docutils literal notranslate"><span class="pre">maximum_speed</span></code> と時間ステップから、<span class="math notranslate nohighlight">\(\sigma\)</span> を探す範囲の上限が決まります。<code class="docutils literal notranslate"><span class="pre">maximum_speed</span></code> を超える移動を禁止するものではありません。また、時間ステップを日から時間に変えるときは、<span class="math notranslate nohighlight">\(\sigma\)</span> の大きさも見直す必要があります。</p>
+</section>
+<section id="sigma-sigma">
+<h2>5. 一つの <span class="math notranslate nohighlight">\(\sigma\)</span> と二つの <span class="math notranslate nohighlight">\(\sigma\)</span><a class="headerlink" href="#sigma-sigma" title="Link to this heading">#</a></h2>
+<p>Base では、すべての時刻に一つの <span class="math notranslate nohighlight">\(\sigma\)</span> を使います。Complete ノートブックには、日によって二つの <span class="math notranslate nohighlight">\(\sigma\)</span> を使い分ける例があります。タグの深度記録に潮汐に合った周期的な上下動が見られる日とそうでない日を、あらかじめ決めた規則で分け、前者は後者の半分の最大速度に対応する <span class="math notranslate nohighlight">\(\sigma\)</span> を使います。この分類は、HMM が行動を推定した結果ではありません。HMM が推定するのは位置です。</p>
+<p>二つの <span class="math notranslate nohighlight">\(\sigma\)</span> は、記録から同時に探索されます。探索が途中で打ち切られることもあるため、得られた <span class="math notranslate nohighlight">\(\sigma\)</span> を最終的な値と見なす前に、結果を確かめてください。日数が短く、各群の移動の数が少ないときは、二つの値が安定して決まらないことがあります。値が探索範囲の端に張り付いているときも、情報が足りない可能性があります。</p>
+</section>
+<section id="id7">
+<h2>6. ノートブックで変える主な設定<a class="headerlink" href="#id7" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>設定</p></th>
+<th class="head"><p>意味</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">initial_std</span></code>、<code class="docutils literal notranslate"><span class="pre">recapture_std</span></code></p></td>
+<td><p>放流位置・回収位置のばらつき。デモでは非常に小さい値（1e-4 rad、約0.64 km）にして、位置をほぼ固定しています</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">differences_std</span></code></p></td>
+<td><p>水温の差に対する許容幅（<a class="reference internal" href="03_temperature.html"><span class="doc">水温・深度履歴から位置の適合度を作る</span></a>）</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">maximum_speed</span></code></p></td>
+<td><p>最大速度。デモでは 60 km/day。<span class="math notranslate nohighlight">\(\sigma\)</span> を探す範囲の上限を決めます</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">adjustment_factor</span></code>、<code class="docutils literal notranslate"><span class="pre">truncate</span></code>、<code class="docutils literal notranslate"><span class="pre">tolerance</span></code></p></td>
+<td><p><span class="math notranslate nohighlight">\(\sigma\)</span> の探索範囲の調整、移動カーネルを打ち切る範囲、探索の収束の許容幅（位置の精度ではありません）。デモでは 1、5、1e-6</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">conv_method</span></code></p></td>
+<td><p>移動の計算方法。主デモは <code class="docutils literal notranslate"><span class="pre">FFTConv</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>詳しい一覧は<a class="reference internal" href="11_parameters_versions.html"><span class="doc">実装・パラメータ・対象版の対応</span></a>にあります。</p>
+<section id="id8">
+<h3>海岸線の扱い<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
+<p>陸上のセルに終点を置かないことと、二つの海のセルの間の移動が陸を横切らないことは別の話です。細い半島の反対側へ移る経路が出ることがあります。推定した経路を地図に描いて、陸を越えたような動きがないか確認してください。</p>
+</section>
+</section>
+<section id="id9">
+<h2>7. 不確実性をどのように読むか<a class="headerlink" href="#id9" title="Link to this heading">#</a></h2>
+<p>セルごとの確率質量を大きい順に並べ、累積が0.95以上になるまで集めれば、95%の確率で魚がいる領域（高確率領域）を作れます。領域は一つにつながるとは限りません。二つの海域が残るなら、一つの円にまとめず、二つの候補として見せます。</p>
+<p>この領域は、使った記録、移動の仮定、固定したパラメータ、格子を前提にしています。実際の位置が領域に入る割合は、推定に使っていない位置情報で別に確かめます。</p>
+<p>相談時には、①観測だけの適合度地図、②フィルタ分布、③平滑化した分布、④平均・最頻・Viterbi の線を順に比べると、どの情報が候補を絞ったかを説明しやすいです。</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./science"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="01_scientific_lineage.html"
+       title="前のページ">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">前へ</p>
+        <p class="prev-next-title">科学的背景と先行研究の読み方</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="03_temperature.html"
+       title="次ページ">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">次へ</p>
+        <p class="prev-next-title">水温・深度履歴から位置の適合度を作る</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> 目次
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">1. 何を未知量としているか</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">2. 前向きフィルタと後向き平滑化</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">前向きフィルタ：その時点までの観測を使う</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">平滑化：後から得られた観測も使う</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">3. 一本の線にする三つの方法</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sigma">4. 移動のばらつき <span class="math notranslate nohighlight">\(\sigma\)</span> と最大速度</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sigma-sigma">5. 一つの <span class="math notranslate nohighlight">\(\sigma\)</span> と二つの <span class="math notranslate nohighlight">\(\sigma\)</span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">6. ノートブックで変える主な設定</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">海岸線の扱い</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">7. 不確実性をどのように読むか</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+著者 Pangeo-Fish プロジェクト
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

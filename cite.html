@@ -1,0 +1,772 @@
+
+<!DOCTYPE html>
+
+
+<html lang="ja" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>研究で pangeo-fish を使ったら：引用のしかた &#8212; Pangeo-Fish による魚類の位置推定 - FRA 横浜ワークショップ 2026</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/exercise.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=6a604523" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=1cf7f4d9"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="_static/translations.js?v=91613774"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="_static/design-tabs.js?v=fcb327ea"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'cite';</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="アンケート" href="feedback.html" />
+    <link rel="prev" title="将来の海での魚の姿：GFTS" href="gfts.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="ja"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">本文へスキップ</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>トップに戻る</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="バージョン警告"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/pangeo-fish-logo.png" class="logo__image only-light" alt="Pangeo-Fish による魚類の位置推定 - FRA 横浜ワークショップ 2026 - Home"/>
+    <img src="_static/pangeo-fish-logo.png" class="logo__image only-dark pst-js-only" alt="Pangeo-Fish による魚類の位置推定 - FRA 横浜ワークショップ 2026 - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="検索" aria-label="検索" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">検索</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Pangeo-Fish による魚類の位置推定
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">このワークショップについて</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="agenda.html">時間割</a></li>
+<li class="toctree-l1"><a class="reference internal" href="users-getting-started.html">事前登録（できれば 11 月 22 日まで）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pangeo-eosc.html">当日：Pangeo@EOSC の使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jupyterlab-basics.html">JupyterLab の使い方のヒント</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pangeo と EOSC の概要</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="pangeo.html">EOSC と Pangeo コミュニティ</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Python で海洋モデルデータを扱う</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="glorys-xarray-dask-zarr-healpix.html">GLORYS で学ぶ Xarray・Dask・Zarr・HEALPix</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">pangeo-fish と GFTS による魚類の位置推定</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="pangeo-fish.html">Pangeo-Fish による魚類の位置推定</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pangeo-fish-complete.html">Pangeo-Fish による魚類の位置推定：海底地形と潮汐を加える</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gfts.html">将来の海での魚の姿：GFTS</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">研究で pangeo-fish を使ったら：引用のしかた</a></li>
+<li class="toctree-l1"><a class="reference internal" href="feedback.html">アンケート</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">科学・技術解説</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="science/00_guide.html">日本語の科学・技術解説を読むために</a></li>
+<li class="toctree-l1"><a class="reference internal" href="science/01_scientific_lineage.html">科学的背景と先行研究の読み方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="science/02_hmm.html">HMM による位置分布と移動経路の推定</a></li>
+<li class="toctree-l1"><a class="reference internal" href="science/03_temperature.html">水温・深度履歴から位置の適合度を作る</a></li>
+<li class="toctree-l1"><a class="reference internal" href="science/04_observations_models.html">観測データと海洋モデル：時刻・単位・鉛直座標</a></li>
+<li class="toctree-l1"><a class="reference internal" href="science/05_acoustic.html">音響観測による位置制約：検出と非検出</a></li>
+<li class="toctree-l1"><a class="reference internal" href="science/06_bathymetry.html">海底地形による制約：潜れた深さとセル内の地形</a></li>
+<li class="toctree-l1"><a class="reference internal" href="science/07_tides.html">潮汐から位置を絞る：海面高度、着底区間、調和定数</a></li>
+<li class="toctree-l1"><a class="reference internal" href="science/08_comparison_validation.html">手法を比較し、推定結果を検証する</a></li>
+<li class="toctree-l1"><a class="reference internal" href="science/09_ellipsoidal_healpix.html">楕円体 HEALPix：位置・面積・解像度を区別する</a></li>
+<li class="toctree-l1"><a class="reference internal" href="science/09b_regridding_alignment.html">再格子化と格子・時刻の整合</a></li>
+<li class="toctree-l1"><a class="reference internal" href="science/10_computing.html">Xarray・Dask・Zarrと計算の大きさ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="science/11_parameters_versions.html">実装・パラメータ・対象版の対応</a></li>
+<li class="toctree-l1"><a class="reference internal" href="science/12_consultation.html">個別相談：自分の魚・タグ・海域へ適用する</a></li>
+<li class="toctree-l1"><a class="reference internal" href="science/13_references.html">参考文献・データ出典</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">チュートリアルの先へ</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="afterword/resources.html">参考資料</a></li>
+<li class="toctree-l1"><a class="reference internal" href="afterword/pythia.html">Project Pythia</a></li>
+<li class="toctree-l1"><a class="reference internal" href="afterword/edsbook.html">Environmental Data Science Book</a></li>
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/pangeo-fish/pangeo-fish-fra2026" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="ソースリポジトリ"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/pangeo-fish/pangeo-fish-fra2026/issues/new?title=Issue%20on%20page%20%2Fcite.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="問題を報告"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="このページをダウンロード">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/cite.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="ソースファイルをダウンロード"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="PDFに印刷"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="全画面モード"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="ライト"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="ダーク"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="検索" aria-label="検索" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>研究で pangeo-fish を使ったら：引用のしかた</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> 目次 </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">pangeo-fish 本体</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">一緒に使ったデータやツール</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">pangeo-fish を使った研究</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">科学・技術解説で引用した文献</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="pangeo-fish">
+<h1>研究で pangeo-fish を使ったら：引用のしかた<a class="headerlink" href="#pangeo-fish" title="Link to this heading">#</a></h1>
+<p>pangeo-fish はオープンソースのソフトウェアで、開発を続けるには、使われていることが論文の引用で見えることがとても大切です。研究で pangeo-fish を使った場合は、論文や報告書で次のように引用してください。</p>
+<section id="id1">
+<h2>pangeo-fish 本体<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<p>pangeo-fish を使った場合は、次の論文を引用してください。</p>
+<ul class="simple">
+<li><p>Magin, J., Mazouni, Q., Cap, E., Gonse, M., Woillez, M., Fouilloux, A., Delouis, J.-M., and Odaka, T.: pangeo-fish: A Python package for studying fish movement using biologging and earth science data, <em>Journal of Open Source Software</em>, 11(122), 8332, <a class="reference external" href="https://doi.org/10.21105/joss.08332">https://doi.org/10.21105/joss.08332</a>, 2026.</p></li>
+</ul>
+<p>論文のページ：<a class="reference external" href="https://joss.theoj.org/papers/10.21105/joss.08332">https://joss.theoj.org/papers/10.21105/joss.08332</a>（BibTeX などの形式もここから取得できます）</p>
+<p>使ったバージョンを明記したい場合は、ソフトウェアの DOI（Zenodo）<a class="reference external" href="https://doi.org/10.5281/zenodo.15110142">https://doi.org/10.5281/zenodo.15110142</a> もあわせて書いてください。使っているバージョンは、pangeo-fish ノートブックの付録「バグ報告用の情報（Information for bug reports）」で確認できます。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>論文の本文では、たとえば次のように書けます。</p>
+<blockquote>
+<div><p>標識魚の位置推定には pangeo-fish（Magin et al., 2026）を用いた。</p>
+</div></blockquote>
+<blockquote>
+<div><p>Fish positions were reconstructed with pangeo-fish (Magin et al., 2026).</p>
+</div></blockquote>
+</div>
+</section>
+<section id="id2">
+<h2>一緒に使ったデータやツール<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<p>解析で使ったものに合わせて、次も引用してください。</p>
+<ul class="simple">
+<li><p><strong>HEALPix の格子（楕円体上の HEALPix DGGS）と GRID4EARTH のパッケージ</strong>：Odaka, T., Delouis, J.-M., Magin, J., Gueguen, C., Cap, E., Fouilloux, A., Bovy, B., Richard, P., Chan, W. T., Chrapkiewicz, K. M., and Kmoch, A.: Grid4Earth: An Open-Source Python Ecosystem for Geospatial Data Integration Using an Ellipsoidal HEALPix DGGS, <em>Int. Arch. Photogramm. Remote Sens. Spatial Inf. Sci.</em>, L-4/W1-2026, 189–195, <a class="reference external" href="https://doi.org/10.5194/isprs-archives-L-4-W1-2026-189-2026">https://doi.org/10.5194/isprs-archives-L-4-W1-2026-189-2026</a>, 2026.</p></li>
+<li><p><strong>海洋モデル（Copernicus Marine Service）</strong>：使った製品の DOI を書いてください。</p>
+<ul>
+<li><p>全球の再解析 GLORYS：Global Ocean Physics Reanalysis, E.U. Copernicus Marine Service Information, <a class="reference external" href="https://doi.org/10.48670/moi-00021">https://doi.org/10.48670/moi-00021</a></p></li>
+<li><p>IBI 海域の再解析：Atlantic-Iberian Biscay Irish- Ocean Physics Reanalysis, E.U. Copernicus Marine Service Information, <a class="reference external" href="https://doi.org/10.48670/moi-00029">https://doi.org/10.48670/moi-00029</a></p></li>
+</ul>
+</li>
+<li><p><strong>このワークショップのタグデータ（A19124）</strong>：Gonse et al. (2024)（下の一覧を見てください）。</p></li>
+<li><p><strong>Pangeo&#64;EOSC で計算した場合</strong>：謝辞に <a class="reference internal" href="pangeo.html"><span class="doc">EOSC と Pangeo コミュニティ</span></a> の「Pangeo&#64;EOSC の謝辞の書き方」の文を入れてください。</p></li>
+</ul>
+</section>
+<section id="id3">
+<h2>pangeo-fish を使った研究<a class="headerlink" href="#id3" title="Link to this heading">#</a></h2>
+<p>pangeo-fish を使った論文の一覧です。</p>
+<ul class="simple">
+<li><p>Magin, J., Mazouni, Q., Cap, E., Gonse, M., Woillez, M., Fouilloux, A., Delouis, J.-M., and Odaka, T.: pangeo-fish: A Python package for studying fish movement using biologging and earth science data, <em>Journal of Open Source Software</em>, 11(122), 8332, <a class="reference external" href="https://doi.org/10.21105/joss.08332">https://doi.org/10.21105/joss.08332</a>, 2026.</p></li>
+<li><p>Gonse, M., Laurans, M., Magin, J., Odaka, T., Delouis, J.-M., Martin, S., Garren, F., Lazard, C., Drogou, M., Stamp, T., Davies, P., Hall, A., Sheehan, E., and Woillez, M.: Combining acoustic telemetry with archival tagging to investigate the spatial dynamic of the understudied pollack, <em>Pollachius pollachius</em>, <em>Journal of Fish Biology</em>, 106(5), 1400–1421, <a class="reference external" href="https://doi.org/10.1111/jfb.15750">https://doi.org/10.1111/jfb.15750</a>, 2024.</p></li>
+</ul>
+<p>pangeo-fish を使った論文を発表したら、<a class="reference external" href="https://github.com/pangeo-fish/pangeo-fish-fra2026/issues">issue</a> でお知らせください。この一覧に追加します。</p>
+</section>
+<section id="id4">
+<h2>科学・技術解説で引用した文献<a class="headerlink" href="#id4" title="Link to this heading">#</a></h2>
+<p>「科学・技術解説」の各章で引用した文献の一覧です。章ごとの読む目的と注意点は、<a class="reference internal" href="science/13_references.html"><span class="doc">参考文献・データ出典</span></a> にまとめています。</p>
+<div class="docutils container" id="id5">
+<div role="list" class="citation-list">
+<div class="citation" id="id42" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>BGT18<span class="fn-bracket">]</span></span>
+<p>Camrin D. Braun, Benjamin Galuardi, and Simon R. Thorrold. HMMoce: an R package for improved geolocation of archival-tagged fishes using a hidden markov method. <em>Methods in Ecology and Evolution</em>, 9(5):1212–1220, 2018. Crossref: published online 23 January 2018; issue May 2018. URL: <a class="reference external" href="https://doi.org/10.1111/2041-210X.12959">https://doi.org/10.1111/2041-210X.12959</a>, <a class="reference external" href="https://doi.org/10.1111/2041-210X.12959">doi:10.1111/2041-210X.12959</a>.</p>
+</div>
+<div class="citation" id="id63" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>CR07<span class="fn-bracket">]</span></span>
+<p>M. R. Calabretta and B. F. Roukema. Mapping on the HEALPix grid. <em>Monthly Notices of the Royal Astronomical Society</em>, 381(2):865–872, 2007. URL: <a class="reference external" href="https://arxiv.org/abs/astro-ph/0412607">https://arxiv.org/abs/astro-ph/0412607</a>, <a class="reference external" href="https://doi.org/10.1111/j.1365-2966.2007.12297.x">doi:10.1111/j.1365-2966.2007.12297.x</a>.</p>
+</div>
+<div class="citation" id="id51" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>EE02<span class="fn-bracket">]</span></span>
+<p>Gary D. Egbert and Svetlana Y. Erofeeva. Efficient inverse modeling of barotropic ocean tides. <em>Journal of Atmospheric and Oceanic Technology</em>, 19(2):183–204, 2002. URL: <a class="reference external" href="https://journals.ametsoc.org/view/journals/atot/19/2/1520-0426_2002_019_0183_eimobo_2_0_co_2.xml">https://journals.ametsoc.org/view/journals/atot/19/2/1520-0426_2002_019_0183_eimobo_2_0_co_2.xml</a>, <a class="reference external" href="https://doi.org/10.1175/1520-0426(2002)019&lt;0183:EIMOBO&gt;2.0.CO;2">doi:10.1175/1520-0426(2002)019&lt;0183:EIMOBO&gt;2.0.CO;2</a>.</p>
+</div>
+<div class="citation" id="id43" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>GFC+21<span class="fn-bracket">]</span></span>
+<p>Paul Gatti, Jonathan A. D. Fisher, Frédéric Cyr, Peter S. Galbraith, Dominique Robert, and Arnault Le Bris. A review and tests of validation and sensitivity of geolocation models for marine fish tracking. <em>Fish and Fisheries</em>, 22(5):1041–1066, 2021. URL: <a class="reference external" href="https://doi.org/10.1111/faf.12568">https://doi.org/10.1111/faf.12568</a>, <a class="reference external" href="https://doi.org/10.1111/faf.12568">doi:10.1111/faf.12568</a>.</p>
+</div>
+<div class="citation" id="id44" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>GLM+25<span class="fn-bracket">]</span></span>
+<p>Marine Gonse, Martial Laurans, Justus Magin, Tina Odaka, Jean-Marc Delouis, Stéphane Martin, François Garren, Coline Lazard, Mickael Drogou, Thomas Stamp, Peter Davies, Alice Hall, Emma Sheehan, and Mathieu Woillez. Combining acoustic telemetry with archival tagging to investigate the spatial dynamic of the understudied pollack, Pollachius pollachius. <em>Journal of Fish Biology</em>, 106(5):1400–1421, 2025. First published online 25 April 2024; issue date May 2025. URL: <a class="reference external" href="https://doi.org/10.1111/jfb.15750">https://doi.org/10.1111/jfb.15750</a>, <a class="reference external" href="https://doi.org/10.1111/jfb.15750">doi:10.1111/jfb.15750</a>.</p>
+</div>
+<div class="citation" id="id48" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>GWL+23<span class="fn-bracket">]</span></span>
+<p>Jolien Goossens, Mathieu Woillez, Arnault LeBris, Pieterjan Verhelst, Tom Moens, Els Torreele, and Jan Reubens. Acoustic and archival technologies join forces: a combination tag. <em>Methods in Ecology and Evolution</em>, 14(3):860–866, 2023. URL: <a class="reference external" href="https://doi.org/10.1111/2041-210X.14045">https://doi.org/10.1111/2041-210X.14045</a>, <a class="reference external" href="https://doi.org/10.1111/2041-210X.14045">doi:10.1111/2041-210X.14045</a>.</p>
+</div>
+<div class="citation" id="id62" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>GorskiHB+05<span class="fn-bracket">]</span></span>
+<p>K. M. Górski, E. Hivon, A. J. Banday, B. D. Wandelt, F. K. Hansen, M. Reinecke, and M. Bartelmann. HEALPix: a framework for high-resolution discretization and fast analysis of data distributed on the sphere. <em>The Astrophysical Journal</em>, 622(2):759–771, 2005. URL: <a class="reference external" href="https://arxiv.org/abs/astro-ph/0409513">https://arxiv.org/abs/astro-ph/0409513</a>, <a class="reference external" href="https://doi.org/10.1086/427976">doi:10.1086/427976</a>.</p>
+</div>
+<div class="citation" id="id50" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>HR20<span class="fn-bracket">]</span></span>
+<p>Nathan J. Hostetter and J. Andrew Royle. Movement-assisted localization from acoustic telemetry data. <em>Movement Ecology</em>, 8:15, 2020. URL: <a class="reference external" href="https://link.springer.com/article/10.1186/s40462-020-00199-6">https://link.springer.com/article/10.1186/s40462-020-00199-6</a>, <a class="reference external" href="https://doi.org/10.1186/s40462-020-00199-6">doi:10.1186/s40462-020-00199-6</a>.</p>
+</div>
+<div class="citation" id="id46" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>HAMA03<span class="fn-bracket">]</span></span>
+<p>Ewan Hunter, J. N. Aldridge, J. D. Metcalfe, and G. P. Arnold. Geolocation of free-ranging fish on the european continental shelf as determined from environmental variables. I. tidal location method. <em>Marine Biology</em>, 142:601–609, 2003. Bibliographic record checked (Crossref); original full text was not accessible in this documentation review. URL: <a class="reference external" href="https://doi.org/10.1007/s00227-002-0984-5">https://doi.org/10.1007/s00227-002-0984-5</a>, <a class="reference external" href="https://doi.org/10.1007/s00227-002-0984-5">doi:10.1007/s00227-002-0984-5</a>.</p>
+</div>
+<div class="citation" id="id47" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>HMAR04<span class="fn-bracket">]</span></span>
+<p>Ewan Hunter, J. D. Metcalfe, G. P. Arnold, and J. D. Reynolds. Impacts of migratory behaviour on population structure in North Sea plaice. <em>Journal of Animal Ecology</em>, 73(2):377–385, 2004. URL: <a class="reference external" href="https://besjournals.onlinelibrary.wiley.com/doi/10.1111/j.0021-8790.2004.00801.x">https://besjournals.onlinelibrary.wiley.com/doi/10.1111/j.0021-8790.2004.00801.x</a>, <a class="reference external" href="https://doi.org/10.1111/j.0021-8790.2004.00801.x">doi:10.1111/j.0021-8790.2004.00801.x</a>.</p>
+</div>
+<div class="citation" id="id49" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>HSK+16<span class="fn-bracket">]</span></span>
+<p>Charlie Huveneers, Colin A. Simpfendorfer, Susan Kim, Jayson M. Semmens, Alistair J. Hobday, Hugh Pederson, Thomas Stieglitz, Richard Vallee, Dale Webber, Michelle R. Heupel, Vic Peddemors, and Robert G. Harcourt. The influence of environmental parameters on the performance and detection range of acoustic receivers. <em>Methods in Ecology and Evolution</em>, 7(7):825–835, 2016. First published online 11 December 2015. URL: <a class="reference external" href="https://doi.org/10.1111/2041-210X.12520">https://doi.org/10.1111/2041-210X.12520</a>, <a class="reference external" href="https://doi.org/10.1111/2041-210X.12520">doi:10.1111/2041-210X.12520</a>.</p>
+</div>
+<div class="citation" id="id64" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>Kar24<span class="fn-bracket">]</span></span>
+<p>Charles F. F. Karney. On auxiliary latitudes. <em>Survey Review</em>, 56(395):165–180, 2024. First published online in 2023; bibliographic year here follows the final journal volume (2024). URL: <a class="reference external" href="https://arxiv.org/abs/2212.05818">https://arxiv.org/abs/2212.05818</a>, <a class="reference external" href="https://doi.org/10.1080/00396265.2023.2217604">doi:10.1080/00396265.2023.2217604</a>.</p>
+</div>
+<div class="citation" id="id56" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>LAC+21<span class="fn-bracket">]</span></span>
+<p>F. H. Lyard, D. J. Allain, M. Cancet, L. Carrère, and N. Picot. FES2014 global ocean tide atlas: design and performance. <em>Ocean Science</em>, 17:615–649, 2021. URL: <a class="reference external" href="https://os.copernicus.org/articles/17/615/2021/">https://os.copernicus.org/articles/17/615/2021/</a>, <a class="reference external" href="https://doi.org/10.5194/os-17-615-2021">doi:10.5194/os-17-615-2021</a>.</p>
+</div>
+<div class="citation" id="id55" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>LCF+26<span class="fn-bracket">]</span></span>
+<p>Florent H. Lyard, Loren Carrère, Ergane Fouchet, Mathilde Cancet, Ramiro Ferrari, Mei-Ling Dabat, Chafih Skandrani, David Greenberg, Damien Allain, Gérald Dibarboure, and Nicolas Picot. FES2022 global tide atlas: a step towards SWOT-compliant tidal corrections. <em>EGUsphere</em>, 2026. Preprint; discussion started 11 November 2026; the EGUsphere page states it is open for discussion and under review for Ocean Science (checked 2026-11-23). URL: <a class="reference external" href="https://egusphere.copernicus.org/preprints/2026/egusphere-2026-6805/">https://egusphere.copernicus.org/preprints/2026/egusphere-2026-6805/</a>, <a class="reference external" href="https://doi.org/10.5194/egusphere-2026-6805">doi:10.5194/egusphere-2026-6805</a>.</p>
+</div>
+<div class="citation" id="id38" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>MMC+26<span class="fn-bracket">]</span></span>
+<p>Justus Magin, Quentin Mazouni, Etienne Cap, Marine Gonse, Mathieu Woillez, Anne Fouilloux, Jean-Marc Delouis, and Tina Odaka. pangeo-fish: a python package for studying fish movement using biologging and earth science data. <em>Journal of Open Source Software</em>, 11(122):8332, 2026. URL: <a class="reference external" href="https://doi.org/10.21105/joss.08332">https://doi.org/10.21105/joss.08332</a>, <a class="reference external" href="https://doi.org/10.21105/joss.08332">doi:10.21105/joss.08332</a>.</p>
+</div>
+<div class="citation" id="id45" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>MA97<span class="fn-bracket">]</span></span>
+<p>J. D. Metcalfe and G. P. Arnold. Tracking fish with electronic tags. <em>Nature</em>, 387:665–666, 1997. URL: <a class="reference external" href="https://www.nature.com/articles/42622">https://www.nature.com/articles/42622</a>, <a class="reference external" href="https://doi.org/10.1038/42622">doi:10.1038/42622</a>.</p>
+</div>
+<div class="citation" id="id61" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>NMA+19<span class="fn-bracket">]</span></span>
+<p>J. K. Nielsen, F. J. Mueter, M. D. Adkison, T. Loher, S. F. McDermott, and A. C. Seitz. Effect of study area bathymetric heterogeneity on parameterization and performance of a depth-based geolocation model for demersal fishes. <em>Ecological Modelling</em>, 402:18–34, 2019. URL: <a class="reference external" href="https://doi.org/10.1016/j.ecolmodel.2019.03.023">https://doi.org/10.1016/j.ecolmodel.2019.03.023</a>, <a class="reference external" href="https://doi.org/10.1016/j.ecolmodel.2019.03.023">doi:10.1016/j.ecolmodel.2019.03.023</a>.</p>
+</div>
+<div class="citation" id="id65" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>ODM+26<span class="fn-bracket">]</span></span>
+<p>Tina Odaka, Jean-Marc Delouis, Justus Magin, Camille Gueguen, Etienne Cap, Anne Fouilloux, Benoit Bovy, Pablo Richard, Wai Tik Chan, Kajetan Marcin Chrapkiewicz, and Alexander Kmoch. Grid4Earth: an open-source python ecosystem for geospatial data integration using an ellipsoidal HEALPix DGGS. <em>The International Archives of the Photogrammetry, Remote Sensing and Spatial Information Sciences</em>, L-4/W1-2026:189–195, 2026. URL: <a class="reference external" href="https://isprs-archives.copernicus.org/articles/L-4-W1-2026/189/2026/">https://isprs-archives.copernicus.org/articles/L-4-W1-2026/189/2026/</a>, <a class="reference external" href="https://doi.org/10.5194/isprs-archives-L-4-W1-2026-189-2026">doi:10.5194/isprs-archives-L-4-W1-2026-189-2026</a>.</p>
+</div>
+<div class="citation" id="id60" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>Par07<span class="fn-bracket">]</span></span>
+<p>Bruce B. Parker. Tidal analysis and prediction. Technical Report NOS CO-OPS 3, National Oceanic and Atmospheric Administration, 2007. Sections 3.3 and 3.4: synodic periods, Rayleigh criterion and harmonic prediction. URL: <a class="reference external" href="https://tidesandcurrents.noaa.gov/publications/Tidal_Analysis_and_Predictions.pdf">https://tidesandcurrents.noaa.gov/publications/Tidal_Analysis_and_Predictions.pdf</a>.</p>
+</div>
+<div class="citation" id="id39" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>PRT+08<span class="fn-bracket">]</span></span>
+<p>Martin Wæver Pedersen, David Righton, Uffe Høgsbro Thygesen, Ken Haste Andersen, and Henrik Madsen. Geolocation of north sea cod (Gadus morhua) using hidden markov models and behavioural switching. <em>Canadian Journal of Fisheries and Aquatic Sciences</em>, 65(11):2367–2377, 2008. URL: <a class="reference external" href="https://doi.org/10.1139/F08-144">https://doi.org/10.1139/F08-144</a>, <a class="reference external" href="https://doi.org/10.1139/F08-144">doi:10.1139/F08-144</a>.</p>
+</div>
+<div class="citation" id="id40" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>TPM09<span class="fn-bracket">]</span></span>
+<p>Uffe Høgsbro Thygesen, Martin Wæver Pedersen, and Henrik Madsen. Geolocating fish using hidden markov models and data storage tags. In <em>Tagging and Tracking of Marine Animals with Electronic Devices</em>, volume 9 of Reviews: Methods and Technologies in Fish Biology and Fisheries, pages 277–293. Springer, 2009. URL: <a class="reference external" href="https://doi.org/10.1007/978-1-4020-9640-2_17">https://doi.org/10.1007/978-1-4020-9640-2_17</a>, <a class="reference external" href="https://doi.org/10.1007/978-1-4020-9640-2_17">doi:10.1007/978-1-4020-9640-2_17</a>.</p>
+</div>
+<div class="citation" id="id41" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>WFN+16<span class="fn-bracket">]</span></span>
+<p>Mathieu Woillez, Ronan Fablet, Tran-Thanh Ngo, Maxime Lalire, Pascal Lazure, and Hélène de Pontual. A HMM-based model to geolocate pelagic fish from high-resolution individual temperature and depth histories: european sea bass as a case study. <em>Ecological Modelling</em>, 321:10–22, 2016. URL: <a class="reference external" href="https://doi.org/10.1016/j.ecolmodel.2015.10.024">https://doi.org/10.1016/j.ecolmodel.2015.10.024</a>, <a class="reference external" href="https://doi.org/10.1016/j.ecolmodel.2015.10.024">doi:10.1016/j.ecolmodel.2015.10.024</a>.</p>
+</div>
+<div class="citation" id="id54" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>AVISO26<span class="fn-bracket">]</span></span>
+<p>AVISO+. FES2022 (finite element solution) ocean tide product handbook. Technical Report SALP-MU-P-EA-23561-CLS, CNES and CLS, 2026. Issue 2.0; document date 03/02/2026; accessed 2026-11-23. URL: <a class="reference external" href="https://aviso.altimetry.fr/fileadmin/documents/data/tools/hdbk_FES2022.pdf">https://aviso.altimetry.fr/fileadmin/documents/data/tools/hdbk_FES2022.pdf</a>.</p>
+</div>
+<div class="citation" id="id57" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>CNES<span class="fn-bracket">]</span></span>
+<p>CNES. PyFES. Official prediction software documentation; record the actual installed version separately; accessed 2026-11-23. URL: <a class="github reference external" href="https://github.com/CNES/aviso-fes">CNES/aviso-fes</a>.</p>
+</div>
+<div class="citation" id="id72" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>CopernicusMServicea<span class="fn-bracket">]</span></span>
+<p>Copernicus Marine Service. Atlantic - iberian biscay irish - ocean physics reanalysis. Official documentation; accessed 23 November 2026. Record the actual data or software version separately. URL: <a class="reference external" href="https://data.marine.copernicus.eu/product/IBI_MULTIYEAR_PHY_005_002/description">https://data.marine.copernicus.eu/product/IBI_MULTIYEAR_PHY_005_002/description</a>.</p>
+</div>
+<div class="citation" id="id73" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>CopernicusMServiceb<span class="fn-bracket">]</span></span>
+<p>Copernicus Marine Service. Global ocean physics reanalysis: glorys12v1. Official documentation; accessed 23 November 2026. Record the actual data or software version separately. URL: <a class="reference external" href="https://data.marine.copernicus.eu/product/GLOBAL_MULTIYEAR_PHY_001_030/description">https://data.marine.copernicus.eu/product/GLOBAL_MULTIYEAR_PHY_001_030/description</a>, <a class="reference external" href="https://doi.org/10.48670/moi-00021">doi:10.48670/moi-00021</a>.</p>
+</div>
+<div class="citation" id="id77" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>Daskdevelopers<span class="fn-bracket">]</span></span>
+<p>Dask developers. Best practices (dask array). Official documentation; accessed 23 November 2026. Record the actual data or software version separately. URL: <a class="reference external" href="https://docs.dask.org/en/stable/array-best-practices.html">https://docs.dask.org/en/stable/array-best-practices.html</a>.</p>
+</div>
+<div class="citation" id="id58" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>GEBCOBCG202424<span class="fn-bracket">]</span></span>
+<p>GEBCO Bathymetric Compilation Group 2024. The GEBCO_2024 grid – a continuous terrain model of the global oceans and land. 2024. Data set and official documentation. URL: <a class="reference external" href="https://www.gebco.net/data-products-gridded-bathymetry-data/gebco2024-grid">https://www.gebco.net/data-products-gridded-bathymetry-data/gebco2024-grid</a>, <a class="reference external" href="https://doi.org/10.5285/1c44ce99-0a0d-5f4f-e063-7086abc0ea0f">doi:10.5285/1c44ce99-0a0d-5f4f-e063-7086abc0ea0f</a>.</p>
+</div>
+<div class="citation" id="id69" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>GRID4EARTHa<span class="fn-bracket">]</span></span>
+<p>GRID4EARTH. Reference system – healpix-geo documentation. Accessed 23 November 2026. URL: <a class="reference external" href="https://healpix-geo.readthedocs.io/en/latest/reference-system.html">https://healpix-geo.readthedocs.io/en/latest/reference-system.html</a>.</p>
+</div>
+<div class="citation" id="id70" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>GRID4EARTHb<span class="fn-bracket">]</span></span>
+<p>GRID4EARTH. Healpix_geo.nested.lonlat_to_healpix – api documentation. Accessed 23 November 2026. URL: <a class="reference external" href="https://healpix-geo.readthedocs.io/en/latest/generated/healpix_geo.nested.lonlat_to_healpix.html">https://healpix-geo.readthedocs.io/en/latest/generated/healpix_geo.nested.lonlat_to_healpix.html</a>.</p>
+</div>
+<div class="citation" id="id68" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>HEALPixCollaboration24<span class="fn-bracket">]</span></span>
+<p>HEALPix Collaboration. Geometric and algebraic properties of HEALPix. 2024. The HEALPix Primer, version 3.83, 13 November 2024; accessed 23 November 2026. URL: <a class="reference external" href="https://healpix.sourceforge.io/html/intro_Geometric_Algebraic_Propert.htm">https://healpix.sourceforge.io/html/intro_Geometric_Algebraic_Propert.htm</a>.</p>
+</div>
+<div class="citation" id="id53" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>LEGOSNOVELTISCLS24<span class="fn-bracket">]</span></span>
+<p>LEGOS, NOVELTIS, and CLS. FES2022 (finite element solution) ocean tide. 2024. Data set; use the FES2022b release and the actual downloaded file version in the run record. URL: <a class="reference external" href="https://doi.org/10.24400/527896/A01-2024.004">https://doi.org/10.24400/527896/A01-2024.004</a>, <a class="reference external" href="https://doi.org/10.24400/527896/A01-2024.004">doi:10.24400/527896/A01-2024.004</a>.</p>
+</div>
+<div class="citation" id="id59" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>NOAA06<span class="fn-bracket">]</span></span>
+<p>NOAA. Implementation of model skill assessment software for water level and current in tidal regions. Technical Report NOS CS 24, National Oceanic and Atmospheric Administration, 2006. Appendix C: angular speeds of tidal constituents. URL: <a class="reference external" href="https://tidesandcurrents.noaa.gov/ofs/publications/CS_Techrpt_024_SkillAss_WLsCUs_2006.pdf">https://tidesandcurrents.noaa.gov/ofs/publications/CS_Techrpt_024_SkillAss_WLsCUs_2006.pdf</a>.</p>
+</div>
+<div class="citation" id="id66" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>OpenGConsortium21<span class="fn-bracket">]</span></span>
+<p>Open Geospatial Consortium. Topic 21 – discrete global grid systems – part 1 core reference system and operations and equal area earth reference system. Abstract Specification Topic 20-040r3, Open Geospatial Consortium, 2021. Version 2.0.0, published 23 September 2021. URL: <a class="reference external" href="https://docs.ogc.org/as/20-040r3/20-040r3.html">https://docs.ogc.org/as/20-040r3/20-040r3.html</a>, <a class="reference external" href="https://doi.org/10.62973/20-040r3">doi:10.62973/20-040r3</a>.</p>
+</div>
+<div class="citation" id="id67" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>OpenGConsortium25<span class="fn-bracket">]</span></span>
+<p>Open Geospatial Consortium. OGC API – discrete global grid systems – part 1: core. Technical Report 21-038r1, Open Geospatial Consortium, 2025. Published 3 October 2025. URL: <a class="reference external" href="https://docs.ogc.org/is/21-038r1/21-038r1.html">https://docs.ogc.org/is/21-038r1/21-038r1.html</a>.</p>
+</div>
+<div class="citation" id="id52" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>OregonSUniversity<span class="fn-bracket">]</span></span>
+<p>Oregon State University. TPXO global tidal models. Official model documentation; accessed 2026-11-23. URL: <a class="reference external" href="https://www.tpxo.net/global">https://www.tpxo.net/global</a>.</p>
+</div>
+<div class="citation" id="id71" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>PROJcontributors<span class="fn-bracket">]</span></span>
+<p>PROJ contributors. HEALPix – proj documentation. Accessed 23 November 2026. URL: <a class="reference external" href="https://proj.org/en/stable/operations/projections/healpix.html">https://proj.org/en/stable/operations/projections/healpix.html</a>.</p>
+</div>
+<div class="citation" id="id74" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>TEOS10<span class="fn-bracket">]</span></span>
+<p>TEOS-10. Gsw_z_from_p: height from pressure (48-term equation). Official documentation; accessed 23 November 2026. Record the actual data or software version separately. URL: <a class="reference external" href="https://www.teos-10.org/pubs/gsw/v3_04/html/gsw_z_from_p.html">https://www.teos-10.org/pubs/gsw/v3_04/html/gsw_z_from_p.html</a>.</p>
+</div>
+<div class="citation" id="id76" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>Xarraydevelopersa<span class="fn-bracket">]</span></span>
+<p>Xarray developers. Data structures: datatree. Official documentation; accessed 23 November 2026. Record the actual data or software version separately. URL: <a class="reference external" href="https://docs.xarray.dev/en/stable/user-guide/data-structures.html#datatree">https://docs.xarray.dev/en/stable/user-guide/data-structures.html#datatree</a>.</p>
+</div>
+<div class="citation" id="id75" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>Xarraydevelopersb<span class="fn-bracket">]</span></span>
+<p>Xarray developers. Xarray.open_zarr: api reference. Official documentation; accessed 23 November 2026. Record the actual data or software version separately. URL: <a class="reference external" href="https://docs.xarray.dev/en/stable/generated/xarray.open_zarr.html">https://docs.xarray.dev/en/stable/generated/xarray.open_zarr.html</a>.</p>
+</div>
+<div class="citation" id="id78" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>Zarrdevelopers<span class="fn-bracket">]</span></span>
+<p>Zarr developers. Optimizing performance. Official documentation; accessed 23 November 2026. Record the actual data or software version separately. URL: <a class="reference external" href="https://zarr.readthedocs.io/en/stable/user-guide/performance/">https://zarr.readthedocs.io/en/stable/user-guide/performance/</a>.</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="gfts.html"
+       title="前のページ">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">前へ</p>
+        <p class="prev-next-title">将来の海での魚の姿：GFTS</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="feedback.html"
+       title="次ページ">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">次へ</p>
+        <p class="prev-next-title">アンケート</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> 目次
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">pangeo-fish 本体</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">一緒に使ったデータやツール</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">pangeo-fish を使った研究</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">科学・技術解説で引用した文献</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+著者 Pangeo-Fish プロジェクト
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

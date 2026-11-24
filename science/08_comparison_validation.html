@@ -1,0 +1,745 @@
+
+<!DOCTYPE html>
+
+
+<html lang="ja" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>手法を比較し、推定結果を検証する &#8212; Pangeo-Fish による魚類の位置推定 - FRA 横浜ワークショップ 2026</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=6a604523" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=1cf7f4d9"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/translations.js?v=91613774"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../_static/design-tabs.js?v=fcb327ea"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'science/08_comparison_validation';</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="楕円体 HEALPix：位置・面積・解像度を区別する" href="09_ellipsoidal_healpix.html" />
+    <link rel="prev" title="潮汐から位置を絞る：海面高度、着底区間、調和定数" href="07_tides.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="ja"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">本文へスキップ</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>トップに戻る</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="バージョン警告"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/pangeo-fish-logo.png" class="logo__image only-light" alt="Pangeo-Fish による魚類の位置推定 - FRA 横浜ワークショップ 2026 - Home"/>
+    <img src="../_static/pangeo-fish-logo.png" class="logo__image only-dark pst-js-only" alt="Pangeo-Fish による魚類の位置推定 - FRA 横浜ワークショップ 2026 - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="検索" aria-label="検索" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">検索</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Pangeo-Fish による魚類の位置推定
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">このワークショップについて</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../agenda.html">時間割</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../users-getting-started.html">事前登録（できれば 11 月 22 日まで）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pangeo-eosc.html">当日：Pangeo@EOSC の使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../jupyterlab-basics.html">JupyterLab の使い方のヒント</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pangeo と EOSC の概要</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../pangeo.html">EOSC と Pangeo コミュニティ</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Python で海洋モデルデータを扱う</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../glorys-xarray-dask-zarr-healpix.html">GLORYS で学ぶ Xarray・Dask・Zarr・HEALPix</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">pangeo-fish と GFTS による魚類の位置推定</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../pangeo-fish.html">Pangeo-Fish による魚類の位置推定</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pangeo-fish-complete.html">Pangeo-Fish による魚類の位置推定：海底地形と潮汐を加える</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gfts.html">将来の海での魚の姿：GFTS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cite.html">研究で pangeo-fish を使ったら：引用のしかた</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feedback.html">アンケート</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">科学・技術解説</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="00_guide.html">日本語の科学・技術解説を読むために</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01_scientific_lineage.html">科学的背景と先行研究の読み方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_hmm.html">HMM による位置分布と移動経路の推定</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_temperature.html">水温・深度履歴から位置の適合度を作る</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_observations_models.html">観測データと海洋モデル：時刻・単位・鉛直座標</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_acoustic.html">音響観測による位置制約：検出と非検出</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_bathymetry.html">海底地形による制約：潜れた深さとセル内の地形</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_tides.html">潮汐から位置を絞る：海面高度、着底区間、調和定数</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">手法を比較し、推定結果を検証する</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_ellipsoidal_healpix.html">楕円体 HEALPix：位置・面積・解像度を区別する</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09b_regridding_alignment.html">再格子化と格子・時刻の整合</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_computing.html">Xarray・Dask・Zarrと計算の大きさ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_parameters_versions.html">実装・パラメータ・対象版の対応</a></li>
+<li class="toctree-l1"><a class="reference internal" href="12_consultation.html">個別相談：自分の魚・タグ・海域へ適用する</a></li>
+<li class="toctree-l1"><a class="reference internal" href="13_references.html">参考文献・データ出典</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">チュートリアルの先へ</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../afterword/resources.html">参考資料</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../afterword/pythia.html">Project Pythia</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../afterword/edsbook.html">Environmental Data Science Book</a></li>
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/pangeo-fish/pangeo-fish-fra2026" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="ソースリポジトリ"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/pangeo-fish/pangeo-fish-fra2026/issues/new?title=Issue%20on%20page%20%2Fscience/08_comparison_validation.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="問題を報告"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="このページをダウンロード">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/science/08_comparison_validation.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="ソースファイルをダウンロード"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="PDFに印刷"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="全画面モード"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="ライト"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="ダーク"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="検索" aria-label="検索" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>手法を比較し、推定結果を検証する</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> 目次 </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">1. 手法の比較表</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">2. 観測の重みを掛け合わせる意味</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">一様・ゼロ・欠測は違う</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#viterbi">3. 平均・最頻・Viterbi を比べる</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a19124">4. A19124 で行う比較の設計</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">σを固定した比較と、再推定した比較</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">5. 不確実性を数値にする</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">6. 独立した位置情報による検証</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">7. 感度分析の順番</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>手法を比較し、推定結果を検証する<a class="headerlink" href="#id1" title="Link to this heading">#</a></h1>
+<p>比較には二つの問いがあります。「この観測を加えると、どこが候補から外れるか」と「その変更によって、実際の位置をより適切に表せるか」です。前者は推定結果の変化を見る問い、後者は独立な情報を使って確かめる問い（検証）です。</p>
+<section id="id2">
+<h2>1. 手法の比較表<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>情報・枠組み</p></th>
+<th class="head"><p>主な入力</p></th>
+<th class="head"><p>制約するもの</p></th>
+<th class="head"><p>有効性を左右する条件</p></th>
+<th class="head"><p>対象デモ</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>水温</p></td>
+<td><p>タグ温度・深度、モデル水温</p></td>
+<td><p>観測した水温と合う位置</p></td>
+<td><p>温度の空間的な変化の大きさ、モデルの誤差、深さの対応</p></td>
+<td><p>Base／Complete</p></td>
+</tr>
+<tr class="row-odd"><td><p>音響</p></td>
+<td><p>検出記録、受信機の位置・稼働期間</p></td>
+<td><p>検出範囲と合う位置</p></td>
+<td><p>検出距離と確率、稼働状況、時間ビン</p></td>
+<td><p>Base／Complete</p></td>
+</tr>
+<tr class="row-even"><td><p>海底地形</p></td>
+<td><p>深度の記録、海面の高さ、海底の深さの分布</p></td>
+<td><p>観測した深さが許される場所</p></td>
+<td><p>深度の基準、セル内の地形、潮位の補正</p></td>
+<td><p>Complete</p></td>
+</tr>
+<tr class="row-odd"><td><p>潮汐・<code class="docutils literal notranslate"><span class="pre">healpix</span></code></p></td>
+<td><p>深度、調和定数、UTC</p></td>
+<td><p>潮位の波形と合う位置（平均水深は未知として推定）</p></td>
+<td><p>静止区間の検出、モデルの誤差、有効なサンプル数</p></td>
+<td><p>Complete の既定</p></td>
+</tr>
+<tr class="row-even"><td><p>潮汐・<code class="docutils literal notranslate"><span class="pre">pedersen</span></code></p></td>
+<td><p>深度、調和定数、UTC、セルの平均水深</p></td>
+<td><p>水深と予測潮位に合う位置（時間的に相関のある誤差を考慮した尤度（likelihood））</p></td>
+<td><p>静止区間の検出、海底地形の基準面、未調整の誤差の設定値</p></td>
+<td><p>Complete の選択肢</p></td>
+</tr>
+<tr class="row-odd"><td><p>HMM</p></td>
+<td><p>観測の重み、初期位置、移動のしやすさ</p></td>
+<td><p>時間的な位置のつながり</p></td>
+<td><p>時間間隔、σ、海域、境界、観測のモデル</p></td>
+<td><p>全体の推定の枠組み</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>対象デモの欄は、<code class="docutils literal notranslate"><span class="pre">361e9b7</span></code> の二つのノートブックのどちらで使うかを示します。<a class="reference external" href="https://github.com/pangeo-fish/pangeo-fish/blob/361e9b7/notebooks/pangeo-fish-base-demo.ipynb">Base</a>／<a class="reference external" href="https://github.com/pangeo-fish/pangeo-fish/blob/361e9b7/notebooks/pangeo-fish-complete-demo.ipynb">Complete</a>。Complete では、潮汐の方式を <code class="docutils literal notranslate"><span class="pre">tide_method</span></code>（既定は <code class="docutils literal notranslate"><span class="pre">&quot;healpix&quot;</span></code>、選択肢は <code class="docutils literal notranslate"><span class="pre">&quot;pedersen&quot;</span></code>）で切り替えます。</p>
+<p><img alt="潮汐、海底地形、音響の重みの違いを示す三つの合成例" src="../_images/observation_constraints.png" /></p>
+<p><strong>図：観測ごとに「位置に合う」の意味が異なります。</strong> 左は平均水深を自由に調整した後の潮汐波形の比較、中央は同じセル内の水深の分布から求めた「可能な深さの割合」、右は 2 km の範囲と、仮想の不完全な検出確率の比較です。すべて説明のために作った合成例で、実測データや魚の経路推定の結果ではありません。中央は考え方を単純にした例で、実際の計算そのままではありません。右の滑らかな曲線も、デモの機能や実測のレンジテストの結果を表すものではありません。</p>
+</section>
+<section id="id3">
+<h2>2. 観測の重みを掛け合わせる意味<a class="headerlink" href="#id3" title="Link to this heading">#</a></h2>
+<p>候補セル <span class="math notranslate nohighlight">\(c\)</span> に対し、温度・音響・海底地形・潮汐の重みをそれぞれ <span class="math notranslate nohighlight">\(L_T,L_A,L_B,L_H\)</span> とすると、Complete ノートブックでは次のように組み合わせます。まず四つの重みを掛け合わせ、次に時刻ごとに、全セルの合計が 1 になるよう正規化します。</p>
+<div class="math notranslate nohighlight">
+\[
+\widetilde L(c,t)=L_T(c,t)L_A(c,t)L_B(c,t)L_H(c,t),\qquad
+L(c,t)=\frac{\widetilde L(c,t)}{\sum_{c'}\widetilde L(c',t)}
+\]</div>
+<p>回収位置が与えられている場合は、最終時刻の積に回収位置の分布も掛かります。この掛け算は、各観測が互いに独立だという近似、または複数の整合性スコアの積と考えられます。</p>
+<p><strong>重みを増やすほど、位置が正しくなるとは限りません。</strong> 同じ深度記録から海底地形の項と潮汐の項を作れば、情報の重なりが残ります。<code class="docutils literal notranslate"><span class="pre">pedersen</span></code> はセルの平均水深（標準偏差 10 m）も使います。<code class="docutils literal notranslate"><span class="pre">healpix</span></code> はノートブックの設定では平均水深を窓ごとに推定して消すので、潮汐の項から絶対的な深さを除きます。ただし、共通する観測誤差や前処理まで独立になるわけではありません。</p>
+<section id="id4">
+<h3>一様・ゼロ・欠測は違う<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>一様な正の重みは、その情報では候補セルを区別しないという意味です。</p></li>
+<li><p>ゼロは、その候補を積から消します。</p></li>
+<li><p>欠測は、データが足りない状態です。掛け合わせの規則によっては、候補セルが消えることがあります。</p></li>
+</ul>
+<p>重みを空間で正規化しただけの地図は、移動のしやすさと初期位置を反映した HMM の事後分布ではありません。図の見出しには、単独の観測の重み、結合した観測の重み、フィルタ分布、平滑化分布のどれかを書いてください。</p>
+</section>
+</section>
+<section id="viterbi">
+<h2>3. 平均・最頻・Viterbi を比べる<a class="headerlink" href="#viterbi" title="Link to this heading">#</a></h2>
+<p><img alt="二つの候補領域がある HMM の合成例" src="../_images/02_hmm_summaries.png" /></p>
+<p>この図は、一般的な離散 HMM を独立に計算した合成例で、pangeo-fish の実行結果ではありません。上下の二つの候補に重みがあると、座標の平均はその間に来ます。時刻別の最頻位置は、各時刻の分布だけを見て選びます。Viterbi は、移動のしやすさも含めて、全体として最も確からしい一続きの経路を選びます。</p>
+<p>平均が候補の外や陸上に出ること、時刻別の最頻位置が飛ぶことは、一本の線だけでは見落としやすいです。実データでは、背景に平滑化分布や、魚が 95% の確率でいるセルの集まりを重ねて示してください。</p>
+<p>ノートブックでは、経路の計算の細部がフィルタ・平滑化と Viterbi で少し違います。線の違いは、平均と最頻の違いだけでは説明できないことがあります（詳しくは <a class="reference internal" href="02_hmm.html"><span class="std std-doc">HMM の章</span></a>）。</p>
+</section>
+<section id="a19124">
+<h2>4. A19124 で行う比較の設計<a class="headerlink" href="#a19124" title="Link to this heading">#</a></h2>
+<p>以下は、自分のデータで比較するときの設計例です。まず、期間、セルの番号、地球の形（WGS84）、海のセル、時間ビンをそろえた共通の領域を作ります。音響や潮汐を加えると利用できる日が変わることがあります。同じデータ範囲で比べられる実験と、範囲が変わる実験を区別してください。</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>実験</p></th>
+<th class="head"><p>使用する情報</p></th>
+<th class="head"><p>主な問い</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>A</p></td>
+<td><p>水温</p></td>
+<td><p>温度だけで見分けられる海域はどこか</p></td>
+</tr>
+<tr class="row-odd"><td><p>B</p></td>
+<td><p>水温＋音響</p></td>
+<td><p>受信記録がどの時刻・海域を絞るか</p></td>
+</tr>
+<tr class="row-even"><td><p>C</p></td>
+<td><p>水温＋音響＋海底地形</p></td>
+<td><p>深度と合わない浅い候補をどう扱うか</p></td>
+</tr>
+<tr class="row-odd"><td><p>D</p></td>
+<td><p>C＋<code class="docutils literal notranslate"><span class="pre">pedersen</span></code> 潮汐</p></td>
+<td><p>平均水深を弱い情報として含む項を加えると何が変わるか</p></td>
+</tr>
+<tr class="row-even"><td><p>E</p></td>
+<td><p>C＋<code class="docutils literal notranslate"><span class="pre">healpix</span></code> 潮汐</p></td>
+<td><p>潮位の波形の情報を加えると何が変わるか</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Complete ノートブックでは、積に入れる項（水温 <code class="docutils literal notranslate"><span class="pre">pdf</span></code>、音響 <code class="docutils literal notranslate"><span class="pre">acoustic</span></code>、海底地形 <code class="docutils literal notranslate"><span class="pre">pdf_bathy</span></code>、潮汐 <code class="docutils literal notranslate"><span class="pre">pdf_tide</span></code>）のうち、比較したい手がかりを外して実行します。実際に作られたデータの変数名は、自分で確かめてから外してください。潮汐の項は、他の項と共通のセルと日にそろえられます。</p>
+<section id="id5">
+<h3>σを固定した比較と、再推定した比較<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<p>まず同じ移動σで比べると、観測を追加した直接の効果が見やすくなります。次に、各組み合わせでσを再推定すると、観測の変更に移動のモデルがどう応じたかが分かります。両方を同じ実験として混ぜないでください。</p>
+<p>各条件で、次の項目をそろえて出力します。</p>
+<ol class="arabic simple">
+<li><p>単独の観測の重みと、それが効いているセル・時刻。</p></li>
+<li><p>統合後の重みと、各時刻に正の重みが残っているか。</p></li>
+<li><p>平滑化分布、平均・最頻・Viterbi の経路。</p></li>
+<li><p>推定したσと、探索の範囲の端に達していないか。最適化の終了状況は保存されないので、実行時の出力を記録しておきます。複数のσを同時に探す場合は、評価回数の上限（既定は 20）に達していないかも確認します。</p></li>
+<li><p>魚が 95% の確率でいるセルの集まりの面積、独立なデータに対する予測の良さ、計算時間と最大メモリ。</p></li>
+</ol>
+<p>同じ色の濃さが同じ量を表すよう、地図の凡例と尺度をそろえます。セルの最大値だけで自動的に色分けすると、鋭くなっただけの分布を改善と読み違えやすくなります。</p>
+</section>
+</section>
+<section id="id6">
+<h2>5. 不確実性を数値にする<a class="headerlink" href="#id6" title="Link to this heading">#</a></h2>
+<p>確率の大きいセルから順に足していき、合計が 0.95 以上になったところまでのセルの集まり <span class="math notranslate nohighlight">\(C_{0.95,t}\)</span> を作ると、「魚が 95% の確率でいる範囲」を定義できます。</p>
+<div class="math notranslate nohighlight">
+\[
+\sum_{c\in C_{0.95,t}}p_t(c)\ge0.95
+\]</div>
+<p>ここで <span class="math notranslate nohighlight">\(p_t(c)\)</span> は、時刻 <span class="math notranslate nohighlight">\(t\)</span> にセル <span class="math notranslate nohighlight">\(c\)</span> に魚がいる確率（平滑化分布）です。セルの面積が等しい全球格子なら、セル数とセル面積から、この範囲の面積を計算できます。ただし、海と陸が混じったセルをどう扱うか、海の面積で報告するのかセルの全面積で報告するのかは、明示してください。確率が離れた二つの海域に分かれるときは、二つの集まりのまま扱います。一つの円にまとめると、確率の低い間の領域まで含んでしまうことがあります。</p>
+<p>この範囲が狭いことは、モデルの中で確率が集中していることを示します。実際の位置が決まった割合でこの範囲に入るかどうかは、別に確かめる必要があります。観測のモデルと移動のモデルが正しいと言えるほど、この範囲を事後分布として解釈できます。</p>
+</section>
+<section id="id7">
+<h2>6. 独立した位置情報による検証<a class="headerlink" href="#id7" title="Link to this heading">#</a></h2>
+<p>音響記録を入力して推定したあと、同じ受信記録への近さだけを評価すると、その観測を再現できたかを調べることになります。独立な評価のためには、検出の一部を取っておく、独立の測位データを使う、位置が分かっている固定タグを使うなど、評価に使う情報を推定から分けます。</p>
+<p><strong>正の検出を削除するだけでは、適切に取っておいたことにならない場合があります。</strong> 検出を消すと、その時間ビンに他の検出が残らない限り、未検出として扱われ、稼働中の受信機の範囲が除外されます。取っておく受信機・時間帯については、検出と未検出の両方を推定から外し、何も情報がない状態にする必要があります。<code class="docutils literal notranslate"><span class="pre">361e9b7</span></code> の pangeo-fish には、受信機と時間帯を指定してこれを行う機能がないため、自分で設計することになります。移動σや観測の幅をデータから選ぶときも、評価に使う側のデータは使わずに決めます。</p>
+<p>受信機の検出は、魚が受信機の位置にいたという点の観測ではなく、受信範囲や検出確率を持つ観測です。取っておいた検出については、その予測確率を評価します。可能なら、次の式を使います。</p>
+<div class="math notranslate nohighlight">
+\[
+p(y^{\rm heldout}_t\mid y^{\rm train})
+=\sum_c p(y^{\rm heldout}_t\mid X_t=c)\,p(X_t=c\mid y^{\rm train})
+\]</div>
+<p>これは、推定に使ったデータ <span class="math notranslate nohighlight">\(y^{\rm train}\)</span> から求めた各セルの確率を使って、取っておいた観測 <span class="math notranslate nohighlight">\(y^{\rm heldout}_t\)</span> がどれだけ起こりやすいかを平均した値です。点の位置が得られる場合は、距離の誤差と、95% の範囲に入る割合を併せて示します。検証データの位置そのものが不確かなら、その誤差も説明してください。観測の仕方が違う検証を、一つの「精度」だけにまとめないでください。</p>
+<p>日ごとに空間で正規化した観測の重みを使うスコアは、同じ観測の構成の中で移動パラメータを比べる場合と、観測の構成そのものを変える場合とで、意味が異なります。特に、入力する項が違う実験の最適化スコアだけを並べて「最良の手法」と決めないでください。</p>
+</section>
+<section id="id8">
+<h2>7. 感度分析の順番<a class="headerlink" href="#id8" title="Link to this heading">#</a></h2>
+<p>最初に、時刻、単位、格子の対応を固定します。次に、次のものを一つずつ変えて結果を見ます。</p>
+<ul class="simple">
+<li><p>水温の誤差 <code class="docutils literal notranslate"><span class="pre">differences_std</span></code></p></li>
+<li><p>受信範囲 <code class="docutils literal notranslate"><span class="pre">receiver_buffer</span></code> と未検出の扱い</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">healpix</span></code> 潮汐の <code class="docutils literal notranslate"><span class="pre">sigma</span></code>（<code class="docutils literal notranslate"><span class="pre">tide_sigma_m</span></code>）と <code class="docutils literal notranslate"><span class="pre">min_samples</span></code>（<code class="docutils literal notranslate"><span class="pre">pedersen</span></code> の誤差の設定値は未調整）</p></li>
+<li><p>移動σの探索範囲（<code class="docutils literal notranslate"><span class="pre">maximum_speed</span></code>、<code class="docutils literal notranslate"><span class="pre">adjustment_factor</span></code>）</p></li>
+<li><p>格子のレベル <code class="docutils literal notranslate"><span class="pre">refinement_level</span></code></p></li>
+</ul>
+<p>変える幅は、機器の精度、モデルの残差、レンジテストなどから決めます。便宜的に半分や倍を試した場合は、較正された範囲ではなく、探索であると書いてください。</p>
+<p>A19124 の短い例で二つのσが得られたとしても、それだけでは、行動ごとの移動の特徴を見分けられたことにはなりません。期間と遷移の数が多いデータ、複数の個体、独立な行動情報による検証を、研究計画に加えてください。</p>
+<p>ここに書いた比較は、自分のデータで試すときの進め方の例です。文献上の実施例は<a class="reference internal" href="01_scientific_lineage.html"><span class="std std-doc">研究の系譜</span></a>に、実装ごとの設定は<a class="reference internal" href="11_parameters_versions.html"><span class="std std-doc">パラメータ表</span></a>にまとめています。</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./science"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="07_tides.html"
+       title="前のページ">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">前へ</p>
+        <p class="prev-next-title">潮汐から位置を絞る：海面高度、着底区間、調和定数</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="09_ellipsoidal_healpix.html"
+       title="次ページ">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">次へ</p>
+        <p class="prev-next-title">楕円体 HEALPix：位置・面積・解像度を区別する</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> 目次
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">1. 手法の比較表</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">2. 観測の重みを掛け合わせる意味</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">一様・ゼロ・欠測は違う</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#viterbi">3. 平均・最頻・Viterbi を比べる</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a19124">4. A19124 で行う比較の設計</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">σを固定した比較と、再推定した比較</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">5. 不確実性を数値にする</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">6. 独立した位置情報による検証</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">7. 感度分析の順番</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+著者 Pangeo-Fish プロジェクト
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

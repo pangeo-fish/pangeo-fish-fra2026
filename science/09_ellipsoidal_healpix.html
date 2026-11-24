@@ -1,0 +1,793 @@
+
+<!DOCTYPE html>
+
+
+<html lang="ja" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>楕円体 HEALPix：位置・面積・解像度を区別する &#8212; Pangeo-Fish による魚類の位置推定 - FRA 横浜ワークショップ 2026</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=6a604523" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=1cf7f4d9"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/translations.js?v=91613774"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../_static/design-tabs.js?v=fcb327ea"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'science/09_ellipsoidal_healpix';</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="再格子化と格子・時刻の整合" href="09b_regridding_alignment.html" />
+    <link rel="prev" title="手法を比較し、推定結果を検証する" href="08_comparison_validation.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="ja"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">本文へスキップ</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>トップに戻る</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="バージョン警告"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/pangeo-fish-logo.png" class="logo__image only-light" alt="Pangeo-Fish による魚類の位置推定 - FRA 横浜ワークショップ 2026 - Home"/>
+    <img src="../_static/pangeo-fish-logo.png" class="logo__image only-dark pst-js-only" alt="Pangeo-Fish による魚類の位置推定 - FRA 横浜ワークショップ 2026 - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="検索" aria-label="検索" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">検索</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Pangeo-Fish による魚類の位置推定
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">このワークショップについて</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../agenda.html">時間割</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../users-getting-started.html">事前登録（できれば 11 月 22 日まで）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pangeo-eosc.html">当日：Pangeo@EOSC の使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../jupyterlab-basics.html">JupyterLab の使い方のヒント</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pangeo と EOSC の概要</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../pangeo.html">EOSC と Pangeo コミュニティ</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Python で海洋モデルデータを扱う</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../glorys-xarray-dask-zarr-healpix.html">GLORYS で学ぶ Xarray・Dask・Zarr・HEALPix</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">pangeo-fish と GFTS による魚類の位置推定</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../pangeo-fish.html">Pangeo-Fish による魚類の位置推定</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pangeo-fish-complete.html">Pangeo-Fish による魚類の位置推定：海底地形と潮汐を加える</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gfts.html">将来の海での魚の姿：GFTS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cite.html">研究で pangeo-fish を使ったら：引用のしかた</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feedback.html">アンケート</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">科学・技術解説</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="00_guide.html">日本語の科学・技術解説を読むために</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01_scientific_lineage.html">科学的背景と先行研究の読み方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_hmm.html">HMM による位置分布と移動経路の推定</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_temperature.html">水温・深度履歴から位置の適合度を作る</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_observations_models.html">観測データと海洋モデル：時刻・単位・鉛直座標</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_acoustic.html">音響観測による位置制約：検出と非検出</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_bathymetry.html">海底地形による制約：潜れた深さとセル内の地形</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_tides.html">潮汐から位置を絞る：海面高度、着底区間、調和定数</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_comparison_validation.html">手法を比較し、推定結果を検証する</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">楕円体 HEALPix：位置・面積・解像度を区別する</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09b_regridding_alignment.html">再格子化と格子・時刻の整合</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_computing.html">Xarray・Dask・Zarrと計算の大きさ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_parameters_versions.html">実装・パラメータ・対象版の対応</a></li>
+<li class="toctree-l1"><a class="reference internal" href="12_consultation.html">個別相談：自分の魚・タグ・海域へ適用する</a></li>
+<li class="toctree-l1"><a class="reference internal" href="13_references.html">参考文献・データ出典</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">チュートリアルの先へ</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../afterword/resources.html">参考資料</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../afterword/pythia.html">Project Pythia</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../afterword/edsbook.html">Environmental Data Science Book</a></li>
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/pangeo-fish/pangeo-fish-fra2026" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="ソースリポジトリ"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/pangeo-fish/pangeo-fish-fra2026/issues/new?title=Issue%20on%20page%20%2Fscience/09_ellipsoidal_healpix.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="問題を報告"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="このページをダウンロード">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/science/09_ellipsoidal_healpix.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="ソースファイルをダウンロード"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="PDFに印刷"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="全画面モード"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="ライト"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="ダーク"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="検索" aria-label="検索" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>楕円体 HEALPix：位置・面積・解像度を区別する</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> 目次 </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">この章で理解すること</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">1. HEALPix がそろえるもの</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">確率質量と確率密度</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">2. 地球の形と三つの緯度</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">3. なぜ等積緯度で面積がそろうのか</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">4. 座標の変換と、位置のずれを区別する</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#levelnside">5. level、nside、セル数、代表長</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#nested-id">6. NESTED ID はセルの識別子</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pangeo-fish">7. pangeo-fish は楕円体をどう扱うか</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">8. 実習中に確認する最小例</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">付録：等積緯度の導出（読み飛ばしてよい）</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="healpix">
+<h1>楕円体 HEALPix：位置・面積・解像度を区別する<a class="headerlink" href="#healpix" title="Link to this heading">#</a></h1>
+<section id="id1">
+<h2>この章で理解すること<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<p>pangeo-fish の位置推定では、魚の候補位置を有限個のセルに分け、各時刻に各セルがどの程度もっともらしいかを計算します。HEALPix は、この候補位置を表す空間格子です。タグの水温や潮汐から位置を推定する方法は観測モデルの章で扱い、この章では「位置を、地球のどんな形の上の、どのセルとして表すか」を整理します。ワークショップの格子はすべて WGS84 です。pangeo-fish での扱いは第7節にまとめています。</p>
+<p>この区別は沿岸で特に大切です。受信局、海底地形、水温場、推定経路が同じ緯度・経度を表しているつもりでも、格子の作り方や緯度の解釈が食い違うと、同じセル番号を照合しても同じ場所を指しません。</p>
+<p>この章の内容は、HEALPix の原論文、緯度の変換に関する Karney の解説、GRID4EARTH による楕円体への適用に基づきます。<span class="bibtex-citation" id="id2">[<a class="reference internal" href="../cite.html#id62" title="K. M. Górski, E. Hivon, A. J. Banday, B. D. Wandelt, F. K. Hansen, M. Reinecke, and M. Bartelmann. HEALPix: a framework for high-resolution discretization and fast analysis of data distributed on the sphere. The Astrophysical Journal, 622(2):759–771, 2005. URL: https://arxiv.org/abs/astro-ph/0409513, doi:10.1086/427976.">GorskiHB+05</a>, <a class="reference internal" href="../cite.html#id64" title="Charles F. F. Karney. On auxiliary latitudes. Survey Review, 56(395):165–180, 2024. First published online in 2023; bibliographic year here follows the final journal volume (2024). URL: https://arxiv.org/abs/2212.05818, doi:10.1080/00396265.2023.2217604.">Kar24</a>, <a class="reference internal" href="../cite.html#id65" title="Tina Odaka, Jean-Marc Delouis, Justus Magin, Camille Gueguen, Etienne Cap, Anne Fouilloux, Benoit Bovy, Pablo Richard, Wai Tik Chan, Kajetan Marcin Chrapkiewicz, and Alexander Kmoch. Grid4Earth: an open-source python ecosystem for geospatial data integration using an ellipsoidal HEALPix DGGS. The International Archives of the Photogrammetry, Remote Sensing and Spatial Information Sciences, L-4/W1-2026:189–195, 2026. URL: https://isprs-archives.copernicus.org/articles/L-4-W1-2026/189/2026/, doi:10.5194/isprs-archives-L-4-W1-2026-189-2026.">ODM+26</a>]</span></p>
+</section>
+<section id="id3">
+<h2>1. HEALPix がそろえるもの<a class="headerlink" href="#id3" title="Link to this heading">#</a></h2>
+<p>HEALPix は Hierarchical Equal Area isoLatitude Pixelization の略です。標準的な格子は12個の基本セルから始まり、階層的に細分化できます。同じ解像度のセルは面積が等しく、セルの中心は同じ緯度の環に並びます。セルは曲線で囲まれた四辺形で、場所によって形が異なります。すべての辺の長さが同じという意味ではありません。<span class="bibtex-citation" id="id4">[<a class="reference internal" href="../cite.html#id62" title="K. M. Górski, E. Hivon, A. J. Banday, B. D. Wandelt, F. K. Hansen, M. Reinecke, and M. Bartelmann. HEALPix: a framework for high-resolution discretization and fast analysis of data distributed on the sphere. The Astrophysical Journal, 622(2):759–771, 2005. URL: https://arxiv.org/abs/astro-ph/0409513, doi:10.1086/427976.">GorskiHB+05</a>]</span> 下の図は、WGS84 楕円体上の HEALPix 格子の例です。</p>
+<p><img alt="WGS84楕円体上のHEALPix格子と、一つのセルを段階的に細分化する様子" src="../_images/healpix_nested_globe.png" /></p>
+<p><strong>図：WGS84 楕円体上の HEALPix セルと、入れ子の細分化の例です。</strong> 太い線で囲まれた12個の基本セルのうち一つが、4分割を繰り返して細かいセルに分けられています。魚の推定結果ではなく、格子の形を示す説明図です。</p>
+<p>格子を細かくすることと、観測の情報を増やすことは別です。例えば海洋モデルが十分に表現できない沿岸の水温の構造は、推定格子を細かくしても復元されません。細かい格子では、同じ情報をより多くのセルに配分するだけになる場合もあります。解像度は、海岸の形の表現、計算にかかる費用、結果が格子の細かさに左右される程度を合わせて決めます。</p>
+<section id="id5">
+<h3>確率質量と確率密度<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<p>セル <span class="math notranslate nohighlight">\(c\)</span> の領域を <span class="math notranslate nohighlight">\(A_c\)</span>、連続した空間での位置の密度を <span class="math notranslate nohighlight">\(p(x)\)</span> とすると、魚がそのセルにいる確率は</p>
+<div class="math notranslate nohighlight">
+\[
+P_c=\int_{A_c}p(x)\,\mathrm dA.
+\]</div>
+<p>です。これは面積を持つ領域に対する<strong>確率質量</strong>（セル全体としての確率）です。小さいセルの中で密度がほぼ一定なら <span class="math notranslate nohighlight">\(P_c\simeq p(x_c)|A_c|\)</span> となります。同じレベルの等積セルでは、全セルに同じ確率質量を置くことが、全域で一様な密度に対応します。</p>
+<p>ただし、沿岸のセルの一部だけが海である場合、「セル全体の面積」と「魚がいられる海の面積」は違います。海の割合 <span class="math notranslate nohighlight">\(f_c\)</span> を使って海の上で一様な事前の密度を表したければ、<span class="math notranslate nohighlight">\(P_c\propto f_c|A_c|\)</span> が対応します。一方、閾値でセルを採用・除外する方法は、海の割合を 0 か 1 の採否に置き換える、別のモデル化です。<strong>等積格子だからといって、海岸の扱いが自動的に適切になるとは限りません。</strong></p>
+</section>
+</section>
+<section id="id6">
+<h2>2. 地球の形と三つの緯度<a class="headerlink" href="#id6" title="Link to this heading">#</a></h2>
+<p>地球は完全な球ではなく、極方向に少しつぶれた楕円体です。WGS84 はその形を定めた標準的な楕円体で、GPS などで使われる緯度・経度は WGS84 の緯度・経度です。</p>
+<p>この楕円体の上で面積のそろったセルを作るために、HEALPix の内部では、通常の緯度とは別の補助的な緯度（<strong>等積緯度</strong>）を使います。これは内部の計算であり、利用者が意識する必要はありません。ただし、緯度には次の三つがあることを知っておくと、後の節の注意が分かりやすくなります。</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>記号</p></th>
+<th class="head"><p>名前</p></th>
+<th class="head"><p>意味</p></th>
+<th class="head"><p>この教材での役割</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\varphi\)</span></p></td>
+<td><p>測地緯度（geodetic latitude）</p></td>
+<td><p>地表の面に垂直な線と赤道面のなす角。地図や GPS の緯度</p></td>
+<td><p>WGS84 の緯度・経度として受け渡す</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\theta\)</span></p></td>
+<td><p>地心緯度（geocentric latitude）</p></td>
+<td><p>地球の中心と地表の点を結ぶ線と赤道面のなす角</p></td>
+<td><p>参考（面積の計算には使えない）</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\xi\)</span></p></td>
+<td><p>等積緯度（authalic latitude）</p></td>
+<td><p>緯度帯の面積が保たれるように定めた補助の緯度</p></td>
+<td><p>楕円体上の等積 HEALPix を作る内部計算</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>これらの定義と変換式は <code class="docutils literal notranslate"><span class="pre">healpix-geo</span></code> の解説と Karney に詳しく書かれています。文献によって記号の使い方が異なるので、記号だけで判断しないようにします。<span class="bibtex-citation" id="id7">[<a class="reference internal" href="../cite.html#id64" title="Charles F. F. Karney. On auxiliary latitudes. Survey Review, 56(395):165–180, 2024. First published online in 2023; bibliographic year here follows the final journal volume (2024). URL: https://arxiv.org/abs/2212.05818, doi:10.1080/00396265.2023.2217604.">Kar24</a>, <a class="reference internal" href="../cite.html#id69" title="GRID4EARTH. Reference system – healpix-geo documentation. Accessed 23 November 2026. URL: https://healpix-geo.readthedocs.io/en/latest/reference-system.html.">GRID4EARTHa</a>]</span></p>
+<p>地心緯度は測地緯度から簡単な式で求められますが、その式は面積を保つ条件から導いたものではありません。面積をそろえる場面で、等積緯度の代わりに地心緯度を使うことはできません。</p>
+<p>WGS84 の長半径 <span class="math notranslate nohighlight">\(a=6\,378\,137\ \mathrm m\)</span>、扁平率 <span class="math notranslate nohighlight">\(1/f=298.257223563\)</span> を使って計算すると、測地緯度45度に対して次の値になります。</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>緯度の種類</p></th>
+<th class="head text-right"><p>値</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>測地緯度 <span class="math notranslate nohighlight">\(\varphi\)</span></p></td>
+<td class="text-right"><p><span class="math notranslate nohighlight">\(45.00000000^\circ\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>等積緯度 <span class="math notranslate nohighlight">\(\xi\)</span></p></td>
+<td class="text-right"><p><span class="math notranslate nohighlight">\(44.87170287^\circ\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p>地心緯度 <span class="math notranslate nohighlight">\(\theta\)</span></p></td>
+<td class="text-right"><p><span class="math notranslate nohighlight">\(44.80757678^\circ\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id8">
+<h2>3. なぜ等積緯度で面積がそろうのか<a class="headerlink" href="#id8" title="Link to this heading">#</a></h2>
+<p>楕円体では、緯度が同じだけ違っても、帯の面積は場所によって変わります。等積緯度は、赤道からの帯の面積が <span class="math notranslate nohighlight">\(\sin\xi\)</span> に比例するように定めた緯度です。そのため、等積緯度で等間隔に区切れば、面積の等しい帯になります。経度はこの変換で変わりません。GRID4EARTH はこの考え方を HEALPix に使っています。<span class="bibtex-citation" id="id9">[<a class="reference internal" href="../cite.html#id65" title="Tina Odaka, Jean-Marc Delouis, Justus Magin, Camille Gueguen, Etienne Cap, Anne Fouilloux, Benoit Bovy, Pablo Richard, Wai Tik Chan, Kajetan Marcin Chrapkiewicz, and Alexander Kmoch. Grid4Earth: an open-source python ecosystem for geospatial data integration using an ellipsoidal HEALPix DGGS. The International Archives of the Photogrammetry, Remote Sensing and Spatial Information Sciences, L-4/W1-2026:189–195, 2026. URL: https://isprs-archives.copernicus.org/articles/L-4-W1-2026/189/2026/, doi:10.5194/isprs-archives-L-4-W1-2026-189-2026.">ODM+26</a>]</span> 導出は章末の付録に載せています。読み飛ばしても、以降の内容には影響しません。</p>
+<p>保たれるのは<strong>面積</strong>だけです。距離、方位、角度までが保たれるわけではありません。</p>
+</section>
+<section id="id10">
+<h2>4. 座標の変換と、位置のずれを区別する<a class="headerlink" href="#id10" title="Link to this heading">#</a></h2>
+<p>測地緯度 <span class="math notranslate nohighlight">\(\varphi\)</span> と等積緯度 <span class="math notranslate nohighlight">\(\xi\)</span> を正しく行き来している限り、観測点の位置は動きません。同じ位置を、計算用の別の座標で表しているだけです。</p>
+<p>問題になるのは、<span class="math notranslate nohighlight">\(\xi\)</span> の数値を <span class="math notranslate nohighlight">\(\varphi\)</span> として地図へ渡すなど、<strong>数値の意味を取り違えたとき</strong>です。上の45度の例では、二つの数値を同じ経度の測地緯度として読み直すと、南北方向に約14.26 kmのずれになります。これは計算例であり、すべての魚の経路が14 kmずれる、あるいは楕円体を使うと推定誤差が14 km改善する、という結果ではありません。</p>
+<p>同じ整数のセル番号でも、格子の作り方（地球の形）が違えば、指す場所が違います。別の格子で作られたセルIDを受け取るときは、この点に注意してください。また、データの位置の対応と、観測誤差による魚の位置の不確実性は、別の問題として評価します。</p>
+</section>
+<section id="levelnside">
+<h2>5. level、nside、セル数、代表長<a class="headerlink" href="#levelnside" title="Link to this heading">#</a></h2>
+<p>この教材の階層レベルを <span class="math notranslate nohighlight">\(L\)</span> とすると、</p>
+<div class="math notranslate nohighlight">
+\[
+N_{\mathrm{side}}=2^L,\qquad
+N_{\mathrm{pix}}=12N_{\mathrm{side}}^2=12\times4^L.
+\]</div>
+<p>セルの面積は WGS84 楕円体の全表面積を <span class="math notranslate nohighlight">\(12\times4^L\)</span> 等分したもので、代表長はその正方形に換算した辺の長さ <span class="math notranslate nohighlight">\(\ell=\sqrt{A_{\mathrm{cell}}}\)</span> とします。セル数の式は HEALPix の構成から、以下の数値は WGS84 の定数から求めました。<span class="bibtex-citation" id="id11">[<a class="reference internal" href="../cite.html#id62" title="K. M. Górski, E. Hivon, A. J. Banday, B. D. Wandelt, F. K. Hansen, M. Reinecke, and M. Bartelmann. HEALPix: a framework for high-resolution discretization and fast analysis of data distributed on the sphere. The Astrophysical Journal, 622(2):759–771, 2005. URL: https://arxiv.org/abs/astro-ph/0409513, doi:10.1086/427976.">GorskiHB+05</a>]</span></p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-right"><p>level <span class="math notranslate nohighlight">\(L\)</span></p></th>
+<th class="head text-right"><p>nside</p></th>
+<th class="head text-right"><p>全球セル数</p></th>
+<th class="head text-right"><p>セル面積（km²）</p></th>
+<th class="head text-right"><p>代表長 <span class="math notranslate nohighlight">\(\sqrt{A_{\mathrm{cell}}}\)</span>（km）</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-right"><p>9</p></td>
+<td class="text-right"><p>512</p></td>
+<td class="text-right"><p>3,145,728</p></td>
+<td class="text-right"><p>162.1455</p></td>
+<td class="text-right"><p>12.7336</p></td>
+</tr>
+<tr class="row-odd"><td class="text-right"><p>10</p></td>
+<td class="text-right"><p>1,024</p></td>
+<td class="text-right"><p>12,582,912</p></td>
+<td class="text-right"><p>40.5364</p></td>
+<td class="text-right"><p>6.3668</p></td>
+</tr>
+<tr class="row-even"><td class="text-right"><p>11</p></td>
+<td class="text-right"><p>2,048</p></td>
+<td class="text-right"><p>50,331,648</p></td>
+<td class="text-right"><p>10.1341</p></td>
+<td class="text-right"><p>3.1834</p></td>
+</tr>
+<tr class="row-odd"><td class="text-right"><p>12</p></td>
+<td class="text-right"><p>4,096</p></td>
+<td class="text-right"><p>201,326,592</p></td>
+<td class="text-right"><p>2.5335</p></td>
+<td class="text-right"><p>1.5917</p></td>
+</tr>
+<tr class="row-even"><td class="text-right"><p>13</p></td>
+<td class="text-right"><p>8,192</p></td>
+<td class="text-right"><p>805,306,368</p></td>
+<td class="text-right"><p>0.6334</p></td>
+<td class="text-right"><p>0.7959</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>level を1増やすと、面積は4分の1、代表長は2分の1になります。配布デモのコメントにある「約6.4 km」「約1.6 km」は、この代表長を丸めた値です。これは同じ面積の正方形の辺の長さに当たる目安で、実際のセルの辺の長さ、受信の範囲、魚の測位誤差、海洋モデルの実効的な解像度を表す値ではありません。</p>
+<p>例えば level 10 で放流位置の標準偏差を約0.64 km相当に設定しても、候補位置は約6.4 kmを代表長とする離散的なセルです。狭い誤差の分布を格子がどう表しているか、結果がセルの割り当て方に左右されないかを確認してください。</p>
+</section>
+<section id="nested-id">
+<h2>6. NESTED ID はセルの識別子<a class="headerlink" href="#nested-id" title="Link to this heading">#</a></h2>
+<p>HEALPix のセル番号の付け方には RING と NESTED などがあります。同じ格子でも番号の付け方が違えば、整数の意味は違います。NESTED では、level <span class="math notranslate nohighlight">\(L\)</span> のセル番号 <span class="math notranslate nohighlight">\(p\)</span> の4個の子は、level <span class="math notranslate nohighlight">\(L+1\)</span> で <span class="math notranslate nohighlight">\(4p,4p+1,4p+2,4p+3\)</span> になります。親の番号は整数の割り算 <span class="math notranslate nohighlight">\(p_{\mathrm{child}}//4\)</span> で得られます。<span class="bibtex-citation" id="id12">[<a class="reference internal" href="../cite.html#id68" title="HEALPix Collaboration. Geometric and algebraic properties of HEALPix. 2024. The HEALPix Primer, version 3.83, 13 November 2024; accessed 23 November 2026. URL: https://healpix.sourceforge.io/html/intro_Geometric_Algebraic_Propert.htm.">HEALPixCollaboration24</a>]</span></p>
+<p>この性質は、細かいセルを親のセルにまとめるときに便利です。ただし、海のセルだけを取り出したデータでは、配列の0番目が全球のセル0を意味するとは限りません。また、番号が近いセルが地図上で隣り合っているとは限りません。セルIDを並べただけで、海岸を越えない経路が得られるわけでもありません。</p>
+<p>データを照合するときは、少なくとも次をひと組として扱います。</p>
+<ul class="simple">
+<li><p>HEALPix の格子の定義</p></li>
+<li><p>level、または nside</p></li>
+<li><p>NESTED／RING などの番号の付け方</p></li>
+<li><p>地球の形</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cells</span></code> に保存された実際のセルID</p></li>
+</ul>
+<p>DGGS（離散的な格子で地球上の位置を表す枠組み）は、セル識別子で空間を指す仕組みの総称であり、特定の整数配列だけを指す名前ではありません。概念モデルは OGC Topic 21、Web API は別の OGC API – DGGS 文書で扱われており、この二つは別のものです。<span class="bibtex-citation" id="id13">[<a class="reference internal" href="../cite.html#id66" title="Open Geospatial Consortium. Topic 21 – discrete global grid systems – part 1 core reference system and operations and equal area earth reference system. Abstract Specification Topic 20-040r3, Open Geospatial Consortium, 2021. Version 2.0.0, published 23 September 2021. URL: https://docs.ogc.org/as/20-040r3/20-040r3.html, doi:10.62973/20-040r3.">OpenGConsortium21</a>, <a class="reference internal" href="../cite.html#id67" title="Open Geospatial Consortium. OGC API – discrete global grid systems – part 1: core. Technical Report 21-038r1, Open Geospatial Consortium, 2025. Published 3 October 2025. URL: https://docs.ogc.org/is/21-038r1/21-038r1.html.">OpenGConsortium25</a>]</span></p>
+</section>
+<section id="pangeo-fish">
+<h2>7. pangeo-fish は楕円体をどう扱うか<a class="headerlink" href="#pangeo-fish" title="Link to this heading">#</a></h2>
+<p>ワークショップの設定では、格子の作成と、水温・音響・海底地形・潮汐の計算がすべて WGS84 で行われます。設定セルの <code class="docutils literal notranslate"><span class="pre">ellipsoid</span> <span class="pre">=</span> <span class="pre">&quot;WGS84&quot;</span></code> を変える必要はありません。結果の保存先も WGS84 用のフォルダです。Complete デモで使う潮汐モデル FES2022b も、WGS84 の格子だけを受け付けます。</p>
+<p>pangeo-fish は、格子の定義（格子の名前、level、番号の付け方、<code class="docutils literal notranslate"><span class="pre">ellipsoid</span></code>）をデータと一緒に保存し、読み戻しても保たれるようにしています。また、データを別の格子に移したり結合したりするとき、これらが食い違っていればエラーにします。</p>
+<p>一方、魚の移動の距離は近似で計算しています。二つのセルの中心の間の距離を、楕円体の上の正確な最短距離ではなく、地球の中心から見た角度をもとに求めています。研究で距離の誤差が重要なら、対象の海域と移動の大きさで、近似と正確な距離を別に比べてください。</p>
+</section>
+<section id="id14">
+<h2>8. 実習中に確認する最小例<a class="headerlink" href="#id14" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">healpix-geo</span></code> の <code class="docutils literal notranslate"><span class="pre">nested.lonlat_to_healpix</span></code> は、経度と緯度（度）を受け取り、<code class="docutils literal notranslate"><span class="pre">depth</span></code>（level）と <code class="docutils literal notranslate"><span class="pre">ellipsoid</span></code> を指定してセルIDを返します。pangeo-fish もこの関数を、<code class="docutils literal notranslate"><span class="pre">ellipsoid</span></code> を明示して呼んでいます。<span class="bibtex-citation" id="id15">[<a class="reference internal" href="../cite.html#id70" title="GRID4EARTH. Healpix_geo.nested.lonlat_to_healpix – api documentation. Accessed 23 November 2026. URL: https://healpix-geo.readthedocs.io/en/latest/generated/healpix_geo.nested.lonlat_to_healpix.html.">GRID4EARTHb</a>]</span></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">healpix_geo.nested</span><span class="w"> </span><span class="kn">import</span> <span class="n">lonlat_to_healpix</span>
+
+<span class="c1"># 入力は WGS84 の測地緯度（通常の緯度）。</span>
+<span class="c1"># 等積緯度へ自分で変換してから渡すと、変換が二重にかかってしまう。</span>
+<span class="n">longitude</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">139.7</span><span class="p">,</span> <span class="mf">142.0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float64"</span><span class="p">)</span>
+<span class="n">latitude</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">35.0</span><span class="p">,</span> <span class="mf">40.0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float64"</span><span class="p">)</span>
+
+<span class="n">cell_ids</span> <span class="o">=</span> <span class="n">lonlat_to_healpix</span><span class="p">(</span>
+    <span class="n">longitude</span><span class="p">,</span> <span class="n">latitude</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">ellipsoid</span><span class="o">=</span><span class="s2">"WGS84"</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>これは書き方を示す例です。実習のノートブックでは設定済みなので、自分で書く必要はありません。</p>
+</section>
+<section id="id16">
+<h2>付録：等積緯度の導出（読み飛ばしてよい）<a class="headerlink" href="#id16" title="Link to this heading">#</a></h2>
+<p>測地緯度 <span class="math notranslate nohighlight">\(\varphi\)</span>、経度 <span class="math notranslate nohighlight">\(\lambda\)</span> の楕円体上の面積要素は、第一離心率の二乗 <span class="math notranslate nohighlight">\(e^2=f(2-f)\)</span> を使って</p>
+<div class="math notranslate nohighlight">
+\[
+\mathrm dA
+=\frac{a^2(1-e^2)\cos\varphi}
+       {(1-e^2\sin^2\varphi)^2}
+  \,\mathrm d\varphi\,\mathrm d\lambda
+\]</div>
+<p>と書けます。次の関数を定義します。</p>
+<div class="math notranslate nohighlight">
+\[
+q(\varphi)
+=(1-e^2)\left[
+\frac{\sin\varphi}{1-e^2\sin^2\varphi}
+-\frac{1}{2e}\log\left(
+\frac{1-e\sin\varphi}{1+e\sin\varphi}\right)
+\right],
+\qquad q_p=q(\pi/2).
+\]</div>
+<p>微分すると</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\mathrm dq}{\mathrm d\varphi}
+=\frac{2(1-e^2)\cos\varphi}
+{(1-e^2\sin^2\varphi)^2}
+\]</div>
+<p>となり、面積要素は <span class="math notranslate nohighlight">\(\mathrm dA=\tfrac{a^2}{2}\,\mathrm dq\,\mathrm d\lambda\)</span> と書き換えられます。したがって、赤道から緯度 <span class="math notranslate nohighlight">\(\varphi\)</span> までを全経度にわたって積分した帯の面積は <span class="math notranslate nohighlight">\(\pi a^2 q(\varphi)\)</span>、楕円体の全表面積は <span class="math notranslate nohighlight">\(2\pi a^2 q_p\)</span> です。</p>
+<p>等積緯度 <span class="math notranslate nohighlight">\(\xi\)</span> は</p>
+<div class="math notranslate nohighlight">
+\[
+\sin\xi=\frac{q(\varphi)}{q_p}
+\]</div>
+<p>で定めます。帯の面積は <span class="math notranslate nohighlight">\(q(\varphi)\)</span> に比例するので <span class="math notranslate nohighlight">\(\sin\xi\)</span> にも比例し、<span class="math notranslate nohighlight">\(\xi\)</span> で区切れば面積がそろいます。高精度な変換方法は Karney を参照してください。<span class="bibtex-citation" id="id17">[<a class="reference internal" href="../cite.html#id64" title="Charles F. F. Karney. On auxiliary latitudes. Survey Review, 56(395):165–180, 2024. First published online in 2023; bibliographic year here follows the final journal volume (2024). URL: https://arxiv.org/abs/2212.05818, doi:10.1080/00396265.2023.2217604.">Kar24</a>]</span></p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./science"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="08_comparison_validation.html"
+       title="前のページ">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">前へ</p>
+        <p class="prev-next-title">手法を比較し、推定結果を検証する</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="09b_regridding_alignment.html"
+       title="次ページ">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">次へ</p>
+        <p class="prev-next-title">再格子化と格子・時刻の整合</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> 目次
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">この章で理解すること</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">1. HEALPix がそろえるもの</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">確率質量と確率密度</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">2. 地球の形と三つの緯度</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">3. なぜ等積緯度で面積がそろうのか</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">4. 座標の変換と、位置のずれを区別する</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#levelnside">5. level、nside、セル数、代表長</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#nested-id">6. NESTED ID はセルの識別子</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pangeo-fish">7. pangeo-fish は楕円体をどう扱うか</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">8. 実習中に確認する最小例</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">付録：等積緯度の導出（読み飛ばしてよい）</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+著者 Pangeo-Fish プロジェクト
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

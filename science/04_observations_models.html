@@ -1,0 +1,636 @@
+
+<!DOCTYPE html>
+
+
+<html lang="ja" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>観測データと海洋モデル：時刻・単位・鉛直座標 &#8212; Pangeo-Fish による魚類の位置推定 - FRA 横浜ワークショップ 2026</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=6a604523" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=1cf7f4d9"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/translations.js?v=91613774"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../_static/design-tabs.js?v=fcb327ea"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'science/04_observations_models';</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="音響観測による位置制約：検出と非検出" href="05_acoustic.html" />
+    <link rel="prev" title="水温・深度履歴から位置の適合度を作る" href="03_temperature.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="ja"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">本文へスキップ</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>トップに戻る</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="バージョン警告"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/pangeo-fish-logo.png" class="logo__image only-light" alt="Pangeo-Fish による魚類の位置推定 - FRA 横浜ワークショップ 2026 - Home"/>
+    <img src="../_static/pangeo-fish-logo.png" class="logo__image only-dark pst-js-only" alt="Pangeo-Fish による魚類の位置推定 - FRA 横浜ワークショップ 2026 - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="検索" aria-label="検索" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">検索</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Pangeo-Fish による魚類の位置推定
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">このワークショップについて</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../agenda.html">時間割</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../users-getting-started.html">事前登録（できれば 11 月 22 日まで）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pangeo-eosc.html">当日：Pangeo@EOSC の使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../jupyterlab-basics.html">JupyterLab の使い方のヒント</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pangeo と EOSC の概要</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../pangeo.html">EOSC と Pangeo コミュニティ</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Python で海洋モデルデータを扱う</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../glorys-xarray-dask-zarr-healpix.html">GLORYS で学ぶ Xarray・Dask・Zarr・HEALPix</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">pangeo-fish と GFTS による魚類の位置推定</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../pangeo-fish.html">Pangeo-Fish による魚類の位置推定</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pangeo-fish-complete.html">Pangeo-Fish による魚類の位置推定：海底地形と潮汐を加える</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gfts.html">将来の海での魚の姿：GFTS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cite.html">研究で pangeo-fish を使ったら：引用のしかた</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feedback.html">アンケート</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">科学・技術解説</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="00_guide.html">日本語の科学・技術解説を読むために</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01_scientific_lineage.html">科学的背景と先行研究の読み方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_hmm.html">HMM による位置分布と移動経路の推定</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_temperature.html">水温・深度履歴から位置の適合度を作る</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">観測データと海洋モデル：時刻・単位・鉛直座標</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_acoustic.html">音響観測による位置制約：検出と非検出</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_bathymetry.html">海底地形による制約：潜れた深さとセル内の地形</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_tides.html">潮汐から位置を絞る：海面高度、着底区間、調和定数</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_comparison_validation.html">手法を比較し、推定結果を検証する</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_ellipsoidal_healpix.html">楕円体 HEALPix：位置・面積・解像度を区別する</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09b_regridding_alignment.html">再格子化と格子・時刻の整合</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_computing.html">Xarray・Dask・Zarrと計算の大きさ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_parameters_versions.html">実装・パラメータ・対象版の対応</a></li>
+<li class="toctree-l1"><a class="reference internal" href="12_consultation.html">個別相談：自分の魚・タグ・海域へ適用する</a></li>
+<li class="toctree-l1"><a class="reference internal" href="13_references.html">参考文献・データ出典</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">チュートリアルの先へ</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../afterword/resources.html">参考資料</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../afterword/pythia.html">Project Pythia</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../afterword/edsbook.html">Environmental Data Science Book</a></li>
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/pangeo-fish/pangeo-fish-fra2026" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="ソースリポジトリ"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/pangeo-fish/pangeo-fish-fra2026/issues/new?title=Issue%20on%20page%20%2Fscience/04_observations_models.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="問題を報告"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="このページをダウンロード">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/science/04_observations_models.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="ソースファイルをダウンロード"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="PDFに印刷"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="全画面モード"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="ライト"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="ダーク"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="検索" aria-label="検索" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>観測データと海洋モデル：時刻・単位・鉛直座標</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> 目次 </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">1. 入力を整理する</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#utc">2. UTCとモデルの時間ビン</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pressure">3. <code class="docutils literal notranslate"><span class="pre">pressure</span></code>という列名を水深の単位と取り違えない</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">4. 鉛直座標と海面高度</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ibiglorys">5. IBIとGLORYSを使い分ける</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">6. 欠測、ゼロ、海陸マスク</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>観測データと海洋モデル：時刻・単位・鉛直座標<a class="headerlink" href="#id1" title="Link to this heading">#</a></h1>
+<p>位置推定を始める前に、タグのデータと環境データが同じ物理量を比べているかを確認します。同じ名前の列があっても、時刻の基準、圧力と水深、海面と海底の基準面が同じとは限りません。</p>
+<section id="id2">
+<h2>1. 入力を整理する<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>入力</p></th>
+<th class="head"><p>科学的な役割</p></th>
+<th class="head"><p>確認する情報</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>タグの温度・圧力・深度</p></td>
+<td><p>魚が経験した環境</p></td>
+<td><p>単位、校正、記録間隔、時刻ずれ、欠測、センサー位置</p></td>
+</tr>
+<tr class="row-odd"><td><p>放流・再捕・死亡等のイベント</p></td>
+<td><p>既知位置に関する情報</p></td>
+<td><p>イベント種別、緯度経度、位置と時刻の不確かさ</p></td>
+</tr>
+<tr class="row-even"><td><p>音響検出</p></td>
+<td><p>受信機付近にいた情報</p></td>
+<td><p>タグID、受信機ID、受信時刻、誤検出処理</p></td>
+</tr>
+<tr class="row-odd"><td><p>受信機設置記録</p></td>
+<td><p>未検出を解釈する条件</p></td>
+<td><p>設置・回収、停止、移設、受信範囲の試験</p></td>
+</tr>
+<tr class="row-even"><td><p>海洋モデル</p></td>
+<td><p>温度、海面高度、鉛直座標</p></td>
+<td><p>変数の定義、時刻の意味、時間境界、海陸マスク</p></td>
+</tr>
+<tr class="row-odd"><td><p>海底地形</p></td>
+<td><p>潜れる深さの制約</p></td>
+<td><p>鉛直基準面、格子間隔、元の測量情報、符号</p></td>
+</tr>
+<tr class="row-even"><td><p>潮汐調和定数</p></td>
+<td><p>潮位変動の予測</p></td>
+<td><p>振幅単位、位相規約、時刻基準、分潮、版</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>上の表は、データを用意するときの確認項目です。ノートブックが受け取る列名やイベント名は、pangeo-fish の版（<code class="docutils literal notranslate"><span class="pre">361e9b7</span></code>）の入力形式に合わせます。<code class="docutils literal notranslate"><span class="pre">docs/format.md</span></code> では、<code class="docutils literal notranslate"><span class="pre">dst.csv</span></code> は <code class="docutils literal notranslate"><span class="pre">time</span></code>・<code class="docutils literal notranslate"><span class="pre">temperature</span></code>・<code class="docutils literal notranslate"><span class="pre">pressure</span></code> の列、<code class="docutils literal notranslate"><span class="pre">tagging_events.csv</span></code> は <code class="docutils literal notranslate"><span class="pre">event_name</span></code>・<code class="docutils literal notranslate"><span class="pre">time</span></code>・<code class="docutils literal notranslate"><span class="pre">latitude</span></code>・<code class="docutils literal notranslate"><span class="pre">longitude</span></code> の列、<code class="docutils literal notranslate"><span class="pre">acoustic.csv</span></code> は <code class="docutils literal notranslate"><span class="pre">deployment_id</span></code> と <code class="docutils literal notranslate"><span class="pre">time</span></code> を必須とします。<code class="docutils literal notranslate"><span class="pre">stations.csv</span></code> は受信機の設置・回収の時刻と位置（<code class="docutils literal notranslate"><span class="pre">deploy_*</span></code>、<code class="docutils literal notranslate"><span class="pre">recover_*</span></code>）を持ちます。位置の手がかりに使われるのは放流（<code class="docutils literal notranslate"><span class="pre">release</span></code>）と死亡（<code class="docutils literal notranslate"><span class="pre">fish_death</span></code>）の行で、再捕（<code class="docutils literal notranslate"><span class="pre">recapture</span></code>）の行は使われません。<code class="docutils literal notranslate"><span class="pre">fish_death</span></code> の緯度経度が <code class="docutils literal notranslate"><span class="pre">NA</span></code> なら、終端位置の制約は作られません。</p>
+</section>
+<section id="utc">
+<h2>2. UTCとモデルの時間ビン<a class="headerlink" href="#utc" title="Link to this heading">#</a></h2>
+<p>タグの10分値、潮汐の予測値（<code class="docutils literal notranslate"><span class="pre">healpix</span></code> 方式は1時間平均、<code class="docutils literal notranslate"><span class="pre">pedersen</span></code> 方式は10分サンプルのまま比較）、水温の日平均値は、それぞれ時間の刻みが異なります。タグの値をどの日・どのモデル時間区間に割り当てるかで、比較される環境が変わります。</p>
+<p><code class="docutils literal notranslate"><span class="pre">compute_diff</span></code>は、参照モデルの時間区間（各時刻が表す時間の始まりと終わり）に従ってタグの値をグループ化します。日付のラベルだけを見て、午前0時の瞬間の値とは解釈しません。日本時間で記録した観測をUTCに直す場合は、元のタイムゾーンと変換の履歴を残してください。潮汐では位相の合わせ方にも影響します。</p>
+<p>同じ日の平均温度でも、魚は移動し、深さを変えています。日ごとの重みは、「その一日を一つの位置で代表させる」近似を含みます。この近似が妥当かどうかは、記録間隔、魚の移動距離、環境の変化から判断します。</p>
+<p><strong>図を追加する場合の実データ例：</strong> タグの生時系列、モデルの時間ビン、ビンごとの有効サンプル数を上下に並べます。欠測した日と、観測はあるがどの候補位置とも整合しない日を別に表示します。</p>
+</section>
+<section id="pressure">
+<h2>3. <code class="docutils literal notranslate"><span class="pre">pressure</span></code>という列名を水深の単位と取り違えない<a class="headerlink" href="#pressure" title="Link to this heading">#</a></h2>
+<p>デモの<code class="docutils literal notranslate"><span class="pre">pressure</span></code>列は、正の下向きの水深（m）としてそのまま計算に使われます。新しいタグの圧力がdbarなら、列名を合わせる前に、どう換算するかを決めてください。</p>
+<p>TEOS-10のGSWでは<code class="docutils literal notranslate"><span class="pre">gsw_z_from_p</span></code>の入力は海水圧[dbar]と緯度、出力は上向きを正とする高さ[m]であり、水深はその符号を反転した量になります。絶対圧か海水圧かも確認します。厳密な換算は緯度などに依存するため、「1 dbar = 1 m」を定義として使うことは勧めません。<a class="reference external" href="https://www.teos-10.org/pubs/gsw/v3_04/html/gsw_z_from_p.html">TEOS-10 / GSW公式資料</a></p>
+<p>位置が未知なら、換算に使う緯度にも幅があります。最初は観測海域を代表する緯度で換算し、必要なら候補域内の緯度の違いが結果に与える影響を調べます。この換算は自分で行ってください。pangeo-fish は自動では行いません。</p>
+</section>
+<section id="id3">
+<h2>4. 鉛直座標と海面高度<a class="headerlink" href="#id3" title="Link to this heading">#</a></h2>
+<p>静的水深を<span class="math notranslate nohighlight">\(H_0&gt;0\)</span>、平均海面などを基準とした海面高度を<span class="math notranslate nohighlight">\(\eta\)</span>とすると、水柱の厚さは同じ基準面・符号の下で<span class="math notranslate nohighlight">\(H_0+\eta\)</span>と表せます。海面からのタグ深度と、固定基準面からの海底深度を直接比べると、潮汐や海面変動の分だけ意味がずれます。</p>
+<p>海洋モデルは、製品ごとに深さの表し方が違います（固定の深さ、海面の上下に合わせて動く深さなど）。pangeo-fish は、モデルの種類に応じて、海面から各層までの実際の深さを求めてからタグの深度と比べます。海面が下がって水がなくなるセルは、<code class="docutils literal notranslate"><span class="pre">min_water_depth=&quot;auto&quot;</span></code> を指定すると自動で除外されます。他のモデルを使うときは、そのモデルの深さの定義と基準の海面を、製品の仕様書で確認してください。</p>
+</section>
+<section id="ibiglorys">
+<h2>5. IBIとGLORYSを使い分ける<a class="headerlink" href="#ibiglorys" title="Link to this heading">#</a></h2>
+<p>IBI再解析<code class="docutils literal notranslate"><span class="pre">IBI_MULTIYEAR_PHY_005_002</span></code>はIberia–Biscay–Irelandを対象とする地域プロダクトで、水平格子は1/36°（約3 km）です。GLORYS12V1の<code class="docutils literal notranslate"><span class="pre">GLOBAL_MULTIYEAR_PHY_001_030</span></code>は全球1/12°（約9 km）の再解析です。製品ID、個別dataset ID、変数、時間平均の種類、取得版は分けて記録します。<a class="reference external" href="https://data.marine.copernicus.eu/product/IBI_MULTIYEAR_PHY_005_002/description">IBI公式製品ページ</a>／<a class="reference external" href="https://data.marine.copernicus.eu/product/GLOBAL_MULTIYEAR_PHY_001_030/description">GLORYS公式製品ページ</a></p>
+<p>フランス沿岸のデモで使ったIBIは、日本周辺を含むモデルではありません。日本の事例へ移るときは、GLORYSまたは適切な地域モデルがその海域を含むか、沿岸・浅海の再現性、利用できる変数を確認します。</p>
+<p>海洋モデルの格子を細かいHEALPixに補間しても、新しい観測情報が増えるわけではありません。水温の分布から位置をどこまで絞れるか、モデルの誤差がどのくらいかは、格子間隔とは別に評価します。</p>
+</section>
+<section id="id4">
+<h2>6. 欠測、ゼロ、海陸マスク<a class="headerlink" href="#id4" title="Link to this heading">#</a></h2>
+<p>値0は有効な温度・海面高度であり得ます。NaNは欠測や除外を表します。候補海域の外、陸上、入力の不足、観測と矛盾するセルを、同じゼロとして一括で扱わないでください。</p>
+<p>複数の観測重みを掛け合わせる<code class="docutils literal notranslate"><span class="pre">combine_emission_pdf</span></code>では、ある観測重みが欠測のセルは、積も欠測になって候補から消えます。また、状態確率や経路を計算する前に、正の重みが残っていない時刻があればエラーになります。</p>
+<p>新しいデータでは、入力変換後の観測数、各観測重みが定義されるセル数、共通の日時・セルID、正の重みの総量を図に描いて確認してください。地図上の経路を見る前に行う点検になります。</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./science"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="03_temperature.html"
+       title="前のページ">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">前へ</p>
+        <p class="prev-next-title">水温・深度履歴から位置の適合度を作る</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="05_acoustic.html"
+       title="次ページ">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">次へ</p>
+        <p class="prev-next-title">音響観測による位置制約：検出と非検出</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> 目次
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">1. 入力を整理する</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#utc">2. UTCとモデルの時間ビン</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pressure">3. <code class="docutils literal notranslate"><span class="pre">pressure</span></code>という列名を水深の単位と取り違えない</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">4. 鉛直座標と海面高度</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ibiglorys">5. IBIとGLORYSを使い分ける</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">6. 欠測、ゼロ、海陸マスク</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+著者 Pangeo-Fish プロジェクト
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
