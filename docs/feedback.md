@@ -2,12 +2,12 @@
 
 ご参加ありがとうございました。ワークショップの感想を、**5分ほど**で教えてください。
 
-% TODO(Tina): 日本語版 Google Forms の URL と QR コード画像（images/feedback-survey-qr.png）が届いたら差し替える。
-% 現在の images/feedback-survey-qr.png は ETN 版のフォームの QR コードなので、そのまま使わないこと。
+## 👉 [アンケートを開く](https://docs.google.com/forms/d/e/1FAIpQLSd0Zd4pFENOXtOLblJzR0zNTkiJeBCh9ZKd4BHX4vc8gAVtBw/viewform)
 
-## 👉 アンケートを開く（URL は準備中です）
-
-QR コード（準備中）
+```{image} images/feedback-survey-qr.png
+:alt: アンケートの QR コード
+:width: 240px
+```
 
 アンケートは**匿名**です（フォローアップの連絡を希望して書く場合を除き、氏名もメールアドレスも不要です）。スマートフォンでも回答できます。ノートブックを最後まで終えられなかった場合でも、回答は役に立ちます。どこでつまずいたかを知ることが、私たちにとって何より必要な情報だからです。
 
