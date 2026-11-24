@@ -29,7 +29,7 @@
 | `differences_std` | `compute_emission_pdf`で必須 | 0.75 °C | 平均した符号付き温度差（モデルの温度の単位）に対する正規分布の標準偏差。センサー精度そのものではない |
 | `initial_std` | 同関数で必須 | $10^{-4}$ rad | 放流位置まわりの正規分布の幅（セル中心間の角距離に対する値） |
 | `recapture_std` | 同関数で必須 | $10^{-4}$ rad | 終点イベントがある場合の広がり。`fish_death` イベントを参照する |
-| `min_water_depth`（`compute_diff`） | `"auto"` | デモは指定しない（コメントに選択肢のみ） | 干出するセル（仮）の扱い。数値ならm、`None` は保持する指定。`"auto"` では `H0 + XE <= 0` のセルがあるときだけ除外され、実際に起こるのは North-West Shelf の1時間値の場合に限る（`docs/dry-cells.md`） |
+| `min_water_depth`（`compute_diff`） | `"auto"` | デモは指定しない（コメントに選択肢のみ） | 干出するセルの扱い。数値ならm、`None` は保持する指定。`"auto"` では `H0 + XE <= 0` のセルがあるときだけ除外され、実際に起こるのは North-West Shelf の1時間値の場合に限る（`docs/dry-cells.md`） |
 | `relative_depth_threshold` | `compute_diff` で必須だが、`main` では使われず、非ゼロだと `FutureWarning` | 0 | 配布デモの設定コメントは旧動作（浅いセルの除外）を説明したままだが、**有効な浅海除外のスイッチとして教えない** |
 | `receiver_buffer` | ラッパーでPint量を要求 | 2,000 m | 受信可能域を近似する半径 |
 | `nondetections`（下位関数 `emission_probability` の引数） | `"ignore"` | ラッパー `compute_acoustic_pdf` は `"mask"` を固定して渡す | ラッパーに同名の切替引数があるとは説明しない |
