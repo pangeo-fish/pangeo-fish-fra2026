@@ -68,7 +68,7 @@ Pangeo@EOSC の[事前登録](users-getting-started)（3 ステップ）を、**
 - Pangeo のエコシステムと、それが海洋データやバイオロギングデータの大規模解析で果たす役割を理解する。
 - 海洋モデル（Copernicus Marine Service の GLORYS）を Xarray で開いて中身を確認・可視化し、Dask で計算を並列化して、結果を Zarr 形式で保存する。
 - HEALPix（等面積の離散全球格子システム、DGGS: Discrete Global Grid System）とは何か、pangeo-fish がなぜそれを使うのかを理解し、xdggs でデータを HEALPix に変換して描画する。
-- バイオロギングタグに対して pangeo-fish の位置推定の流れを実行する。タグの記録を参照モデルと比較して観測確率（emission probability）を作り、音響テレメトリーの受信記録を加え、パラメータを最適化して、推定した移動経路を可視化する。
+- バイオロギングタグに対して pangeo-fish の位置推定の流れを実行する。タグの記録を参照モデルと比較して観測確率（emission probability、各場所が記録とどれだけ合うかの点数）を作り、音響テレメトリーの受信記録を加え、パラメータを最適化して、推定した移動経路を可視化する。
 
 ## 前提知識
 

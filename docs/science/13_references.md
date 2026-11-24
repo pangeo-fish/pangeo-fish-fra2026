@@ -1,13 +1,13 @@
 # 参考文献・データ出典
 
-この一覧は、どの説明にどの文献を使うかを示します。論文の方法、ワークショップのノートブックの実装、これから試す比較実験は、別のものとして区別して読んでください。
+この一覧は、どの説明にどの文献を使うかを示します。論文に書かれた方法、ワークショップのノートブックで実際に使う方法、今後の比較実験の案は、別のものとして区別して読んでください。
 
 ## 1. 研究の系譜・HMM・検証
 
 | 文献 | 何のために読むか | 読むときの注意 |
 |---|---|---|
 | Magin et al. (2026), *pangeo-fish: A Python package for studying fish movement using biologging and earth science data*. [DOI](https://doi.org/10.21105/joss.08332) | ソフトウェア自体の引用 | ソフトウェアとして引用するときの論文です。個々のパラメータの値の根拠は、{doc}`11_parameters_versions` を見てください |
-| Pedersen et al. (2008), *Geolocation of North Sea cod … using Hidden Markov Models and behavioural switching*. [DOI](https://doi.org/10.1139/F08-144) | HMMを使う魚の位置推定の背景 | Complete ノートブックの二つのσと、この論文のモデルは同じではありません。`tide_method = "pedersen"` は、この論文の潮汐尤度（likelihood）を移したもので（`docs/tide.rst` に説明があります）、MATLAB 版と完全に同じ結果になるかは、この教材では扱いません。誤差パラメータは較正していません |
+| Pedersen et al. (2008), *Geolocation of North Sea cod … using Hidden Markov Models and behavioural switching*. [DOI](https://doi.org/10.1139/F08-144) | HMMを使う魚の位置推定の背景 | Complete ノートブックの二つのσと、この論文のモデルは同じではありません。`tide_method = "pedersen"` は、この論文の潮汐尤度（likelihood）を移したものです。誤差パラメータは較正していません |
 | Thygesen et al. (2009), *Geolocating Fish Using Hidden Markov Models and Data Storage Tags*. [DOI](https://doi.org/10.1007/978-1-4020-9640-2_17) | HMMと記録型タグをつなぐ解説 | — |
 | Woillez et al. (2016), *A HMM-based model to geolocate pelagic fish from high-resolution individual temperature and depth histories …*. [DOI](https://doi.org/10.1016/j.ecolmodel.2015.10.024) | 水温・深度と移動モデルを結び付ける先行法 | 現在のノートブックが使う平均符号付き残差とは、式が違います |
 | Braun et al. (2018), *HMMoce: An R package for improved geolocation …*. [DOI](https://doi.org/10.1111/2041-210X.12959) | 他のHMM構成（水温・深度の記録と海洋データの統合）を比較する | — |
@@ -76,6 +76,6 @@
 
 ## 6. 実装の出典を残す
 
-実装について引用するときは、論文のDOIに加えて、pangeo-fishのコミット（ワークショップでは`361e9b7`）、ノートブック名、データ製品と版、実行したPython環境を記録してください。プルリクエストを引用するときは、PR 番号に加えて、head のコミットも残してください。
+実装について引用するときは、論文のDOIに加えて、pangeo-fishのコミット（ワークショップでは`361e9b7`）、ノートブック名、データ製品と版、実行したPython環境を記録してください。
 
 この資料の BibTeX は `references_fra.bib` にあります。
