@@ -43,7 +43,7 @@ WGS84 の長半径6,378 kmを用いる単純な角度換算では、$10^{-4}$ ra
 
 | 引数・処理 | 関数の既定値 | Completeの設定 | 留意点 |
 |---|---|---|---|
-| `depth_bin_size` | 1（m） | 2 m | 深度ビンの幅（m）。尤度はビン内で線形補間されるので、幅を広げると海底の位置が最大1ビンぶんぼやける |
+| `depth_bin_size` | 1（m） | 2 m | 深度ビンの幅（m）。尤度（likelihood）はビン内で線形補間されるので、幅を広げると海底の位置が最大1ビンぶんぼやける |
 | `max_depth_m` | `None`（`nb_depth_bins` とどちらかが必須） | 1,000 m | 最後のビン境界がちょうど `max_depth_m` になる（最後の区間は短くなりうる）。デモでは `ceil(1000 / 2)` = 500 区間で、これより深い魚には「`max_depth_m` より深い海底の割合」が使われる |
 | `depth_offset` | 0 | 指定なし | 魚と海底の間の余裕（m）。水深を `-elevation - depth_offset` として求める。負の値なら、その分だけ海底より下を許す |
 | `default_stdev_m` | 1（m） | 指定なし | `stdev` がない、または有限でない点の GEBCO 水深の鉛直不確かさ（m） |
@@ -84,7 +84,7 @@ WGS84 の長半径6,378 kmを用いる単純な角度換算では、$10^{-4}$ ra
 | `freq` | `"1h"` | 既定 | 観測と予測を同じサンプルで集約する時間単位 |
 | `time_step` | `"1D"` | 既定 | 位置の重みを作る時間区間。ラベル $T$ は $(T-12\,\mathrm{h},\,T+12\,\mathrm{h}]$ |
 | `min_samples` | 12 | 6（`tide_min_samples`） | 窓内の有効な集約サンプルの最低数。足りない窓は一様な重み |
-| `n_eff` | `None`（窓内のサンプル数） | 既定 | 尤度の鋭さを左右する情報量。自動で自己相関を推定する指定ではない |
+| `n_eff` | `None`（窓内のサンプル数） | 既定 | 尤度（likelihood）の鋭さを左右する情報量。自動で自己相関を推定する指定ではない |
 | `water_column` | `None` | 指定なし | 与えなければ各セル・窓で平均水深を推定。与えるときは平均海面基準の水深（m） |
 | `valid` | `None` | `tide_found > 0` | 使用する観測のフラグ（窓の中心のサンプルだけが残る） |
 | `min_tidal_signal` | 0.05 m | 既定（効かない） | `detection_ratio` を指定したときだけ使われる最小信号 |
@@ -103,7 +103,7 @@ WGS84 の長半径6,378 kmを用いる単純な角度換算では、$10^{-4}$ ra
 | `epsilon` | 0.4 m | 既定（RMSE が取れない窓のみ） | 時間相関の項の標準偏差の代替値 |
 | `depth_offset_sd` | 10 m | 既定 | 平均水深に対する一定の標準偏差 |
 | `bathy_variance` | 20 m² | `cell_bathymetry` の分散 | `non_tidal="bathymetry"` のときだけ効く |
-| `non_tidal` | `"uniform"` | 既定 | 窓のない日の PDF（一様）。`"bathymetry"` は MATLAB の海底地形のみの尤度 |
+| `non_tidal` | `"uniform"` | 既定 | 窓のない日の PDF（一様）。`"bathymetry"` は MATLAB の海底地形のみの尤度（likelihood） |
 | `min_fraction`、`max_overlap_hours` | 0.8、1 h | 既定 | 候補の窓に必要なサンプルの割合、異なる日の窓が共有できる時間 |
 
 これらの誤差パラメータは MATLAB のコードのもので、このパッケージ向けには較正されていません。[tide_healpix.py](https://github.com/pangeo-fish/pangeo-fish/blob/361e9b7/pangeo_fish/tide_healpix.py#L488-L1249)／[Complete デモ](https://github.com/pangeo-fish/pangeo-fish/blob/361e9b7/notebooks/pangeo-fish-complete-demo.ipynb)（セル 7、8、79）

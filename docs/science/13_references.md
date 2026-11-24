@@ -9,7 +9,7 @@
 | 文献 | 本資料で読む目的 | 確認範囲・扱い |
 |---|---|---|
 | Magin et al. (2026), *pangeo-fish: A Python package for studying fish movement using biologging and earth science data*. [DOI](https://doi.org/10.21105/joss.08332) | ソフトウェア自体の引用 | JOSSの公開論文と書誌。個々の現行パラメータの根拠はコード調査 |
-| Pedersen et al. (2008), *Geolocation of North Sea cod … using Hidden Markov Models and behavioural switching*. [DOI](https://doi.org/10.1139/F08-144) | HMMを使う魚の位置推定の背景 | 著者所属機関の書誌・要旨。Completeの二つのσと同一モデルとはしない。Completeの`tide_method = "pedersen"`はこの論文の潮汐尤度の移植（`docs/tide.rst`の説明）だが、論文本文とMATLABコードは本書では未確認で、移植の忠実度は確認していない。誤差パラメータは未較正 |
+| Pedersen et al. (2008), *Geolocation of North Sea cod … using Hidden Markov Models and behavioural switching*. [DOI](https://doi.org/10.1139/F08-144) | HMMを使う魚の位置推定の背景 | 著者所属機関の書誌・要旨。Completeの二つのσと同一モデルとはしない。Completeの`tide_method = "pedersen"`はこの論文の潮汐尤度（likelihood）の移植（`docs/tide.rst`の説明）だが、論文本文とMATLABコードは本書では未確認で、移植の忠実度は確認していない。誤差パラメータは未較正 |
 | Thygesen et al. (2009), *Geolocating Fish Using Hidden Markov Models and Data Storage Tags*. [DOI](https://doi.org/10.1007/978-1-4020-9640-2_17) | HMMと記録型タグをつなぐ解説 | 書誌（Crossref）を確認。要旨・章の本文は未取得 |
 | Woillez et al. (2016), *A HMM-based model to geolocate pelagic fish from high-resolution individual temperature and depth histories …*. [DOI](https://doi.org/10.1016/j.ecolmodel.2015.10.024) | 水温・深度と移動モデルを結び付ける先行法 | 著者公開PDFの方法節・式を確認。現在の平均符号付き残差とは区別 |
 | Braun et al. (2018), *HMMoce: An R package for improved geolocation …*. [DOI](https://doi.org/10.1111/2041-210X.12959) | 他のHMM構成（水温・深度の記録と海洋データの統合）を比較する | 公開本文の関連節。Crossrefのオンライン公開日は2018年1月23日、巻号は2018年5月 |
