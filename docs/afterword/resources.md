@@ -3,7 +3,7 @@
 
 **地球科学ビッグデータのためのコミュニティ・プラットフォーム** 
 
-### コミュニティに参加しましょう！
+# コミュニティに参加しましょう！
 
 | 項目 | リンク                                                                                                                                                                                                                                                                                    |
 | :--- |:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -13,7 +13,7 @@
 | **チャット** | [![Gitter](https://img.shields.io/badge/Gitter-Chat-yellow?logo=gitter)](https://gitter.im/pangeo-data/Lobby)  [![Pangeo - Discourse](https://img.shields.io/discourse/users?server=https%3A%2F%2Fdiscourse.pangeo.io%2F&style=flat-square&logo=discourse)](https://discourse.pangeo.io) |
 | **ニュース** | [![Medium - Blog](https://img.shields.io/badge/Medium-Blog-2ea44f?logo=medium)](https://medium.com/pangeo) [![Fllo](https://img.shields.io/twitter/follow/pangeo_data?style=social)](https://twitter.com/pangeo_data)                                                                    |
 
-### ミーティング
+## ミーティング
 - [General（全体ミーティング）](https://pangeo.io/meeting-notes.html#community-meeting)：Pangeo は毎週水曜日にコミュニティミーティングを開いています。幅広いタイムゾーンの参加者が加われるよう、開催時刻は米国東部時間の 12 時と 16 時を交互に切り替えています。
 - [Pangeo European Coffee](https://pangeo.io/meeting-notes.html#continental-community-meetings)：自由に議論する気軽なミーティングで、世界各地のタイムゾーンに対応するための大陸ごとのミーティングの 1 つです。開催は毎週火曜日の中央ヨーロッパ時間 9:30 です。
 - [Showcases（ショーケース）](https://pangeo.io/pangeo-showcase.html#pangeo-showcase)：15 分間のトークで、誰でも Pangeo コミュニティのほかのメンバーと出会い、自分の取り組みを知ってもらえる機会です。トークは録画され、DOI が付与されて、[Pangeo の YouTube チャンネル](https://youtube.com/playlist?list=PLuQQBBQFfpgq0OvjKbjcYgTDzDxTqtwua)で公開されます。発表に関心がある方は、[この短いフォーム](https://forms.gle/QwxKusVvrvDakSNs8)に記入してください。

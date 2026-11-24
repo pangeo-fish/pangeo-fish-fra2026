@@ -10,7 +10,7 @@
 2. [GFTS ダッシュボード](https://gfts.destine.eu)を開き、Destination Earth のアカウントでサインインします。すでに登録されているスズキとポラックの移動経路や、その生息域で予測される水温を見てみましょう。
 3. 詳しくは [GFTS のドキュメント](https://destination-earth.github.io/DestinE_ESA_GFTS)（英語）を読んでください。
 
-### 共同研究の相手を探しています
+## 共同研究の相手を探しています
 
 アーカイバルタグ（DST、データストレージタグ）や音響タグを持っていて、自分の魚を GFTS で見てみたい方はいませんか。私たちは、皆さんと一緒に、より多くの魚種と海域を解析したいと考えています。[GFTS の repository](https://github.com/destination-earth/DestinE_ESA_GFTS/issues/new) に issue を作成し、次の点を簡単に書いてください。
 

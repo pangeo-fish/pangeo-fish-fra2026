@@ -5,7 +5,7 @@
 % TODO(Tina): 日本語版 Google Forms の URL と QR コード画像（images/feedback-survey-qr.png）が届いたら差し替える。
 % 現在の images/feedback-survey-qr.png は ETN 版のフォームの QR コードなので、そのまま使わないこと。
 
-### 👉 アンケートを開く（URL は準備中です）
+## 👉 アンケートを開く（URL は準備中です）
 
 QR コード（準備中）
 
