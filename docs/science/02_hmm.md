@@ -82,14 +82,14 @@ Viterbi は「魚が実際に通った唯一の線」を確定するものでは
 
 合成データによる数値例と図は[比較と検証](08_comparison_validation.md)に示します。これは pangeo-fish のコードではなく、2状態・6時刻の教科書的な HMM を独立に計算した例です。2の6乗＝64通りの状態列をすべて列挙し、フィルタ・平滑化の周辺分布および Viterbi の結果と一致することを確認しています。初期分布は教科書通りの $\pi L_0$ で、pangeo-fish の前向き処理（放流分布のみで開始）とは異なります。
 
-### 実装上、三つの線が揃わない点（af4fe17）
+### 実装上、三つの線の違いと揃えてある点（e2877f2）
 
 ソースを読んで確認した点です。いずれも実行して数値で検証したものではありません。
 
-- **作る元の演算子が異なります。** 平均位置と時刻別最頻セルは、`compute_states` が前向き・後向き処理（Notebook では `FFTConv`）で求めた状態確率から計算されます。Viterbi（`viterbi_healpix`）はこの状態確率を使わず、別に作る遷移表を使います。遷移表は隣接セル中心間の角距離に対するガウス重みで、打ち切りの既定は $4\sigma$、楕円体の既定は `"sphere"` です。`decode` は σ だけを渡すため、フィット時の `truncate=5` や格子の楕円体は引き継がれません。
+- **作る元の演算子が異なります。** 平均位置と時刻別最頻セルは、`compute_states` が前向き・後向き処理（Notebook では `FFTConv`）で求めた状態確率から計算されます。Viterbi（`viterbi_healpix`）はこの状態確率を使わず、別に作る遷移表を使います。遷移表は隣接セル中心間の角距離に対するガウス重みで、打ち切りは $4\sigma$ です（`decode` は `truncate` を渡さないため、Notebook の `truncate=5` は Viterbi に届きません）。楕円体は、`decode` が予測器の楕円体を渡し、指定がなければ格子に記録された楕円体が使われるので、WGS84 の格子では Viterbi の位置も WGS84 で計算されます。
 - **移動範囲の外へ出る質量の扱い。** Viterbi の遷移は、出発セルごとに打ち切り円板全体で正規化され、領域外へ出る質量は再正規化されません（`build_transitions` の説明）。
 - **最初の時刻。** 前向き処理と Viterbi は、どちらも最初の時刻に放流分布だけを使い、その時刻の観測重みは掛けません。一方、σを選ぶ `score` の目的関数には、最初の時刻の初期分布と観測重みの積が入ります。
-- **二つの σ を使うときの時刻の対応。** 前向き処理・`score`・後向き処理は、時刻 $k$ への遷移に `predictor_index[k-1]` を使います。Viterbi は `predictor_index[k]` を使います。σが一つなら影響しませんが、二つのσを切り替える日の前後では、平滑化と Viterbi で一日ずれたσが使われ得ます。同じ列を渡しても両者のσの割り当ては揃いません。
+- **二つの σ を使うときの時刻の対応（揃えてあります）。** 前向き処理・`score`・後向き処理は、時刻 $k$ への遷移に `predictor_index[k-1]` を使います。Viterbi も同じ規約で、遷移 $k-1\to k$ に `predictor_index[k-1]` を使います。したがって最後の時刻の `predictor_index` はどの遷移にも使われませんが、範囲外の値がないかは全時刻について検査されます。使われる遷移のない σ については、遷移表も作りません。同じ列を渡せば、平滑化と Viterbi で σ の割り当ては一致します。
 
 ## 4. 移動幅 $\sigma$ と速度の意味
 
@@ -99,14 +99,14 @@ $$
 w(c,c')\propto\exp\!\left[-\frac{d(c,c')^2}{2\sigma^2}\right]
 $$
 
-で、$d$ と $\sigma$ は角度（rad）です。小領域の平面近似で球半径を $R$ とすると、水平座標各成分の長さの標準偏差は $s=R\sigma$ と解釈できます。この近似では二次元の移動距離 $r$ はレイリー分布となり、
+で、$d$ と $\sigma$ は角度（rad）です。小領域の平面近似で地球半径を $R$ とすると、水平座標各成分の長さの標準偏差は $s=R\sigma$ と解釈できます。この近似では二次元の移動距離 $r$ はレイリー分布となり、
 
 $$
 E[r]=s\sqrt{\pi/2},\qquad
 \sqrt{E[r^2]}=\sqrt2\,s.
 $$
 
-したがって $s$ を、そのまま平均移動距離や最大移動距離と呼びません。球面・楕円体、離散セル、切り詰め、海岸、領域端によっても、この平面近似からの差が生じます。
+したがって $s$ を、そのまま平均移動距離や最大移動距離と呼びません。楕円体の曲率、離散セル、切り詰め、海岸、領域端によっても、この平面近似からの差が生じます。
 
 `maximum_speed` は `optimize_pdf` の中で
 
@@ -114,7 +114,7 @@ $$
 \sigma_{\max}=\frac{v_{\max}\Delta t\,a}{R}
 $$
 
-という**推定する $\sigma$ の探索上限**に使われます（`_get_max_sigma`）。ここで $\Delta t$ はデータの時刻間隔、$a$ は `adjustment_factor`、$R$ は格子の楕円体から決まる半径（球なら 6371 km、楕円体なら長半径）です。探索範囲は $[10^{-4},\sigma_{\max}]$ rad で、下限もコードに固定されています。これは「すべての移動を $v_{\max}\Delta t$ 以下に禁止する」処理ではありません。カーネルの範囲を `truncate × σ` で切り詰める設定は別に存在します。
+という**推定する $\sigma$ の探索上限**に使われます（`_get_max_sigma`）。ここで $\Delta t$ はデータの時刻間隔、$a$ は `adjustment_factor`、$R$ は格子に記録された楕円体から決まる半径で、WGS84 では長半径 6378.137 km です。探索範囲は $[10^{-4},\sigma_{\max}]$ rad で、下限もコードに固定されています。これは「すべての移動を $v_{\max}\Delta t$ 以下に禁止する」処理ではありません。カーネルの範囲を `truncate × σ` で切り詰める設定は別に存在します。
 
 また、拡散を時間的に整合させる理想化では $s^2=2D\Delta t$ なので $s\propto\sqrt{\Delta t}$ となります。時間刻みを一日から一時間へ変えるとき、日平均の移動幅をそのまま使う、あるいは速度上限の換算だけを行うことは、同一の拡散過程を保つことと同義ではありません。ここは新しい研究設定に移す際の検討事項です。
 
@@ -132,23 +132,23 @@ Base の一つの移動幅に対し、Complete Notebook には二つの移動幅
 
 ## 6. 今回の実装・設定との対応
 
-以下は pangeo-fish の `af4fe17`（main）のソースコードと、同コミットの Base／Complete Notebook の設定値に基づきます。ソースを読んで確認したもので、実行して得た結果ではありません。Notebook に書かれた値を、関数の普遍的な既定値と混同しません。
+以下は pangeo-fish の `e2877f2`（main）のソースコードと、同コミットの Base／Complete Notebook の設定値に基づきます。ソースを読んで確認したもので、実行して得た結果ではありません。Notebook に書かれた値を、関数の普遍的な既定値と混同しません。
 
 | 項目 | 今回確認された内容 | 教材で補う説明 |
 |---|---|---|
 | `compute_emission_pdf` | `initial_std`、`recapture_std`、`differences_std` は既定値のない必須引数。イベントは `release` と `fish_death` を読みます。`fish_death` の緯度経度が NA なら終端分布は作られない | 放流・終端位置と水温のばらつきは別の単位 |
-| 放流・終端の幅 | デモでは `initial_std=recapture_std=1e-4 rad` | 球面換算約0.64 km。level 10 のセル代表長より小さく、連続空間で同精度の位置を解いているわけではない |
+| 放流・終端の幅 | デモでは `initial_std=recapture_std=1e-4 rad` | $1\times10^{-4}\ \mathrm{rad}\times6378\ \mathrm{km}\approx0.64$ km。level 10 のセル代表長より小さく、連続空間で同精度の位置を解いているわけではない |
 | 終端分布 | `combine_emission_pdf` が、`final` があれば最終時刻の観測重みに掛ける | `optimize_pdf` の `final` 引数（既定 `False`）は $\sigma$ の探索に使う目的関数（`True` で最終位置への到達度を評価する `score_final_pos`）を切り替える引数で、終端位置の情報を使うかどうかを決めるものではありません。`final=False` でも、回収位置が与えられていれば最終時刻の重みに終端分布が入る |
 | `forward` | 最初の分布を放流分布として開始 | 上の一般式の $\pi L_0$ との違いを意識します。`score` 側には最初の時刻の初期分布と観測重みの積が含まれる |
 | `backward` | 同じ予測演算子を `mask=None` で使用 | `FFTConv` の非対称性により、転置演算子の代用に近似を含む |
 | `optimize_pdf` | デモの `maximum_speed=60 km/day`、`adjustment_factor=1`、`truncate=5`、`tolerance=1e-6` | 上限は移動幅の探索境界。`tolerance` は $\sigma$（rad）の探索の収束許容で、位置精度ではありません。単一の $\sigma$ は `scipy.optimize.fminbound` で $[10^{-4},\sigma_{\max}]$ を探索する |
 | `conv_method` | 主デモは `FFTConv`（接平面上の FFT 畳み込み。領域は半径10度以内）。カーネルは `truncate × σ` で切り詰め、セルの大きさは公称値で換算します。出力の負の値は0に切り上げ、最大値の $10^{-12}$ 倍より小さい値は0にする | 計算方法の選択には投影・切り詰め・境界処理の差もある |
-| `viterbi_healpix` | 独自の離散遷移で既定の範囲は $4\sigma$、楕円体の既定は `"sphere"` | FFT フィット後の周辺分布と比較すると、統計的定義に加え数値演算子の差も含まれる |
+| `viterbi_healpix` | 独自の離散遷移で範囲は $4\sigma$。楕円体は予測器の指定、なければ格子に記録された楕円体（WGS84 のデモでは WGS84） | FFT フィット後の周辺分布と比較すると、統計的定義に加え数値演算子の差も含まれる |
 | `mean_track` | 緯度・経度座標を状態確率で加重平均 | 日付変更線などをまたぐ場合は角度の平均の問題を別途扱う |
 | `modal_track` | 時刻ごとに状態確率が最大のセル | 経路全体の確率は最大化していない |
 | 二つの移動幅 | `stamp_parameter_indices_from_mask` で指定したグループを利用 | 行動分類を隠れ状態として推定する例とは区別 |
 
-実装へのリンク：[フィルタと平滑化](https://github.com/pangeo-fish/pangeo-fish/blob/af4fe17/pangeo_fish/hmm/filter.py)、[最適化ヘルパー](https://github.com/pangeo-fish/pangeo-fish/blob/af4fe17/pangeo_fish/helpers.py)、[デコード](https://github.com/pangeo-fish/pangeo-fish/blob/af4fe17/pangeo_fish/hmm/decode.py)、[畳み込み方式の説明](https://github.com/pangeo-fish/pangeo-fish/blob/af4fe17/docs/choosing-conv-method.md)。
+実装へのリンク：[フィルタと平滑化](https://github.com/pangeo-fish/pangeo-fish/blob/e2877f2/pangeo_fish/hmm/filter.py)、[最適化ヘルパー](https://github.com/pangeo-fish/pangeo-fish/blob/e2877f2/pangeo_fish/helpers.py)、[デコード](https://github.com/pangeo-fish/pangeo-fish/blob/e2877f2/pangeo_fish/hmm/decode.py)、[畳み込み方式の説明](https://github.com/pangeo-fish/pangeo-fish/blob/e2877f2/docs/choosing-conv-method.md)。
 
 ### 海岸線の扱い
 

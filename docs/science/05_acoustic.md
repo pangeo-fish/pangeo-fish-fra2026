@@ -2,7 +2,7 @@
 
 受信機の位置がわかっていても、検出記録が示す魚の位置には幅があります。この章では、検出が得られた場合の位置重みと、検出がなかった場合の扱いを分けます。受信時刻、受信機の稼働期間、タグの送信仕様が、空間的な範囲と同じくらい重要になります。
 
-**実装の基準**：関数・既定値は pangeo-fish の `af4fe17`（main）のソースコードと、同コミットの Base／Complete Notebook に基づきます。ソースを読んで確認したもので、Notebook を実行して得た結果ではありません。以下の一般的な確率モデルは理解のための定式化であり、現行のデモがすべて実装しているという説明ではありません。
+**実装の基準**：関数・既定値は pangeo-fish の `e2877f2`（main）のソースコードと、同コミットの Base／Complete Notebook に基づきます。ソースを読んで確認したもので、Notebook を実行して得た結果ではありません。以下の一般的な確率モデルは理解のための定式化であり、現行のデモがすべて実装しているという説明ではありません。
 
 ## 1. 先行研究と現行実装をつなぐ
 
@@ -26,13 +26,13 @@ $$
 |---|---|---|
 | 入口 | `compute_acoustic_pdf` | Notebook が使うラッパー |
 | 受信半径 | `receiver_buffer` は単位付き量（`pint.Quantity`）が必須の引数。デモは2000 m | 2 km はデモ設定。すべての海域の実測受信距離ではない |
-| セル選択 | 受信機位置を中心に、半径 `receiver_buffer / 6371 km`（rad）の円錐範囲と交わるセルを、`healpix_geo` の `cone_coverage` で選びます（セルと同じ分解能、`delta_depth=0`） | セルの代表長とバッファ半径の関係を図で確認。半径の換算には、楕円体によらず球の半径 6371 km が使われる |
+| セル選択 | 受信機位置を中心に、半径 `receiver_buffer / 6371 km`（rad）の円錐範囲と交わるセルを、`healpix_geo` の `cone_coverage` で選びます（セルと同じ分解能、`delta_depth=0`、円錐は格子の楕円体上で作る） | セルの代表長とバッファ半径の関係を図で確認。半径の換算（距離から角度への変換）には、格子の楕円体によらず固定の 6371 km（`buffer_points_cells` の `sphere_radius=6371e3`）が使われる。σの探索上限に使う WGS84 の長半径 6378.137 km とは別の値 |
 | 時間チャンク | ラッパーの `chunk_time` の既定値は24。デモの Notebook は `chunk_time=1` を渡す | 計算処理の設定。受信時間の物理的な不確実性と区別 |
 | セル保持 | `cell_ids="keep"` | 別観測との統合時もセルIDを保つ |
 | 非検出 | ラッパーは `nondetections="mask"` を固定して渡します。ラッパーに `nondetections` を切り替える引数はありません（余分なキーワード引数は受け取るが使われない） | 下位関数の既定値とは異なる |
 | 下位入口 | `emission_probability` の関数シグネチャの既定値は `nondetections="ignore"` | 同関数の docstring は既定値を `"mask"` と記しており、シグネチャと食い違います。実際の呼出しを確認する |
 
-実装出典：[ラッパー](https://github.com/pangeo-fish/pangeo-fish/blob/af4fe17/pangeo_fish/helpers.py#L1699-L1795)、[検出数と範囲の統合](https://github.com/pangeo-fish/pangeo-fish/blob/af4fe17/pangeo_fish/acoustic.py#L262-L361)。
+実装出典：[ラッパー](https://github.com/pangeo-fish/pangeo-fish/blob/e2877f2/pangeo_fish/helpers.py#L1714-L1810)、[検出数と範囲の統合](https://github.com/pangeo-fish/pangeo-fish/blob/e2877f2/pangeo_fish/acoustic.py#L262-L361)。
 
 検出数は滞在時間以外に、送信間隔や受信性能にも左右され得ます。上式を「校正された検出確率」と呼ぶには、その対応を確かめる追加のモデルが必要です。現行の説明では、検出数を重みに使う位置制約として示します。
 
@@ -59,9 +59,9 @@ Huveneers et al. (2016) の受信性能実験は、受信機の設置条件と�
 
 2 km のバッファを選んだとしても、結果の解像度が自動的に2 kmになるわけではありません。タグの位置情報、受信範囲、HEALPix セルの大きさは別の尺度です。特にセルが受信範囲より大きければ、範囲が交わる複数セルのどこに重みが付くかを確認します。
 
-`af4fe17` の `compute_acoustic_pdf` は `ellipsoid` 引数を持ち、`None` なら格子の DGGS 情報（なければ `cell_ids` の属性）から楕円体を取ります。Notebook の既定は `ellipsoid="sphere"` で、WGS84 は設定を変えて使う選択肢です。受信局を点で描き、受信範囲と重みを持つセルを重ねる小さな図が、座標変換と範囲選択の確認に役立ちます。
+`e2877f2` の `compute_acoustic_pdf` は `ellipsoid` 引数を持ち、`None` なら格子の DGGS 情報（なければ `cell_ids` の属性）から楕円体を取ります。Complete Notebook はこの引数を渡さず、WGS84 で作った格子の楕円体がそのまま使われます。受信局を点で描き、受信範囲と重みを持つセルを重ねる小さな図が、座標変換と範囲選択の確認に役立ちます。
 
-実装出典：[acoustic.py](https://github.com/pangeo-fish/pangeo-fish/blob/af4fe17/pangeo_fish/acoustic.py#L25-L50)（座標変換）、[同 L157-L201](https://github.com/pangeo-fish/pangeo-fish/blob/af4fe17/pangeo_fish/acoustic.py#L157-L201)（範囲選択）。
+実装出典：[acoustic.py](https://github.com/pangeo-fish/pangeo-fish/blob/e2877f2/pangeo_fish/acoustic.py#L25-L50)（座標変換）、[同 L157-L201](https://github.com/pangeo-fish/pangeo-fish/blob/e2877f2/pangeo_fish/acoustic.py#L157-L201)（範囲選択）。
 
 ## 5. 手法比較で見る結果
 
@@ -72,7 +72,7 @@ Huveneers et al. (2016) の受信性能実験は、受信機の設置条件と�
 | 音響なし／あり | 検出前後の位置分布と経路の変化 | 真の位置への誤差が必ず減ったとは限らない |
 | 非検出 `ignore`／`mask` | 受信局周辺の候補消失と、ゼロ質量の有無 | 非検出が死亡や海域離脱を意味するとは限らない |
 | バッファを変更 | 有効セル数、検出位置との整合、分布の幅 | 最も狭い分布が最も正確とは限らない |
-| 検出を一部留保 | 入力に使わなかった検出の範囲に予測が入るか | 留保点だけで全時刻の精度を保証できるわけではありません。`af4fe17` のパッケージには、検出を留保して評価する機能は見当たりません（ソース内の検索で確認）。自前で設計する |
+| 検出を一部留保 | 入力に使わなかった検出の範囲に予測が入るか | 留保点だけで全時刻の精度を保証できるわけではありません。`e2877f2` のパッケージには、検出を留保して評価する機能は見当たりません（ソース内の検索で確認）。自前で設計する |
 
 同じ受信記録を推定に使ってから、その記録との一致だけで性能を評価すると、情報の再利用になります。独立の受信記録、既知位置、固定タグなどをどこで確保するかを、実験を設計する段階で決めます。
 

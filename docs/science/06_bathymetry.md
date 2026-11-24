@@ -2,7 +2,7 @@
 
 海底地形から得られる基本的な条件は、魚が記録した水深まで潜れる水柱が、その場所に存在することです。これは、魚が常に海底にいるという仮定より弱い条件です。浮魚性の魚にも、観測した潜水深度より浅い海域を候補から減らすという使い方ができます。
 
-**実装の基準**：以下の関数、数値、挙動は、pangeo-fish `main` の `5cffccc` のソース（`pangeo_fish/bathy.py` と `notebooks/pangeo-fish-complete-demo.ipynb`）を読んで確認したものです。コードの記述は読解にもとづくもので、ノートブックを実行して確かめたものではありません。説明用の理想式と実際の実装は分けて示します。
+**実装の基準**：以下の関数、数値、挙動は、pangeo-fish `main` の `e2877f2` のソース（`pangeo_fish/bathy.py` と `notebooks/pangeo-fish-complete-demo.ipynb`）を読んで確認したものです。コードの記述は読解にもとづくもので、ノートブックを実行して確かめたものではありません。説明用の理想式と実際の実装は分けて示します。
 
 ## 1. 水深の符号と基準面
 
@@ -55,13 +55,13 @@ Nielsenらは、北太平洋の平坦・斜面・不均質な海底で模擬移�
 | `depth_offset` | 0 | 指定なし | 魚と海底の間の余裕（m）。水深を `-elevation - depth_offset` として求める。負の値なら、その分だけ海底より下を許す |
 | `default_stdev_m` | 1（m） | 指定なし | `stdev` がない、または有限でない点の水深の不確かさ（m） |
 | `chunk_size` | 500 | 指定なし | 一度に読む緯度の行数（ヒストグラムの集計を行う単位） |
-| `ellipsoid` | `"sphere"` | 研究設定の `ellipsoid`（配布デモの値は `"sphere"`。`"WGS84"` はコメントで選択肢として示される） | セルIDとセル中心の計算に使われる（下記） |
+| `ellipsoid` | `"WGS84"` | 研究設定の `ellipsoid`（配布デモの値は `"WGS84"`） | セルIDとセル中心の計算に使われる（下記） |
 | 入力の海底地形 | 関数に渡すデータセット（`elevation`（m、海底は負）が必須、`stdev`（m）は任意） | `gebco_2024_new.zarr`。領域（`bbox`）の外側に0.1度の余白を付けて切り出す | |
 | `batch_compute_pdf_bathy` の `batch_size` | 50,000（セル） | 10,000 | 一度に水深尤度を計算するセル数 |
 
 `ellipsoid` は、地理座標からセルIDを求める段階（`lonlat_to_healpix`）と、出力のセル中心の `latitude`／`longitude` を求める段階（`healpix_to_lonlat`）の両方に渡されます。出力の `cell_ids` には、属性として `grid_name`、`level`、`indexing_scheme`、`ellipsoid` が付きます。`batch_compute_pdf_bathy` は、ヒストグラムと `diff-regridded.zarr` で level・番号付け・楕円体が違うと `ValueError` にします。
 
-実装出典：[bathy.py のヒストグラム](https://github.com/pangeo-fish/pangeo-fish/blob/5cffccc/pangeo_fish/bathy.py#L50-L212)、[Complete デモの設定](https://github.com/pangeo-fish/pangeo-fish/blob/5cffccc/notebooks/pangeo-fish-complete-demo.ipynb)（Section 6）。
+実装出典：[bathy.py のヒストグラム](https://github.com/pangeo-fish/pangeo-fish/blob/e2877f2/pangeo_fish/bathy.py#L50-L214)、[Complete デモの設定](https://github.com/pangeo-fish/pangeo-fish/blob/e2877f2/notebooks/pangeo-fish-complete-demo.ipynb)（Section 6）。
 
 ### 水深ビンと `stdev` の単位
 
@@ -73,15 +73,15 @@ Nielsenらは、北太平洋の平坦・斜面・不均質な海底で模擬移�
 
 現段階では、この項を「水深との適合度」または「セル内の水深分布に基づく位置重み」と説明するのが明確です。特定海域の測深誤差を校正し、魚のセル内分布を含めて妥当性を確かめる前に、校正済みの確率と呼びません。
 
-実装出典：[水深値の索引、床値、欠測処理](https://github.com/pangeo-fish/pangeo-fish/blob/5cffccc/pangeo_fish/bathy.py#L214-L255)、[セルへの割当てと出力](https://github.com/pangeo-fish/pangeo-fish/blob/5cffccc/pangeo_fish/bathy.py#L380-L497)。
+実装出典：[水深値の索引、床値、欠測処理](https://github.com/pangeo-fish/pangeo-fish/blob/e2877f2/pangeo_fish/bathy.py#L216-L257)、[セルへの割当てと出力](https://github.com/pangeo-fish/pangeo-fish/blob/e2877f2/pangeo_fish/bathy.py#L382-L499)。
 
 ## 4. 欠測、床値、正規化
 
-陸の GEBCO 点（標高が0以上）と欠測の点は、ヒストグラムの集計から除かれます（`bathy.py` 130、147行）。全点が陸のセルにはヒストグラムができません。
+陸の GEBCO 点（標高が0以上）と欠測の点は、ヒストグラムの集計から除かれます（`bathy.py` 132、149行）。全点が陸のセルにはヒストグラムができません。
 
-水深尤度の側では、`XE` が欠測のセル（陸）と、ヒストグラムの先頭の値が欠測のセルには `NaN` が返ります（230行）。海のセルで、ヒストグラムに対応するセルがない場合は、最も近いヒストグラムのセルの値が使われ、その数と最大距離が `UserWarning` で知らされます（338–377、455–466行）。時間ステップにタグの水深記録が全くない場合は、情報なしとして1が返ります（239–241行）。海のセルの値は、床値 `1e-14` 以上に切り上げられるので、常に完全な0の排除にはなりません（254行）。床値と欠測と1は別の意味を持ちます。
+水深尤度の側では、`XE` が欠測のセル（陸）と、ヒストグラムの先頭の値が欠測のセルには `NaN` が返ります（232行）。海のセルで、ヒストグラムに対応するセルがない場合は、最も近いヒストグラムのセルの値が使われ、その数と最大距離が `UserWarning` で知らされます（340–379、457–468行）。時間ステップにタグの水深記録が全くない場合は、情報なしとして1が返ります（241–243行）。海のセルの値は、床値 `1e-14` 以上に切り上げられるので、常に完全な0の排除にはなりません（256行）。床値と欠測と1は別の意味を持ちます。
 
-読み出す深さが最初の境界以下なら最初の値、最後の境界以上なら最後の値になります（244–248行）。すなわち、設定した最大水深（デモでは1000 m）より深い観測は、「その最大水深より深い海底の割合」で扱われます。
+読み出す深さが最初の境界以下なら最初の値、最後の境界以上なら最後の値になります（246–250行）。すなわち、設定した最大水深（デモでは1000 m）より深い観測は、「その最大水深より深い海底の割合」で扱われます。
 
 空間的な正規化は、ある時刻のセル間比較をしやすくします。デモでは、`batch_compute_pdf_bathy` の出力を、全セルの和（`NaN` を除く）で割って正規化しています。ただし、総和を1にしたというだけで海底地形の不確実性や生息場選択をすべて含む事後確率になるわけではありません。最終的な位置分布は、ほかの観測と HMM の移動・端点条件を加えて決まります。
 

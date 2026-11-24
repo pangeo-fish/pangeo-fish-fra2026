@@ -2,19 +2,19 @@
 
 ## この章で理解すること
 
-Pangeo-Fish の位置推定では、魚の候補位置を有限個のセルに分け、各時刻に各セルがどの程度もっともらしいかを計算します。HEALPix はこの候補位置を表す空間格子です。タグの水温や潮汐そのものから位置を推定する手法は観測モデルの章で扱い、ここでは「その位置をどの地球形状上の、どのセルとして表すか」を整理します。
+Pangeo-Fish の位置推定では、魚の候補位置を有限個のセルに分け、各時刻に各セルがどの程度もっともらしいかを計算します。HEALPix はこの候補位置を表す空間格子です。タグの水温や潮汐そのものから位置を推定する手法は観測モデルの章で扱い、ここでは「その位置をどの地球形状上の、どのセルとして表すか」を整理します。ワークショップでは、この格子を WGS84 楕円体上の HEALPix に固定して使います。
 
 この区別は沿岸で特に大切です。受信局、海底地形、水温場、推定経路が同じ緯度・経度を表しているつもりでも、格子の地球形状や緯度の解釈が異なれば、同じセル番号を照合しても同じ場所を指しません。
 
-本章の幾何学的説明は、Górski et al. の HEALPix、Karney の補助緯度、GRID4EARTH の楕円体への適用に基づきます。計算例と図は定義式から新たに作成しました。Pangeo-Fish の具体的な実装は、`main` の `af4fe17` のソースを読んで確認した内容を、第7節に分けて記します。{cite:p}`gorski2005healpix,karney2024auxiliary,odaka2026grid4earth`
+本章の幾何学的説明は、Górski et al. の HEALPix、Karney の補助緯度、GRID4EARTH の楕円体への適用に基づきます。計算例と図は定義式から新たに作成しました。Pangeo-Fish の具体的な実装は、`main` の `e2877f2` のソースを読んで確認した内容を、第7節に分けて記します。{cite:p}`gorski2005healpix,karney2024auxiliary,odaka2026grid4earth`
 
 ## 1. HEALPix がそろえるもの
 
-HEALPix は Hierarchical Equal Area isoLatitude Pixelization の略です。標準的な格子は12個の基本セルから始まり、階層的に細分化できます。同じ解像度のセル面積が等しく、セル中心が一定緯度の環に並ぶことが特徴です。セルは曲線で囲まれた四辺形で、場所により形が異なります。すべての辺長や隣接中心間距離が同一という意味ではありません。{cite:p}`gorski2005healpix` 下の図は、球面上のHEALPix格子の例です。
+HEALPix は Hierarchical Equal Area isoLatitude Pixelization の略です。標準的な格子は12個の基本セルから始まり、階層的に細分化できます。同じ解像度のセル面積が等しく、セル中心が一定緯度の環に並ぶことが特徴です。セルは曲線で囲まれた四辺形で、場所により形が異なります。すべての辺長や隣接中心間距離が同一という意味ではありません。{cite:p}`gorski2005healpix` 下の図は、WGS84楕円体上のHEALPix格子の例です。
 
-![球面上のHEALPix格子と、一つのセルを段階的に細分化する様子](figures/healpix_nested_globe.png)
+![WGS84楕円体上のHEALPix格子と、一つのセルを段階的に細分化する様子](figures/healpix_nested_globe.png)
 
-**図：球面上のHEALPixセルと入れ子の細分化の例です。** 太い線で囲まれた12個の基本セルのうち一つが、4分割を繰り返して細かいセルに分けられている様子を示します。地球は球として描かれており、WGS84楕円体上の格子ではありません。魚の推定結果ではなく、格子の形を示す説明図です。図：Grid4Earth（GRID4EARTH/figures）
+**図：WGS84楕円体上のHEALPixセルと入れ子の細分化の例です。** 太い線で囲まれた12個の基本セルのうち一つが、4分割を繰り返して細かいセルに分けられている様子を示します。セルの境界は、healpix-geo で WGS84 楕円体上の経度・緯度として計算しました（`ellipsoid="WGS84"`）。地球全体を正射図法で描いているため、この縮尺では地球の扁平は見分けられません。魚の推定結果ではなく、格子の形を示す説明図です。図：Grid4Earth（GRID4EARTH/figures）のスクリプトで、楕円体を WGS84 に変更して作成
 
 格子を細かくすることと観測情報を増やすことは別です。例えば海洋モデルが十分に表現できない沿岸の水温構造は、推定格子を細分化するだけでは復元されません。より細かい格子では同じ情報を多くの候補セルに配分する場合もあります。解像度は、海岸形状の表現、計算費用、結果が格子に依存する程度を一緒に見て決めます。
 
@@ -118,7 +118,7 @@ $$
 
 問題は $\xi$ の数値を $\varphi$ として地図へ渡すなど、**数値の意味を取り違えたとき**です。上の45度の例では、その二つの数値を同じ経度の WGS84 測地緯度として読み直すと、子午線に沿った隔たりは約14.26 kmになります。この値は本章の式と子午線曲率半径の積分から計算した例です。すべての魚の経路が14 kmずれる、あるいは楕円体対応により推定誤差が14 km改善する、という結果ではありません。
 
-同様に、あるセル番号を球面の格子で緯度経度へ変換する場合と、WGS84 の格子で変換する場合では、同じ整数でも地理的な位置解釈が異なります。データの面積・位置対応と、観測誤差による魚の位置の不確実性は別の問題として評価します。
+同様に、あるセル番号を、地球を球として作った HEALPix 格子として緯度経度へ変換する場合と、WGS84 の格子として変換する場合では、同じ整数でも地理的な位置解釈が異なります。ワークショップの格子は WGS84 だけなので、他の地球形状で作られたセルIDを受け取るときにこの点が問題になります。データの面積・位置対応と、観測誤差による魚の位置の不確実性は別の問題として評価します。
 
 ## 5. level、nside、セル数、代表長
 
@@ -146,7 +146,7 @@ $$
 | 12 | 4,096 | 201,326,592 | 2.5335 | 1.5917 |
 | 13 | 8,192 | 805,306,368 | 0.6334 | 0.7959 |
 
-level を1増やすと面積は4分の1、代表長は2分の1になります。半径6371 kmの球で計算しても、この表の代表長は小数第4位まで変わりません（level 10 で6.3668 km）。配布デモのコメントにある「約6.4 km」「約1.6 km」はこの値を丸めたものです。ここでいう約6.4 kmや約1.6 kmは、同じ面積を持つ正方形を仮定したときの辺長に相当する尺度です。実際の HEALPix セルの全辺長、受信半径、魚の測位誤差、海洋モデルの有効解像度を表す値ではありません。
+level を1増やすと面積は4分の1、代表長は2分の1になります。$R_q$ を6371 kmと丸めて計算しても、この表の代表長は小数第4位まで変わりません（level 10 で6.3668 km）。配布デモのコメントにある「約6.4 km」「約1.6 km」はこの値を丸めたものです。ここでいう約6.4 kmや約1.6 kmは、同じ面積を持つ正方形を仮定したときの辺長に相当する尺度です。実際の HEALPix セルの全辺長、受信半径、魚の測位誤差、海洋モデルの有効解像度を表す値ではありません。
 
 例えば level 10 で放流位置の標準偏差を約0.64 km相当に設定しても、候補位置は約6.4 kmを代表長とする離散セルです。この場合、連続空間の狭い誤差分布を格子がどのように表しているか、セル中心やセルへの割当てに結果が依存しないかを確認する必要があります。
 
@@ -166,39 +166,39 @@ HEALPix には RING と NESTED などの番号付けがあります。同じ格�
 
 DGGS はセル識別子を用いて空間を参照する枠組みであり、特定の整数配列だけを指す名称ではありません。概念モデルは OGC Topic 21、Web API は別の OGC API – DGGS 文書で扱われます。本教材で「DGGS Core」とだけ書いてこの二つを混同しません。{cite:p}`ogc2021dggs,ogc2025apidggs`
 
-## 7. Pangeo-Fish `main`（af4fe17）は楕円体をどう扱うか
+## 7. Pangeo-Fish `main`（e2877f2）は楕円体をどう扱うか
 
-以下は、`main` の `af4fe17` のソースを読んで確認した内容です。ただし海底地形の行だけは `5cffccc` のソースで確認しました。ノートブックを実行して確かめたものではありません。
+以下は、`main` の `e2877f2` のソースを読んで確認した内容です。ノートブックを実行して確かめたものではありません。
 
 ### 7.1 設定と既定値
 
-Base／Complete の配布デモの研究設定は `ellipsoid = "sphere"` で、`"WGS84"` はコメント行として選択肢に挙がっています（コメントは「必要な精度に対して地球の扁平率が無視できないときに推奨」という趣旨）。日本語のワークショップ Notebook も同じ設定で、level 10 を使います。したがって実習の既定は**球面**であり、WGS84 は利用者が選ぶ設定です。FES2022b の潮汐を使う場合だけは `ellipsoid = "WGS84"` が必須で、そうでなければ `ValueError` になります。
+Base／Complete の配布デモの研究設定は `ellipsoid = "WGS84"` で、他の値は選択肢として示されていません。日本語のワークショップ Notebook も同じ設定で、level 10 を使います。結果の保存先は WGS84 用のフォルダ（Base は `./test/wgs84/level10`、Complete は `./test/wgs84`）です。Complete デモの FES2022b の潮汐が要求する `ellipsoid = "WGS84"` の条件も、この設定で満たされます。
 
-関数側の既定値は、`regrid_dataset_hpresample`、`compute_healpix_histogram_region_bin_size`、`viterbi_healpix` のいずれも `"sphere"` です。
+HEALPix 格子を新しく作るときの関数側の既定値も `"WGS84"` です（`regrid_dataset_hpresample`、`estimate_refinement_costs`、`compute_healpix_histogram_region_bin_size`、`build_transitions`）。格子に楕円体の記録がない保存データを読む側の既定だけは `"sphere"` です（`hmm/prediction.py`、`decode._grid_ellipsoid`、`helpers._ellipsoid_params`）。これは古い保存データを読み戻すための規則で、ワークショップの設定ではありません。
 
 ### 7.2 どこで楕円体が使われているか
 
 | 処理 | `ellipsoid` の扱い（ソースで確認） | 出典 |
 |---|---|---|
-| 再格子化 `regrid_dataset_hpresample` | `ellipsoid` を healpix-resample の3つのリサンプラ（陸海マスク用の双一次、Clough–Tocher、沿岸の補完用の双一次）に渡し、出力セル中心の経度・緯度を `healpix_geo.nested.healpix_to_lonlat(..., ellipsoid=...)` で計算し、`cell_ids` の属性 `ellipsoid` に保存する。リサンプラ内部の幾何は外部パッケージ側にあり、本書では確認していない | `helpers.py` 1143–1150、1181–1245、1281–1283、1319–1337 |
+| 再格子化 `regrid_dataset_hpresample` | `ellipsoid` を healpix-resample の3つのリサンプラ（陸海マスク用の双一次、Clough–Tocher、沿岸の補完用の双一次）に渡し、出力セル中心の経度・緯度を `healpix_geo.nested.healpix_to_lonlat(..., ellipsoid=...)` で計算し、`cell_ids` の属性 `ellipsoid` に保存する。リサンプラ内部の幾何は外部パッケージ側にあり、本書では確認していない | `helpers.py` 1156–1163、1196–1260、1296–1298、1334–1352 |
 | 格子属性 | `grid_name`、`level`、`indexing_scheme`、`ellipsoid` を `cell_ids` の属性として書き出し、保存・再読込でも保つ | `storage.py` `_with_dggs_attrs` |
-| 海底地形（`5cffccc` で確認） | `ellipsoid` を `lonlat_to_healpix` に渡してセルIDを決め、出力の `latitude`／`longitude` も `healpix_to_lonlat(..., ellipsoid=...)` で計算する。`cell_ids` の属性には `grid_name`、`level`、`indexing_scheme`、`ellipsoid` が付く。`batch_compute_pdf_bathy` は、ヒストグラムと `diff-regridded.zarr` で level・番号付け・楕円体が違うと `ValueError` にする | `bathy.py` 135、159、175–184、317–335、428–432 |
-| 音響の受信域 | 格子の `ellipsoid` 属性を読み、受信域の計算に渡す。WGS84 のときは地心緯度から測地緯度へ換算する式を持つ | `helpers.py` 1746–1770、`acoustic.py` 22–49、107–179 |
-| 潮汐（legacy） | `tide_to_healpix(..., ellipsoid)` が再格子化に渡す。日平均した潮汐 PDF を総合 PDF に結合するときは、`grid_name`・`level`・`indexing_scheme`・`ellipsoid` の属性が両者で食い違うと `ValueError` | `tide.py` 535–631、654–664 |
+| 海底地形 | `ellipsoid` を `lonlat_to_healpix` に渡してセルIDを決め、出力の `latitude`／`longitude` も `healpix_to_lonlat(..., ellipsoid=...)` で計算する。`cell_ids` の属性には `grid_name`、`level`、`indexing_scheme`、`ellipsoid` が付く。`batch_compute_pdf_bathy` は、ヒストグラムと `diff-regridded.zarr` で level・番号付け・楕円体が違うと `ValueError` にする | `bathy.py` 137、161、177–186、319–337、430–434 |
+| 音響の受信域 | 格子の `ellipsoid` 属性を読み、受信域の計算に渡す。WGS84 のときは地心緯度から測地緯度へ換算する式を持つ。受信半径（距離）を角度にする換算だけは、楕円体によらず固定の 6371 km を使い、その角度の円錐を格子の楕円体上で作る | `helpers.py` 1761–1785、`acoustic.py` 22–49、107–179 |
+| 潮汐（TPXO 緯度経度格子から HEALPix への変換） | `tide_to_healpix(..., ellipsoid)` が再格子化に渡す。日平均した潮汐 PDF を総合 PDF に結合するときは、`grid_name`・`level`・`indexing_scheme`・`ellipsoid` の属性が両者で食い違うと `ValueError`。`ellipsoid` の属性がない側は `"sphere"` とみなして比較する（古い保存データの読み戻し用） | `tide.py` 535–631、657–671 |
 | 潮汐（HEALPix、FES2022b） | セル中心を `cell_ids` の楕円体で計算し、FES2022b は `WGS84` のセルだけを受け付ける（`WGS84` は測地緯度で、潮汐モデルの緯度に当たる） | `tide_healpix.py` 1–36、95–106、1046–1124 |
-| 移動の σ の上限 | 格子の `ellipsoid` から地球半径を求める。球なら半径、楕円体なら**長半径**である（距離を長半径で割ると、その距離が楕円体上で張る最小の角度になるので、保守的な上限になる、と docstring は説明する）。属性がなければ球面とみなす | `helpers.py` 2070–2114、2164–2190 |
-| 畳み込み（`conv_method`） | `HealpixAnalyseConv` と `HealpixAnalyseLargeConv` は WGS84 のみ（docstring）。`FFTConv` と `LargeHealpixConv` は `ellipsoid` を受け取る | `helpers.py` 1985–2067、2296–2300 |
-| Viterbi（`viterbi_healpix`） | `ellipsoid="sphere"` なら球面の角距離を使う。それ以外では、二つのセル中心の位置ベクトル間の地心角を使い、docstring は「楕円体上の測地線距離ではない。差は小さいが高緯度で大きくなる」と注意する。ところが `decode_trajectories` → `estimator.decode` は `sigmas` だけを渡して `ellipsoid` を渡さないので、デモ経由の Viterbi の遷移は既定の `"sphere"`（打ち切り4σ）で計算される | `hmm/decode.py` 317–367、462–530、`hmm/estimator/eager.py` 316–318 |
+| 移動の σ の上限 | 格子に記録された `ellipsoid` から地球半径を求める。WGS84 では**長半径**6378.137 km である（距離を長半径で割ると、その距離が楕円体上で張る最小の角度になるので、保守的な上限になる、と docstring は説明する）。属性がなければ球面とみなす（古い保存データの読み戻し用） | `helpers.py` 2085–2129、2179–2205 |
+| 畳み込み（`conv_method`） | `HealpixAnalyseConv` と `HealpixAnalyseLargeConv` は WGS84 のみ（docstring）。`FFTConv` と `LargeHealpixConv` は `ellipsoid` を受け取る | `helpers.py` 2000–2082、2311–2315 |
+| Viterbi（`viterbi_healpix`） | `EagerEstimator.decode` が予測器の楕円体を渡し、指定がなければ（`ellipsoid=None`）格子に記録された楕円体（記録がなければ `"sphere"`）を使う。`decode_trajectories` 経由では、予測器が格子の楕円体で作られるので、Viterbi の位置も WGS84 で計算される。遷移の距離は、二つのセル中心の位置ベクトル間の地心角で、docstring は「楕円体上の測地線距離ではない。差は小さいが高緯度で大きくなる」と注意する。遷移の打ち切りは4σ（`truncate` は渡されない） | `hmm/decode.py` 317–473、476–578、`hmm/estimator/eager.py` 50–60、330–336 |
 
-要約すると、`main` は球面専用ではありません。`ellipsoid="WGS84"` を選ぶと、セルIDとセル中心の計算、再格子化、音響の受信域、FES2022b の補間は、格子の楕円体を使って行われます。一方、次の点では球面・近似が残ります。(a) 移動の σ は長半径で距離に換算する保守的な上限を使います。(b) デモ経由の Viterbi は球面の角距離を使います。
+要約すると、WGS84 の格子では、セルIDとセル中心の計算、再格子化、音響の受信域、海底地形、FES2022b の補間に加え、Viterbi の位置も、格子の楕円体を使って計算されます。一方、次の点では近似が残ります。(a) 移動の σ は長半径で距離に換算する保守的な上限を使います。(b) Viterbi の遷移は地心角（楕円体上の測地線距離ではない）で、打ち切りは4σです。(c) 音響の受信半径は、距離を角度にする換算に固定の 6371 km を使います。
 
-セル属性を書き換えるだけでは観測は変換されません。`main` で WGS84 を選んだ実行では、再格子化・音響・海底地形が、それぞれ `ellipsoid` を使ってセルIDやセル中心を計算しています。ただし、この確認は呼び出しの引数を追ったもので、各外部パッケージ（`healpix-geo`、`healpix-resample`）が WGS84 をどう幾何に反映するかは、本書のソースツリーには含まれないため確認していません。
+セル属性を書き換えるだけでは観測は変換されません。`main` の WGS84 の実行では、再格子化・音響・海底地形が、それぞれ `ellipsoid` を使ってセルIDやセル中心を計算しています。ただし、この確認は呼び出しの引数を追ったもので、各外部パッケージ（`healpix-geo`、`healpix-resample`）が WGS84 をどう幾何に反映するかは、本書のソースツリーには含まれないため確認していません。
 
 `ellipsoid="WGS84"` の格子であることだけから、すべての移動計算が楕円体上の厳密な測地線距離を使うと判断できません。研究で距離誤差が重要なら、対象海域・移動尺度における近似と楕円体上の測地線を別途比較します。
 
 ## 8. 実習中に確認する最小例
 
-`healpix-geo` の `nested.lonlat_to_healpix` は、経度と緯度（度）を受け取り、`depth` と `ellipsoid` を指定します。pangeo-fish はこの関数を `ellipsoid` を明示して呼んでいます（`bathy.py` 135、159行）。{cite:p}`healpixgeo_lonlat`
+`healpix-geo` の `nested.lonlat_to_healpix` は、経度と緯度（度）を受け取り、`depth` と `ellipsoid` を指定します。pangeo-fish はこの関数を `ellipsoid` を明示して呼んでいます（`bathy.py` 137、161行）。{cite:p}`healpixgeo_lonlat`
 
 ```python
 import numpy as np
@@ -216,12 +216,12 @@ cell_ids = lonlat_to_healpix(
 )
 ```
 
-これはAPIの入力規約を示す例であり、本書では実行していません。魚の実習 Notebook に適用するときは、使用版の regrid・音響・海底地形・経路出力まで、同じ参照系が引き継がれることを確認します。第7節の表のとおり、Viterbi の遷移には球面の部分が残ります。
+これはAPIの入力規約を示す例であり、本書では実行していません。魚の実習 Notebook に適用するときは、使用版の regrid・音響・海底地形・経路出力まで、同じ参照系が引き継がれることを確認します。第7節の表のとおり、Viterbi の遷移は楕円体上の測地線距離ではなく地心角で計算されます。
 
 ## 面談で説明できるようにしておきたい問い
 
 1. この研究の経度・緯度は何を基準に記録されていますか。
-2. 球面版と WGS84 版の結果を比較するとき、同じ数値IDを同じ地理的位置だと解釈していませんか。
+2. 別の地球形状の格子で作られた結果と WGS84 の結果を比較するとき、同じ数値IDを同じ地理的位置だと解釈していませんか。
 3. 海洋モデルの元の空間情報に対して、この level を選ぶ理由は何ですか。
 4. 狭い受信半径や放流位置の誤差を、現在のセルでどう表現していますか。
 5. 出力経路の距離を測るとき、計算用の角距離と地図上の測地線距離を区別していますか。

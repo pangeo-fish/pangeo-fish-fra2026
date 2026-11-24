@@ -1,6 +1,6 @@
 # 実装・パラメータ・対象版の対応
 
-このページは、pangeo-fish `main` の `af4fe17` のソースと、同じコミットの Complete デモ（`notebooks/pangeo-fish-complete-demo.ipynb`）を読んで整理したものです（ノートブックを実行して確かめたものではありません）。ただし第3節（海底地形）だけは、より新しい `5cffccc` のソースで確認しました。**関数の既定値とNotebookで明示的に与えた値を別々に記します。** ワークショップの環境はこのコミットをビルドしたイメージ `ghcr.io/pangeo-fish/pangeo-fish-notebook:2026.10.21-af4fe17` で、デモの HEALPix レベルは10です。
+このページは、pangeo-fish `main` の `e2877f2` のソースと、同じコミットの Complete デモ（`notebooks/pangeo-fish-complete-demo.ipynb`）を読んで整理したものです（ノートブックを実行して確かめたものではありません）。**関数の既定値とNotebookで明示的に与えた値を別々に記します。** ワークショップの環境はこのコミットをビルドしたイメージ `ghcr.io/pangeo-fish/pangeo-fish-notebook:2026.10.21-e2877f2` で、デモの HEALPix レベルは10です。
 
 単位は入力の物理量を踏まえた記述であり、すべての関数がPintによる単位検査を行うという意味ではありません。下記にないNotebook変数名や引数の完全なsignatureは、組み込み時にコードで再確認します。
 
@@ -19,7 +19,7 @@
 | 観測を組み合わせる | `normalize_pdf` → `combine_emission_pdf` | `excluded_pdf` | 積に含める観測項 |
 | 移動を推定する | `optimize_pdf` | `conv_method`, `maximum_speed`, `truncate`, `tolerance` | 遷移の計算、σの探索範囲、数値精度 |
 | 2種類の移動幅 | `stamp_parameter_indices_from_mask`と最適化 | `predictor_index`、行動フラグ | 各遷移で使うσ |
-| 結果を要約する | `decode_trajectories`（`track_modes`：`mean`・`mode`・`viterbi_healpix`） | 入力分布、遷移（Viterbi の `truncate`、`ellipsoid` は `decode_trajectories` 経由では既定値） | 平均・最頻・連続する最尤状態列 |
+| 結果を要約する | `decode_trajectories`（`track_modes`：`mean`・`mode`・`viterbi_healpix`） | 入力分布、遷移（Viterbi の `truncate` は渡されず4.0。`ellipsoid` は予測器のものが引き継がれ、`decode_trajectories` 経由では格子の楕円体） | 平均・最頻・連続する最尤状態列 |
 
 ## 2. 水温・初期位置・音響
 
@@ -34,9 +34,9 @@
 | `nondetections`（下位関数 `emission_probability` の引数） | `"ignore"` | ラッパー `compute_acoustic_pdf` は `"mask"` を固定して渡す | ラッパーに同名の切替引数があるとは説明しない |
 | `chunk_time` | ラッパー（`compute_diff`・`compute_emission_pdf`・`compute_acoustic_pdf`）で24 | **1**（研究設定で上書き） | 時間の処理チャンク（デモでは1時間ステップ分）であり、24時間の生物学的仮定ではない |
 
-半径6,371 kmを用いる単純な角度換算では、$10^{-4}$ radは約0.637 km、0.0003 radは約1.911 kmです。後者は日本語Baseの手動σ（`sigma=[0.0003]`）の例です。格子レベル10の代表長約6.4 kmより狭い幅も設定されているため、この数値をそのまま達成された位置精度と呼びません。
+WGS84 の長半径6,378 kmを用いる単純な角度換算では、$10^{-4}$ radは約0.64 km、0.0003 radは約1.91 kmです。後者は日本語Baseの手動σ（`sigma=[0.0003]`）の例です。格子レベル10の代表長約6.4 kmより狭い幅も設定されているため、この数値をそのまま達成された位置精度と呼びません。
 
-音響ラッパーと下位関数で既定動作が違う点は、研究用の直接呼出しに移るときに特に確認します。[helpers.py](https://github.com/pangeo-fish/pangeo-fish/blob/af4fe17/pangeo_fish/helpers.py)／[acoustic.py](https://github.com/pangeo-fish/pangeo-fish/blob/af4fe17/pangeo_fish/acoustic.py)
+音響ラッパーと下位関数で既定動作が違う点は、研究用の直接呼出しに移るときに特に確認します。[helpers.py](https://github.com/pangeo-fish/pangeo-fish/blob/e2877f2/pangeo_fish/helpers.py)／[acoustic.py](https://github.com/pangeo-fish/pangeo-fish/blob/e2877f2/pangeo_fish/acoustic.py)
 
 ## 3. 海底地形
 
@@ -47,12 +47,12 @@
 | `depth_offset` | 0 | 指定なし | 魚と海底の間の余裕（m）。水深を `-elevation - depth_offset` として求める。負の値なら、その分だけ海底より下を許す |
 | `default_stdev_m` | 1（m） | 指定なし | `stdev` がない、または有限でない点の GEBCO 水深の鉛直不確かさ（m） |
 | `chunk_size` | 500 | 指定なし | 一度に読む緯度の行数 |
-| `ellipsoid` | `"sphere"` | 研究設定の `ellipsoid`（配布デモでは `"sphere"`） | セルIDとセル中心の計算に渡され、出力の `cell_ids` 属性にも保存される（[楕円体HEALPix](09_ellipsoidal_healpix.md)第7節） |
+| `ellipsoid` | `"WGS84"` | 研究設定の `ellipsoid`（配布デモでは `"WGS84"`） | セルIDとセル中心の計算に渡され、出力の `cell_ids` 属性にも保存される（[楕円体HEALPix](09_ellipsoidal_healpix.md)第7節） |
 | `batch_compute_pdf_bathy` の `batch_size` | 50,000（セル） | 10,000（セル） | 一度に計算するセル数 |
 | `depth_bins`（出力の水深軸） | 海面より上の10ビンぶん（`-10 × depth_bin_size`）から最後の境界まで、単位は m | そのまま適用 | 水深を引く側も同じ m の軸で読むので、ビン幅を変えても一致する。校正済み誤差幅や基準面補正ではない |
 | ヒストグラムの `stdev` 利用 | 各 GEBCO 点の水深を、平均が水深、標準偏差が `stdev`（**m**）の正規分布として広げる。入力にないとき `default_stdev_m`（1 m）、最小は0.001 m | データに `stdev` があるかは未確認 | ビン幅とは独立に m で与える。値は誤差の仮定であり、推奨される測深誤差ではない |
 
-最後の二行はユーザーが調整できる公開パラメータの説明ではなく、**科学的意味を説明する前に確認すべき実装事項**です。この節の海底地形の記述は `5cffccc` のソースで確認しました。[bathy.py](https://github.com/pangeo-fish/pangeo-fish/blob/5cffccc/pangeo_fish/bathy.py)
+最後の二行はユーザーが調整できる公開パラメータの説明ではなく、**科学的意味を説明する前に確認すべき実装事項**です。この節の海底地形の記述は `e2877f2` のソースで確認しました。[bathy.py](https://github.com/pangeo-fish/pangeo-fish/blob/e2877f2/pangeo_fish/bathy.py)
 
 ## 4. 潮汐
 
@@ -92,17 +92,19 @@ legacyの`sigma_tid=2.0`は、どの時間にも一律に2 mを使うという�
 | `single_behav` | `True` | 1つのσのとき `True`、2つのσの例でも `True` | 多σのときに、行動の値ごとに1つのσを推定する（`False` は連続区間ごと） |
 | `multivariate` | `False` | 二つのσの例で `True` | 全σを同時に最適化する |
 | `final` | `False` | 指定なし | `True` で、最終状態が観測した最終位置と合うようにσを最適化する。多σ（`predictor_index`）とは併用不可 |
-| `earth_radius` | `None` | 既定 | `None` なら格子の `ellipsoid` から求める（球なら半径、楕円体なら長半径） |
-| `ellipsoid` | `None`（格子の属性から推定） | 既定 | 畳み込みの作用素に渡される |
+| `earth_radius` | `None` | 既定 | `None` なら格子の `ellipsoid` から求める（WGS84 では長半径 6378.137 km） |
+| `ellipsoid` | `None`（格子の属性から推定。属性のない古い保存データは `"sphere"` とみなされる） | 既定（WGS84 の格子から取得） | 畳み込みの作用素に渡される |
 | `projection` | `"conservative"` | 既定 | `FFTConv` のみ |
 | `normalization`、`land_barrier` | `"full_disc"`、`False` | 既定 | `HealpixAnalyseConv` のみ |
 | 探索の範囲 | — | — | 下限 $10^{-4}$ rad、上限は `maximum_speed × Δt × adjustment_factor / 地球半径`（rad）。単独σは `fminbound`（有界の Brent 法） |
 | joint optimizer（`fit_multivariate_parameter`） | `Powell`、`maxfev=20` | 二つのσの例 | 目的関数の評価回数の上限と識別性を確認する |
 | Viterbiの打ち切り | `truncate=4.0`（`viterbi_healpix`） | `decode_trajectories` は渡さない | fitの`truncate=5`と自動で一致しない |
+| Viterbiの楕円体 | `viterbi_healpix` の `ellipsoid=None` は、格子に記録された楕円体（記録がなければ `"sphere"`）を使う。`EagerEstimator.decode` は予測器の楕円体を渡す | `decode_trajectories` 経由では格子の楕円体（WGS84） | 作用素は異なる（FFT は接平面、Viterbi はセル中心間の角距離）が、位置は同じ楕円体で計算される |
+| Viterbiのσの割り当て | 遷移 $k-1\to k$ に `predictor_index[k-1]` を使う（フィルタと同じ） | 二つのσの例も同じ | 最後の時刻の添字は使われないが、範囲検査は全時刻に行われる。使われない遷移のσは遷移表を作らない |
 
 `final=False`という引数だけを見て、終点情報を使っていないと判断しません。`combine_emission_pdf`が最後の観測スライスに終点因子（`final`）を掛ける経路もあるため、計算全体で何回条件付けされるかを確認します。
 
-Completeの二つのσの例では、日別の`behav_found > 0`から`predictor_index`を作り（`stamp_parameter_indices_from_mask`）、グループごとに60／30 km/dayの速度尺度（`maximum_speed`と`maximum_speed / 2`）をσの探索上限とします。潜在的な行動状態の遷移確率を同時推定するモデルとは区別します。[最適化](https://github.com/pangeo-fish/pangeo-fish/blob/af4fe17/pangeo_fish/hmm/optimize/scipy.py)
+Completeの二つのσの例では、日別の`behav_found > 0`から`predictor_index`を作り（`stamp_parameter_indices_from_mask`）、グループごとに60／30 km/dayの速度尺度（`maximum_speed`と`maximum_speed / 2`）をσの探索上限とします。潜在的な行動状態の遷移確率を同時推定するモデルとは区別します。[最適化](https://github.com/pangeo-fish/pangeo-fish/blob/e2877f2/pangeo_fish/hmm/optimize/scipy.py)
 
 ## 6. 対象版・格子設定・依存パッケージ
 
@@ -110,15 +112,15 @@ Completeの二つのσの例では、日別の`behav_found > 0`から`predictor_
 
 | 項目 | 内容 | 出典 |
 |---|---|---|
-| pangeo-fish | `main` のコミット `5cffccc`（`5cffccc8344e7031b81a7de3cf84b2f670fbf3d3`） | 本書の起動ガイド（`pangeo-eosc.md`） |
-| 環境イメージ | `ghcr.io/pangeo-fish/pangeo-fish-notebook:2026.10.21-5cffccc` | 同上 |
-| 格子 | 球面（`ellipsoid = "sphere"`）、レベル10 | Complete／Baseデモと日本語Notebook |
+| pangeo-fish | `main` のコミット `e2877f2`（`e2877f2febb145b86263ae11ba865cf2a84e98d6`） | 本書の起動ガイド（`pangeo-eosc.md`） |
+| 環境イメージ | `ghcr.io/pangeo-fish/pangeo-fish-notebook:2026.10.21-e2877f2` | 同上 |
+| 格子 | WGS84 楕円体上の HEALPix（`ellipsoid = "WGS84"`）、レベル10 | Complete／Baseデモと日本語Notebook |
 | 海マスク閾値 | `mask_threshold = 0.25`（`regrid_dataset_hpresample` の既定値は0.5） | 同上 |
 | 移動 | `FFTConv` | 同上 |
 | 軌跡 | `track_modes = ["viterbi_healpix", "mode", "mean"]` | 同上 |
 | 潮汐 | `tide_method = "legacy"`、`tide_model = "tpxo9"` | Completeデモ |
 
-WGS84 を選ぶ設定は配布デモにありますが、既定は球面です。楕円体に関する `main` の挙動は[楕円体HEALPix](09_ellipsoidal_healpix.md)第7節にまとめました。
+格子は WGS84 のみを使います（Notebook の設定セルで `ellipsoid = "WGS84"`）。楕円体に関する `main` の挙動は[楕円体HEALPix](09_ellipsoidal_healpix.md)第7節にまとめました。
 
 ### 6.2 依存パッケージの版
 
@@ -126,7 +128,7 @@ WGS84 を選ぶ設定は配布デモにありますが、既定は球面です�
 
 | パッケージ | 読み取れる情報 | 出典 |
 |---|---|---|
-| pangeo-fish | 版番号は読み取れない（`setuptools_scm` が動的に決め、フォールバックは `999`）。コミット `5cffccc` で特定する | `pyproject.toml` |
+| pangeo-fish | 版番号は読み取れない（`setuptools_scm` が動的に決め、フォールバックは `999`）。コミット `e2877f2` で特定する | `pyproject.toml` |
 | healpix-geo | `>=0.5`。デモ用 CI の固定値は `0.5.0` | `pyproject.toml`、`ci/requirements/demo-constraints.txt` |
 | healpix-resample | `>=2026.11.2,<2027`。同固定値は `2026.11.2` | 同上 |
 | healpix-analyse | `>=2026.11.1`。同固定値は `2026.11.1` | 同上 |

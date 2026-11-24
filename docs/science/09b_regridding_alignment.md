@@ -6,7 +6,7 @@
 
 この条件は配列の長さが一致するだけでは満たされません。例えば水温尤度がセルID `[10, 20, 30]`、音響尤度が `[30, 10, 20]` の順なら、配列の位置で掛け合わせると違う場所の観測を組み合わせてしまいます。IDが同じでも、格子の level や楕円体が違えば再び意味が異なります。
 
-この章の実装記述は、pangeo-fish `main` の `af4fe17` のソースを読んで確認した内容です（ノートブックを実行して確かめたものではありません）。一般的な数式例やメモリ見積りは、本教材で説明のために作成しました。
+この章の実装記述は、pangeo-fish `main` の `e2877f2` のソースを読んで確認した内容です（ノートブックを実行して確かめたものではありません）。一般的な数式例やメモリ見積りは、本教材で説明のために作成しました。
 
 ## 2. 再格子化で保存したい量を決める
 
@@ -37,7 +37,7 @@ $$
 
 したがって再格子化は尤度ではなく**平均差**に対して行われ、正規形への変換はその後です。正規分布は0を中心に対称なので、差の符号の向き（タグ − モデル）は重みの値に影響しません。符号付きの量を扱うので、再格子化の段階で負の値を0に切り上げるような処理は `main` にはありません。一方、非負であるべき量（潮汐の確率密度）を Clough–Tocher で補間すると、小さな負の過小評価が出ることがあり、デモのノートブックはこれを `clip(min=0)` で処理しています（Section 7）。
 
-実装参照：[compute_diff と regrid_dataset_hpresample](https://github.com/pangeo-fish/pangeo-fish/blob/af4fe17/pangeo_fish/helpers.py#L997-L1338)、[diff_z](https://github.com/pangeo-fish/pangeo-fish/blob/af4fe17/pangeo_fish/diff.py#L87-L139)
+実装参照：[compute_diff と regrid_dataset_hpresample](https://github.com/pangeo-fish/pangeo-fish/blob/e2877f2/pangeo_fish/helpers.py#L997-L1353)、[diff_z](https://github.com/pangeo-fish/pangeo-fish/blob/e2877f2/pangeo_fish/diff.py#L87-L139)
 
 ## 3. 共通セルと共通時刻を先に確定する
 
@@ -53,13 +53,13 @@ $$
 
 | 観測項 | 結合のしかた（ソースで確認） | 出典 |
 |---|---|---|
-| 音響・海底地形 | `current_total.merge(<項>.drop_indexes(["cell_ids"]), compat="override")`。`cell_ids` のインデックスを外してから位置（配列の順序）で結合するので、セルの数と並びが一致していることが前提である。海底地形は、`batch_compute_pdf_bathy` が参照（`diff-regridded.zarr`）の全セルについて、その並びで値を作る（ヒストグラムにないセルは最も近いヒストグラムのセルで補う）。デモはさらに、結合の前に `bathy_pdf.sel(cell_ids=…, time=…)` で総合 PDF のセルIDと時刻に合わせる（`5cffccc` で確認） | Complete デモ Section 5–6、`bathy.py` 449–478 |
-| 潮汐 | `merge_tide_with_total` が、日平均した潮汐 PDF と総合 PDF の共通セルIDと共通の日付を取り、HMM のセルの順に合わせてIDで選んで結合する。`grid_name`・`level`・`indexing_scheme`・`ellipsoid` が両者で食い違うと `ValueError` | `tide.py` 634–693 |
-| 全項の統合 | `normalize_pdf` → `combine_emission_pdf`。除外対象以外のすべての項の積（`prod(skipna=False)`、つまり `NaN` が1つでもあればそのセルは `NaN`）を作り、最後の時刻に `final` を掛け、空間で正規化する。全セルが欠測の時刻があると警告する | `pdf.py` 50–69、`helpers.py` 1889–1975 |
+| 音響・海底地形 | `current_total.merge(<項>.drop_indexes(["cell_ids"]), compat="override")`。`cell_ids` のインデックスを外してから位置（配列の順序）で結合するので、セルの数と並びが一致していることが前提である。海底地形は、`batch_compute_pdf_bathy` が参照（`diff-regridded.zarr`）の全セルについて、その並びで値を作る（ヒストグラムにないセルは最も近いヒストグラムのセルで補う）。デモはさらに、結合の前に `bathy_pdf.sel(cell_ids=…, time=…)` で総合 PDF のセルIDと時刻に合わせる（`5cffccc` で確認） | Complete デモ Section 5–6、`bathy.py` 451–480 |
+| 潮汐 | `merge_tide_with_total` が、日平均した潮汐 PDF と総合 PDF の共通セルIDと共通の日付を取り、HMM のセルの順に合わせてIDで選んで結合する。`grid_name`・`level`・`indexing_scheme`・`ellipsoid` が両者で食い違うと `ValueError`（`ellipsoid` の属性がない側は `"sphere"` とみなして比較する。属性を持たない古い保存データを読み戻すための規則） | `tide.py` 634–698 |
+| 全項の統合 | `normalize_pdf` → `combine_emission_pdf`。除外対象以外のすべての項の積（`prod(skipna=False)`、つまり `NaN` が1つでもあればそのセルは `NaN`）を作り、最後の時刻に `final` を掛け、空間で正規化する。全セルが欠測の時刻があると警告する | `pdf.py` 50–69、`helpers.py` 1904–1990 |
 
 この結合は、「データセットの形状がそろった」ことの確認ではなく、「観測因子が同じ状態を指すこと」の確認につなげて説明します。音響の結合には ID の照合がなく、位置で結合する点に注意します。海底地形も最後の結合は位置で行われます。研究で自分のデータを結合する場合は、結合の前に `cell_ids` を直接比較します。
 
-実装参照：[潮汐の結合](https://github.com/pangeo-fish/pangeo-fish/blob/af4fe17/pangeo_fish/tide.py#L634-L693)／[観測項の積と正規化](https://github.com/pangeo-fish/pangeo-fish/blob/af4fe17/pangeo_fish/pdf.py#L50-L69)
+実装参照：[潮汐の結合](https://github.com/pangeo-fish/pangeo-fish/blob/e2877f2/pangeo_fish/tide.py#L634-L698)／[観測項の積と正規化](https://github.com/pangeo-fish/pangeo-fish/blob/e2877f2/pangeo_fish/pdf.py#L50-L69)
 
 共通部分だけを残す操作は、解析期間や候補海域を狭める可能性もあります。結合前後で時刻数・セル数・欠測位置を比較し、除外された場所や日付が研究上の意味を持たないか確認します。
 
@@ -83,6 +83,6 @@ $$
 
 **属性を書き換えることとデータを変換することは別の操作です。** 球面として作ったセルIDや値に `WGS84` の文字列を付けるだけでは、観測を楕円体格子に再割当てしたことにはなりません。保存前に値と属性が同じ幾何学を表している必要があります。
 
-`main` では、格子の定義は `cell_ids` の属性（`grid_name`、`level`、`indexing_scheme`、`ellipsoid`）として保存・再読込されます（`storage.py` の `_with_dggs_attrs`）。再格子化の設定（`resolution_2D`、`refinement_level`、`ellipsoid`）は、戻り値の辞書と、デモが書く `resampling_info.json` に残ります。`ellipsoid` の属性がない格子では、地球半径の導出と Viterbi の距離計算は球面（`"sphere"`）として扱われます（`helpers.py` 2070–2078、`hmm/decode.py` 485–486）。古い中間データを読み直すときは、属性欠落を実際の球面指定と混同しません。楕円体の扱いの全体は[楕円体HEALPix](09_ellipsoidal_healpix.md)の第7節にまとめました。
+`main` では、格子の定義は `cell_ids` の属性（`grid_name`、`level`、`indexing_scheme`、`ellipsoid`）として保存・再読込されます（`storage.py` の `_with_dggs_attrs`）。再格子化の設定（`resolution_2D`、`refinement_level`、`ellipsoid`）は、戻り値の辞書と、デモが書く `resampling_info.json` に残ります。`resolution_2D` は元の格子の経度方向・緯度方向の点数 `[nx, ny]` です（経度・緯度が1次元ならその長さ、そうでなければ `xi`・`yi` の大きさ。時刻や深度など他の次元には依存しません）（`helpers._resolution_2d`）。`ellipsoid` の属性がない格子では、地球半径の導出と Viterbi の距離計算は球面（`"sphere"`）として扱われます（`helpers.py` 2085–2093、`hmm/decode.py` 462–473 の `_grid_ellipsoid`）。古い中間データを読み直すときは、属性欠落を実際の球面指定と混同しません。楕円体の扱いの全体は[楕円体HEALPix](09_ellipsoidal_healpix.md)の第7節にまとめました。
 
 計算量・チャンクと移動作用素は[データ処理と計算](10_computing.md)へ、幾何学は[楕円体HEALPix](09_ellipsoidal_healpix.md)へ進みます。

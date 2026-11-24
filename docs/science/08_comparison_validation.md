@@ -13,7 +13,7 @@
 | 潮汐・HEALPix | 深度、調和定数、UTC | 潮位波形との整合 | オフセット、モデル誤差、有効サンプル数 | Completeの選択経路 |
 | HMM | 観測重み、初期位置、移動カーネル | 時間的な位置のつながり | 時間間隔、σ、海域、境界、観測モデル | 全体の推定枠組み |
 
-対象デモの欄は、`af4fe17`の二つのNotebookのコードセルを読んで確認しました（実行はしていません）。[Base](https://github.com/pangeo-fish/pangeo-fish/blob/af4fe17/notebooks/pangeo-fish-base-demo.ipynb)／[Complete](https://github.com/pangeo-fish/pangeo-fish/blob/af4fe17/notebooks/pangeo-fish-complete-demo.ipynb)。Completeでは、潮汐の経路を`tide_method`（既定は`"legacy"`、選択肢は`"healpix"`）で切り替えます。
+対象デモの欄は、`e2877f2`の二つのNotebookのコードセルを読んで確認しました（実行はしていません）。[Base](https://github.com/pangeo-fish/pangeo-fish/blob/e2877f2/notebooks/pangeo-fish-base-demo.ipynb)／[Complete](https://github.com/pangeo-fish/pangeo-fish/blob/e2877f2/notebooks/pangeo-fish-complete-demo.ipynb)。Completeでは、潮汐の経路を`tide_method`（既定は`"legacy"`、選択肢は`"healpix"`）で切り替えます。
 
 ![潮汐、海底地形、音響の重みの違いを示す三つの合成例](figures/observation_constraints.png)
 
@@ -48,7 +48,7 @@ $$
 
 平均が候補外・陸上に出る可能性、時刻別最頻位置が飛ぶ可能性は、一本の線だけでは見落としやすいです。実データでは背景に平滑化分布や信用集合を重ねます。
 
-さらに、`af4fe17`のコードでは、FFTによるフィルタ・平滑化とViterbiで、実際に使う移動作用素や打ち切り幅が一致しません。Notebookの設定では、フィルタ・平滑化は`FFTConv`（`truncate=5`）、Viterbi（`viterbi_healpix`）は別に作る遷移表（打ち切りの既定は4σ）を使います。また、二つのσを使う場合は、時刻に対するσの割り当てが一日ずれます（詳細は[HMMの章](02_hmm.md)）。線の違いをすべて「平均か最尤か」という統計的な違いだけで説明しません。[移動作用素](https://github.com/pangeo-fish/pangeo-fish/blob/af4fe17/pangeo_fish/hmm/prediction.py)／[経路の計算](https://github.com/pangeo-fish/pangeo-fish/blob/af4fe17/pangeo_fish/hmm/decode.py)
+さらに、`e2877f2`のコードでは、FFTによるフィルタ・平滑化とViterbiで、実際に使う移動作用素や打ち切り幅が一致しません。Notebookの設定では、フィルタ・平滑化は`FFTConv`（`truncate=5`）、Viterbi（`viterbi_healpix`）は別に作る遷移表（打ち切りは4σ。`decode`は`truncate`を渡さないので、Notebookの`truncate`は届きません）を使います。一方、二つのσを使う場合の時刻に対するσの割り当ては、Viterbiもフィルタ・平滑化と同じ規約（遷移 $k-1\to k$ に`predictor_index[k-1]`）にそろっています。楕円体も、`decode`が予測器の楕円体（指定がなければ格子に記録された楕円体）を渡すので、WGS84の格子ならViterbiの位置もWGS84で計算されます（詳細は[HMMの章](02_hmm.md)）。線の違いをすべて「平均か最尤か」という統計的な違いだけで説明しません。[移動作用素](https://github.com/pangeo-fish/pangeo-fish/blob/e2877f2/pangeo_fish/hmm/prediction.py)／[経路の計算](https://github.com/pangeo-fish/pangeo-fish/blob/e2877f2/pangeo_fish/hmm/decode.py)
 
 ## 4. A19124で行う比較の設計
 
@@ -62,7 +62,7 @@ $$
 | D | C＋legacy潮汐 | 絶対水柱深度を含む追加項で何が変わるか |
 | E | C＋自由オフセットHEALPix潮汐 | 潮位波形の情報で何が変わるか |
 
-実装上は`normalize_pdf`の`excluded_pdf`（または`combine_emission_pdf`の`exclude`）で、積に使う項を制御します。`af4fe17`のCompleteで各項が入るデータ変数名は、水温が`pdf`、音響が`acoustic`、海底地形が`pdf_bathy`、潮汐が`pdf_tide`です。`excluded_pdf`にこれらの名前を渡して項を外す方式が考えられますが、この組み合わせの実行は確認していません。比較実験を組む際は、生成したDatasetの変数名を実際に確認します。なお、潮汐の項は`merge_tide_with_total`で、他の項と共通のセルと日にそろえられます。
+実装上は`normalize_pdf`の`excluded_pdf`（または`combine_emission_pdf`の`exclude`）で、積に使う項を制御します。`e2877f2`のCompleteで各項が入るデータ変数名は、水温が`pdf`、音響が`acoustic`、海底地形が`pdf_bathy`、潮汐が`pdf_tide`です。`excluded_pdf`にこれらの名前を渡して項を外す方式が考えられますが、この組み合わせの実行は確認していません。比較実験を組む際は、生成したDatasetの変数名を実際に確認します。なお、潮汐の項は`merge_tide_with_total`で、他の項と共通のセルと日にそろえられます。
 
 ### σを固定した比較と、再推定した比較
 
@@ -94,7 +94,7 @@ $$
 
 音響記録を入力して推定したあと、同じ受信記録への近さだけを評価すると、その観測を再現できたかを調べることになります。独立な評価のためには、検出の一部を保留する、独立の測位データを使う、既知位置の固定タグを使うなど、評価のための情報を推定から分けます。
 
-**正の検出を削除するだけでは、適切な保留にならない場合があります。** 現行ラッパーの`nondetections="mask"`では、その時刻ビンにほかの検出が残らない限り、削除した検出は未検出として扱われ、その受信機を含む稼働中の受信機の範囲が除外されます。保留対象の受信機・時間区間では、検出（受信機ごとの寄与）と未検出（時間ビンごとの除外範囲）の両方を訓練側から外し、中立な観測項として扱う必要があります。`af4fe17`のパッケージには、このように受信機と時間ビンを指定して寄与を中立にする機能は見当たらないため、自前で設計します。移動σや観測の幅をデータから選ぶときも、評価側を使わずに決めます。
+**正の検出を削除するだけでは、適切な保留にならない場合があります。** 現行ラッパーの`nondetections="mask"`では、その時刻ビンにほかの検出が残らない限り、削除した検出は未検出として扱われ、その受信機を含む稼働中の受信機の範囲が除外されます。保留対象の受信機・時間区間では、検出（受信機ごとの寄与）と未検出（時間ビンごとの除外範囲）の両方を訓練側から外し、中立な観測項として扱う必要があります。`e2877f2`のパッケージには、このように受信機と時間ビンを指定して寄与を中立にする機能は見当たらないため、自前で設計します。移動σや観測の幅をデータから選ぶときも、評価側を使わずに決めます。
 
 受信機の検出は、魚が受信機中心にいたという点位置の観測ではありません。受信範囲や検出確率を持つ観測として、保留した検出に対する予測確率を評価します。可能なら
 
@@ -113,5 +113,5 @@ $$
 
 A19124の短い例で二つのσが得られたとしても、それだけでは行動別の移動特性を識別できたことになりません。期間と遷移数を増やしたデータ、複数個体、独立な行動情報による検証を研究計画に加えます。
 
-本章の実験・評価手順は、`af4fe17`のソースの確認と一般的な確率モデルの原理を踏まえた提案であり、実行した結果ではありません。文献上の実施例は[研究の系譜](01_scientific_lineage.md)に、実装固有の設定は[パラメータ表](11_parameters_versions.md)に分けました。
+本章の実験・評価手順は、`e2877f2`のソースの確認と一般的な確率モデルの原理を踏まえた提案であり、実行した結果ではありません。文献上の実施例は[研究の系譜](01_scientific_lineage.md)に、実装固有の設定は[パラメータ表](11_parameters_versions.md)に分けました。
 

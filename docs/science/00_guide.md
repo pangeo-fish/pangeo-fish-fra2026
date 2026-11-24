@@ -10,8 +10,8 @@
 
 | 対象 | 版 |
 |---|---|
-| pangeo-fish | `main` ブランチのコミット `5cffccc` |
-| Docker イメージ | `ghcr.io/pangeo-fish/pangeo-fish-notebook:2026.10.21-5cffccc` |
+| pangeo-fish | `main` ブランチのコミット `e2877f2` |
+| Docker イメージ | `ghcr.io/pangeo-fish/pangeo-fish-notebook:2026.10.21-e2877f2` |
 
 各章の実装の説明は、特に断りがない限り、この固定版に対するものです。開発中の変更（プルリクエストなど）は、本文でそのことを明記したうえで別に扱います。
 
@@ -30,7 +30,7 @@
 | 経路、位置の分布、移動σは何を意味するか | [HMM](02_hmm.md) |
 | 水温・音響・水深・潮汐はそれぞれ何を制約するか | [水温](03_temperature.md)、[音響](05_acoustic.md)、[海底地形](06_bathymetry.md)、[潮汐](07_tides.md) |
 | 方法や設定を変えた結果をどう比較するか | [比較と検証](08_comparison_validation.md) |
-| 楕円体HEALPixと球面HEALPixは何が違うか | [楕円体HEALPix](09_ellipsoidal_healpix.md) |
+| ワークショップの WGS84 楕円体HEALPixは、球面HEALPixと何が違うか | [楕円体HEALPix](09_ellipsoidal_healpix.md) |
 | 複数の環境場を同じ格子でどう合わせるか | [再格子化と整合](09b_regridding_alignment.md) |
 | 計算量やZarrのチャンクをどう考えるか | [データ処理と計算](10_computing.md) |
 | どの関数・オプションを変えるか | [パラメータと版](11_parameters_versions.md) |
