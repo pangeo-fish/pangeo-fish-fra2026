@@ -90,7 +90,7 @@ $n_{\mathrm{eff}}$ は、その日の 1 時間平均の数（既定）です。�
 
 ### 3.2 `"pedersen"`：Pedersen et al. (2008) の方法
 
-`tide_method = "pedersen"` は、Pedersen et al. (2008) の潮汐の尤度（likelihood）を、元の研究コードから移したものです。{cite:p}`Pedersen2008`
+`tide_method = "pedersen"` は、Pedersen et al. (2008) の潮汐尤度（tide likelihood）を、元の研究コードから移したものです。{cite:p}`Pedersen2008`
 
 潮汐の印が付いた窓について、窓の中の水深の並び全体を、予測される水深（平均水深と潮位の和）と比べます。10 分間隔のサンプルを平均せずにそのまま使います。
 
@@ -168,7 +168,7 @@ $$
 | FES2022 の科学的説明 | Lyard et al. (2026), DOI `10.5194/egusphere-2026-6805` | 査読中のプレプリント（2026年11月時点） |
 | FES2014 の設計・検証 | Lyard et al. (2021) | 先行モデルの論文。FES2022b の検証論文ではない |
 | 潮汐予測ソフトウェア | CNES PyFES の公式資料と使った版（`pyproject.toml` の任意依存 `tide` は `pyfes>=2026.10`） | 調和定数を時系列に変換する計算の出典 |
-| 潮汐の尤度（likelihood）の方法 | Pedersen et al. (2008)（`"pedersen"` 方式） | 公表された方法の出典 |
+| 潮汐尤度（tide likelihood）の方法 | Pedersen et al. (2008)（`"pedersen"` 方式） | 公表された方法の出典 |
 
 FES2022b の配布元は、規則格子とネイティブ格子を区別しています。Complete ノートブックが使うのは、ネイティブの LGP2 データか、そこから事前に計算した Zarr です。海洋潮汐（ocean tide）と荷重潮汐（loading tide）を混同せず、タグの水深が表す量にどの項が必要かを確認してください。{cite:p}`Egbert2002,TPXOOfficial,CNESFES2022,AVISOFES2022Handbook,Lyard2026Preprint,Lyard2021,PyFESOfficial,Pedersen2008`
 
