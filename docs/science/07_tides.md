@@ -206,7 +206,7 @@ FES2022b の配布元は規則格子とネイティブ格子を区別してい�
 
 実装出典：[`latlon_constants_from_tmd`](https://github.com/pangeo-fish/pangeo-fish/blob/361e9b7/pangeo_fish/tide_healpix.py#L1502-L1550)、[`constants_to_healpix`](https://github.com/pangeo-fish/pangeo-fish/blob/361e9b7/pangeo_fish/tide_healpix.py#L1586-L1650)、[`fes2022b_constants_to_healpix`](https://github.com/pangeo-fish/pangeo-fish/blob/361e9b7/pangeo_fish/tide_healpix.py#L1653-L1743)。
 
-## 6. 面談で確認したい条件と比較実験
+## 6. 個別相談で確認したい条件と比較実験
 
 1. 固定点または着底に近い区間がありますか。単なる半日周期の鉛直行動との区別はできますか。`tide_found` が立つ日はどれだけありますか。
 2. 圧力が m（または dbar）に変換されていますか（`detect_tide` は単位を検査します）。時計の UTC、時差、ドリフト、記録欠落を確認しましたか。
