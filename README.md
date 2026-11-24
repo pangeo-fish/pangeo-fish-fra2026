@@ -18,12 +18,12 @@
 | 項目 | このワークショップで使うもの |
 | --- | --- |
 | pangeo-fish | `main` ブランチのコミット [`361e9b7`](https://github.com/pangeo-fish/pangeo-fish/tree/361e9b7639b09115c281e13c7fe78da22b2c1711) |
-| Docker イメージ | `ghcr.io/pangeo-fish/pangeo-fish-notebook:2026.10.21-361e9b7`（[pangeo-fish/pangeo-fish-docker](https://github.com/pangeo-fish/pangeo-fish-docker) でビルド） |
+| Docker イメージ | `ghcr.io/pangeo-fish/pangeo-fish-notebook:2026.11.2`（[pangeo-fish/pangeo-fish-docker](https://github.com/pangeo-fish/pangeo-fish-docker) でビルド） |
 | ノートブック | pangeo-fish の [base demo](https://github.com/pangeo-fish/pangeo-fish/blob/361e9b7639b09115c281e13c7fe78da22b2c1711/notebooks/pangeo-fish-base-demo.ipynb) と [complete demo](https://github.com/pangeo-fish/pangeo-fish/blob/361e9b7639b09115c281e13c7fe78da22b2c1711/notebooks/pangeo-fish-complete-demo.ipynb) を日本語にしたもの |
 | 計算環境 | [Pangeo@EOSC](https://pangeo-eosc.vm.fedcloud.eu/) |
 <!-- versions:end -->
 
-Docker イメージのタグの末尾は、イメージに入っている pangeo-fish のコミットです。全員が同じ環境で作業できるよう、`latest` ではなくこの固定タグを使います。
+Docker イメージのタグ `2026.11.2` は pangeo-fish のリリース番号で、中身は上の表のコミットと同じです。全員が同じ環境で作業できるよう、`latest` ではなくこの固定タグを使います。
 
 ## 事前登録（できれば 11 月 22 日まで）
 
@@ -38,12 +38,12 @@ Docker イメージのタグの末尾は、イメージに入っている pangeo
 参加申請が承認されたら、まず [Pangeo@EOSC にログイン](https://pangeo-eosc.vm.fedcloud.eu/hub/login)します。ログインしたらこのページに戻り、下の起動リンクを使います。ログインしていない状態では、起動リンクが正しく動かないことがあります。
 
 👉 **Pangeo@EOSC でワンクリック起動**（pangeo-fish のイメージでサーバーを起動し、このリポジトリをクローン・更新して、ノートブックを開きます）：
-[ワークショップの環境を起動する](https://pangeo-eosc.vm.fedcloud.eu/hub/spawn?profile=only-choice&profile-option-only-choice--image--unlisted-choice=ghcr.io%2Fpangeo-fish%2Fpangeo-fish-notebook%3A2026.10.21-361e9b7&next=%2Fhub%2Fuser-redirect%2Fgit-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252Fpangeo-fish%252Fpangeo-fish-fra2026%26urlpath%3Dlab%252Ftree%252Fpangeo-fish-fra2026%252Fdocs%252Fpangeo-fish.ipynb%26branch%3Dmain)
+[ワークショップの環境を起動する](https://pangeo-eosc.vm.fedcloud.eu/hub/spawn?profile=only-choice&profile-option-only-choice--image--unlisted-choice=ghcr.io%2Fpangeo-fish%2Fpangeo-fish-notebook%3A2026.11.2&next=%2Fhub%2Fuser-redirect%2Fgit-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252Fpangeo-fish%252Fpangeo-fish-fra2026%26urlpath%3Dlab%252Ftree%252Fpangeo-fish-fra2026%252Fdocs%252Fpangeo-fish.ipynb%26branch%3Dmain)
 
 または、ログインしたあとで、次の URL をブラウザのアドレスバーにコピー＆ペーストしてください。
 
 ```
-https://pangeo-eosc.vm.fedcloud.eu/hub/spawn?profile=only-choice&profile-option-only-choice--image--unlisted-choice=ghcr.io%2Fpangeo-fish%2Fpangeo-fish-notebook%3A2026.10.21-361e9b7&next=%2Fhub%2Fuser-redirect%2Fgit-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252Fpangeo-fish%252Fpangeo-fish-fra2026%26urlpath%3Dlab%252Ftree%252Fpangeo-fish-fra2026%252Fdocs%252Fpangeo-fish.ipynb%26branch%3Dmain
+https://pangeo-eosc.vm.fedcloud.eu/hub/spawn?profile=only-choice&profile-option-only-choice--image--unlisted-choice=ghcr.io%2Fpangeo-fish%2Fpangeo-fish-notebook%3A2026.11.2&next=%2Fhub%2Fuser-redirect%2Fgit-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252Fpangeo-fish%252Fpangeo-fish-fra2026%26urlpath%3Dlab%252Ftree%252Fpangeo-fish-fra2026%252Fdocs%252Fpangeo-fish.ipynb%26branch%3Dmain
 ```
 
 ## 教材を手元でビルドする

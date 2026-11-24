@@ -9,12 +9,12 @@ Pangeo@EOSC は、ヨーロッパの研究者とその共同研究者に開か�
 | 項目 | このワークショップで使うもの |
 | --- | --- |
 | pangeo-fish | `main` ブランチのコミット [`361e9b7`](https://github.com/pangeo-fish/pangeo-fish/tree/361e9b7639b09115c281e13c7fe78da22b2c1711) |
-| Docker イメージ | `ghcr.io/pangeo-fish/pangeo-fish-notebook:2026.10.21-361e9b7`（[pangeo-fish/pangeo-fish-docker](https://github.com/pangeo-fish/pangeo-fish-docker) でビルド） |
+| Docker イメージ | `ghcr.io/pangeo-fish/pangeo-fish-notebook:2026.11.2`（[pangeo-fish/pangeo-fish-docker](https://github.com/pangeo-fish/pangeo-fish-docker) でビルド） |
 | ノートブック | pangeo-fish の [base demo](https://github.com/pangeo-fish/pangeo-fish/blob/361e9b7639b09115c281e13c7fe78da22b2c1711/notebooks/pangeo-fish-base-demo.ipynb) と [complete demo](https://github.com/pangeo-fish/pangeo-fish/blob/361e9b7639b09115c281e13c7fe78da22b2c1711/notebooks/pangeo-fish-complete-demo.ipynb) を日本語にしたもの |
 | 計算環境 | [Pangeo@EOSC](https://pangeo-eosc.vm.fedcloud.eu/) |
 <!-- versions:end -->
 
-Docker イメージのタグの末尾は、イメージに入っている pangeo-fish のコミットです。全員が同じ環境で作業できるよう、`latest` ではなくこの固定タグを使います。
+Docker イメージのタグ `2026.11.2` は pangeo-fish のリリース番号で、中身は上の表のコミットと同じです。全員が同じ環境で作業できるよう、`latest` ではなくこの固定タグを使います。
 
 ## ワークショップの環境を起動する（ワンクリック）
 
@@ -22,15 +22,15 @@ Docker イメージのタグの末尾は、イメージに入っている pangeo
 
 起動リンクは次のことを行います。
 
-1. **pangeo-fish の Docker イメージ**（`ghcr.io/pangeo-fish/pangeo-fish-notebook:2026.10.21-361e9b7`）で JupyterLab サーバーを起動します。
+1. **pangeo-fish の Docker イメージ**（`ghcr.io/pangeo-fish/pangeo-fish-notebook:2026.11.2`）で JupyterLab サーバーを起動します。
 2. **このリポジトリ**（`pangeo-fish-fra2026`）をホームディレクトリに**クローン**し（すでにある場合は更新し）、pangeo-fish のノートブックを開きます。
 
-👉 **<a href="https://pangeo-eosc.vm.fedcloud.eu/hub/spawn?profile=only-choice&amp;profile-option-only-choice--image--unlisted-choice=ghcr.io%2Fpangeo-fish%2Fpangeo-fish-notebook%3A2026.10.21-361e9b7&amp;next=%2Fhub%2Fuser-redirect%2Fgit-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252Fpangeo-fish%252Fpangeo-fish-fra2026%26urlpath%3Dlab%252Ftree%252Fpangeo-fish-fra2026%252Fdocs%252Fpangeo-fish.ipynb%26branch%3Dmain">FRA 2026 pangeo-fish ワークショップの環境を起動する</a>** 👈
+👉 **<a href="https://pangeo-eosc.vm.fedcloud.eu/hub/spawn?profile=only-choice&amp;profile-option-only-choice--image--unlisted-choice=ghcr.io%2Fpangeo-fish%2Fpangeo-fish-notebook%3A2026.11.2&amp;next=%2Fhub%2Fuser-redirect%2Fgit-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252Fpangeo-fish%252Fpangeo-fish-fra2026%26urlpath%3Dlab%252Ftree%252Fpangeo-fish-fra2026%252Fdocs%252Fpangeo-fish.ipynb%26branch%3Dmain">FRA 2026 pangeo-fish ワークショップの環境を起動する</a>** 👈
 
 または、ログインしたあとで、次の URL をブラウザのアドレスバーにコピー＆ペーストしてください。
 
 ```
-https://pangeo-eosc.vm.fedcloud.eu/hub/spawn?profile=only-choice&profile-option-only-choice--image--unlisted-choice=ghcr.io%2Fpangeo-fish%2Fpangeo-fish-notebook%3A2026.10.21-361e9b7&next=%2Fhub%2Fuser-redirect%2Fgit-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252Fpangeo-fish%252Fpangeo-fish-fra2026%26urlpath%3Dlab%252Ftree%252Fpangeo-fish-fra2026%252Fdocs%252Fpangeo-fish.ipynb%26branch%3Dmain
+https://pangeo-eosc.vm.fedcloud.eu/hub/spawn?profile=only-choice&profile-option-only-choice--image--unlisted-choice=ghcr.io%2Fpangeo-fish%2Fpangeo-fish-notebook%3A2026.11.2&next=%2Fhub%2Fuser-redirect%2Fgit-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252Fpangeo-fish%252Fpangeo-fish-fra2026%26urlpath%3Dlab%252Ftree%252Fpangeo-fish-fra2026%252Fdocs%252Fpangeo-fish.ipynb%26branch%3Dmain
 ```
 
 :::{note}
@@ -46,10 +46,10 @@ JupyterLab サーバーが**すでに動いている**場合（たとえば別�
 サーバーのオプションの **Image** で **"Specify an existing docker image"**（カスタムイメージ）を選び、次を入力します。
 
 ```
-ghcr.io/pangeo-fish/pangeo-fish-notebook:2026.10.21-361e9b7
+ghcr.io/pangeo-fish/pangeo-fish-notebook:2026.11.2
 ```
 
-固定タグ `2026.10.21-361e9b7` には、このワークショップ用に準備した Pangeo-Fish のバージョンが入っています。全員が同じ環境で作業できるよう、この固定タグを使ってください。イメージは [pangeo-fish/pangeo-fish-docker](https://github.com/pangeo-fish/pangeo-fish-docker) でビルド・テストされています。
+固定タグ `2026.11.2` には、このワークショップ用に準備した Pangeo-Fish のバージョンが入っています。全員が同じ環境で作業できるよう、この固定タグを使ってください。イメージは [pangeo-fish/pangeo-fish-docker](https://github.com/pangeo-fish/pangeo-fish-docker) でビルド・テストされています。
 
 JupyterLab が起動したら、ターミナルを開いてこのリポジトリをクローンします。
 

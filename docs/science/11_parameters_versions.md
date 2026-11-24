@@ -1,6 +1,6 @@
 # 実装・パラメータ・対象版の対応
 
-このページは、pangeo-fish `main` の `361e9b7` のソースと、同じコミットの Complete デモ（`notebooks/pangeo-fish-complete-demo.ipynb`）を読んで整理したものです（ノートブックを実行して確かめたものではありません）。**関数の既定値とNotebookで明示的に与えた値を別々に記します。** ワークショップの環境はこのコミットをビルドしたイメージ `ghcr.io/pangeo-fish/pangeo-fish-notebook:2026.10.21-361e9b7` で、デモの HEALPix レベルは10です。
+このページは、pangeo-fish `main` の `361e9b7` のソースと、同じコミットの Complete デモ（`notebooks/pangeo-fish-complete-demo.ipynb`）を読んで整理したものです（ノートブックを実行して確かめたものではありません）。**関数の既定値とNotebookで明示的に与えた値を別々に記します。** ワークショップの環境はこのコミットをビルドしたイメージ `ghcr.io/pangeo-fish/pangeo-fish-notebook:2026.11.2` で、デモの HEALPix レベルは10です。
 
 単位は入力の物理量を踏まえた記述であり、すべての関数がPintによる単位検査を行うという意味ではありません。下記にないNotebook変数名や引数の完全なsignatureは、組み込み時にコードで再確認します。
 
@@ -143,7 +143,7 @@ Completeの二つのσの例では、日別の`behav_found > 0`から`predictor_
 | 項目 | 内容 | 出典 |
 |---|---|---|
 | pangeo-fish | `main` のコミット `361e9b7`（`361e9b7639b09115c281e13c7fe78da22b2c1711`） | 本書の起動ガイド（`pangeo-eosc.md`） |
-| 環境イメージ | `ghcr.io/pangeo-fish/pangeo-fish-notebook:2026.10.21-361e9b7` | 同上 |
+| 環境イメージ | `ghcr.io/pangeo-fish/pangeo-fish-notebook:2026.11.2` | 同上 |
 | 格子 | WGS84 楕円体上の HEALPix（`ellipsoid = "WGS84"`）、レベル10 | Complete／Baseデモと日本語Notebook |
 | 海マスク閾値 | `mask_threshold = 0.25`（`regrid_dataset_hpresample` の既定値は0.5） | 同上 |
 | 移動 | `FFTConv` | 同上 |
