@@ -42,7 +42,7 @@ pangeo-fish を使った論文を発表したら、[issue](https://github.com/pa
 
 ## 科学・技術解説で引用した文献
 
-「科学・技術解説」の各章で引用した文献の一覧です。章ごとの読む目的と確認範囲は、{doc}`science/13_references` にまとめています。
+「科学・技術解説」の各章で引用した文献の一覧です。章ごとの読む目的と注意点は、{doc}`science/13_references` にまとめています。
 
 ```{bibliography}
 ```
